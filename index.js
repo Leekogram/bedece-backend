@@ -3,7 +3,17 @@ const app = express()
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser')
 const UserRouter = require("./routes/signup-loginRoutes");
-mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true});
+// mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true});
+
+const MongoClient = require('mongodb').MongoClient;
+const uri = "mongodb+srv://sayil:<password>@cluster0-knm9b.mongodb.net/test?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true });
+client.connect(err => {
+  const collection = client.db("test").collection("devices");
+  // perform actions on the collection object
+  client.close();
+});
+
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
