@@ -34,4 +34,4 @@ app.get('/', (req, res) => res.send('Hello World!'))
 app.post('/t', (req, res) => res.send(req.body))
 app.use('/reg', require('./routes/signup-loginRoutes'))
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(process.env.PORT || port, () => console.log(`Example app listening on port ${port}!`))
