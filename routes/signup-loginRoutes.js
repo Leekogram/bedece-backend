@@ -65,10 +65,11 @@ router.post('/register', (req, res) => {
 
 })
 
-router.post('/test', (req, res)=>{
+router.get('/all', (req, res)=>{
   User.find((err, result)=>{
-    if (err) console.log(err)
-    console.log(result)
+    if (err) res.send(err)
+    
+    res.send(result)
   })
 })
 

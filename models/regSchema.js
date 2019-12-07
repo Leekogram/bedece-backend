@@ -1,13 +1,16 @@
-const mongoose = require ('mongoose');
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 let RegSchema = new Schema({
-    userName : {
+    fullName: {
         type: String
     },
-    email : {
-        type : String
+    phone: {
+           type: String
     },
-    password : {
+    email: {
+        type: String
+    },
+    password: {
         type: {
             String: String
         }
