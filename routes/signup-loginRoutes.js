@@ -16,7 +16,7 @@ router.get("/reg", (req, res) => {
 
 router.post('/register', (req, res) => {
   let errors = [];
-  console.log("working")
+  console.log(req.body, 'is the body')
   if (req.body.password.length < 8) {
     errors.push("Password must not be less than 8 characters")
     res.send(errors)
@@ -31,7 +31,7 @@ router.post('/register', (req, res) => {
     }).then(user => {
       if (user) {
         errors.push("an account already exist with this email address")
-       res.send(errors)
+        res.send(errors)
         console.log("this account exists")
       } else {
         const newUser = new User({
@@ -65,10 +65,10 @@ router.post('/register', (req, res) => {
 
 })
 
-router.get('/all', (req, res)=>{
-  User.find((err, result)=>{
+router.get('/all', (req, res) => {
+  User.find((err, result) => {
     if (err) res.send(err)
-    
+
     res.send(result)
   })
 })
@@ -78,10 +78,9 @@ router.post("/login", async (req, res, next) => {
 
   await User.findOne({
     email: req.body.email
-
   })
     .then(user => {
-      // console.log(user)
+       console.log(req.body)
       if (user == null) {
         res.json({
           message: "User not found"

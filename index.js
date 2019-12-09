@@ -1,9 +1,10 @@
 const express = require('express')
 const app = express()
 var mongoose = require('mongoose');
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
+var cors = require('cors')
 const UserRouter = require("./routes/signup-loginRoutes");
-// mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true});
+//  mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true});
 
 mongoose.connect('mongodb+srv://sayil:sayil2194@cluster0-knm9b.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
 
@@ -15,6 +16,12 @@ db.once('open', function() {
 });
 
  
+
+var corsOptions = {
+  origin: 'https://bcd-backend.herokuapp.com',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+app.use(cors(corsOptions))
 // parse application/json
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
