@@ -13,9 +13,9 @@ require("firebase/auth");
 require("firebase/firestore");
 
 
- mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true});
+//  mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true});
 
-// mongoose.connect('mongodb+srv://sayil:sayil2194@cluster0-knm9b.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
+mongoose.connect('mongodb+srv://sayil:sayil2194@cluster0-knm9b.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
