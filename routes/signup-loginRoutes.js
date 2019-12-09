@@ -100,7 +100,7 @@ router.post("/login", async (req, res, next) => {
 
 
           } else {
-            res.send("this is failing");
+            res.send("wrong login details");
             console.log("failed password didnt match")
             console.log(req.body)
           }
