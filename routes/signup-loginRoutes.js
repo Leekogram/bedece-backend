@@ -35,10 +35,19 @@ router.post('/register', (req, res) => {
         console.log("this account exists")
       } else {
         const newUser = new User({
-          fname: req.body.fname,
-          lname: req.body.lname,
-          email: req.body.email,
-          password: req.body.password
+          fullName: req.body.fullName,
+          address: req.body.address,
+          accountNumber: req.body.accountNumber,
+          accountName: req.body.accountName,
+          bankName:req.body.bankName,
+          Dob:req.body.Dob,
+          phone:req.body.phone,
+          email:req.body.email,
+          password: req.body.password,
+          business:{
+            type: String
+            // for either trustee or corporate
+          }
         });
 
         bcrypt.genSalt(10, (err, salt) => {
