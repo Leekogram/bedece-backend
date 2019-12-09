@@ -9,6 +9,7 @@ const buySchema = new schema({
     },
     userId :{
         type:  mongoose.Schema.Types.ObjectId
+        //this is the id of the person making the purchase
     },
     created_date: {
         type: Date,
