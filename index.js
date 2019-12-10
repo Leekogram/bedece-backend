@@ -26,11 +26,11 @@ db.once('open', function() {
 
  
 
-var corsOptions = {
-  origin: 'https://bcd-backend.herokuapp.com',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
-app.use(cors(corsOptions))
+// var corsOptions = {
+//   origin: 'https://bcd-backend.herokuapp.com',
+//   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+// }
+app.use(cors())
 // parse application/json
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
