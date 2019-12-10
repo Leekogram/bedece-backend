@@ -16,6 +16,10 @@ router.get("/reg", (req, res) => {
 
 router.post('/register', (req, res) => {
   let errors = [];
+  if(Object.keys(req.body).length === 0){
+    console.log('sorry u didnt send any data')
+    res.send('you didnt send any data')
+  }else {
   console.log(req.body, 'is the body')
   if (req.body.password.length < 8) {
     errors.push("Password must not be less than 8 characters")
@@ -72,7 +76,7 @@ router.post('/register', (req, res) => {
     });
   }
 
-})
+}})
 
 router.get('/all', (req, res) => {
   User.find((err, result) => {
@@ -83,7 +87,10 @@ router.get('/all', (req, res) => {
 })
 
 router.post("/login", async (req, res, next) => {
-  console.log
+  if(Object.keys(req.body).length === 0){
+    console.log('sorry u didnt send any data')
+    res.send('you didnt send any data')
+  }else {
 
   await User.findOne({
     email: req.body.email
@@ -120,7 +127,7 @@ router.post("/login", async (req, res, next) => {
 
     });
 
-});
+}});
 
 function verifyToken(req, res, next) {
   //get auth bearer
