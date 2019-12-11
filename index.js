@@ -3,7 +3,9 @@ const app = express()
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var cors = require('cors')
+var db = mongoose.connection;
 const UserRouter = require("./routes/signup-loginRoutes");
+const port = 2194;
 // Firebase App (the core Firebase SDK) is always required and
 // must be listed before other Firebase SDKs
 var firebase = require("firebase/app");
@@ -17,7 +19,7 @@ require("firebase/firestore");
 
 mongoose.connect('mongodb+srv://sayil:sayil2194@cluster0-knm9b.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
 
-var db = mongoose.connection;
+
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   // we're connected!
@@ -37,10 +39,9 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 
-const port = 2194;
+
 
 app.get('/', (req, res) => res.send('Hello World!'))
-app.post('/t', (req, res) => res.send(req.body))
 app.use('/reg', require('./routes/signup-loginRoutes'))
 app.use('/buy', require('./routes/purchase/buyRoutes'))
 
