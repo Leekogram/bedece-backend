@@ -149,8 +149,8 @@ router.post("/login", async (req, res, next) => {
   //   } else
     await User.findOne({
       $or: [
-        {email: req.body.test},
-        {phone: req.body.test}
+        {email: req.body.emailOrPhone},
+        {phone: req.body.emailOrPhone}
     ]
     })
       .then(user => {
