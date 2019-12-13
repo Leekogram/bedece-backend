@@ -3,6 +3,7 @@ const User = require('../models/regSchema')
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 var emailCheck = require('email-check');
+var firebase = require("firebase/app");
 
 router.get('/', (req, res) => {
   console.log("signup works");
@@ -90,7 +91,7 @@ router.post('/register', (req, res) => {
   }
 })
 
-router.get('/all', (req, res) => {
+router.get('/users', (req, res) => {
   User.find((err, result) => {
     if (err) res.send(err)
 
@@ -98,21 +99,59 @@ router.get('/all', (req, res) => {
   })
 })
 
+
+router.get("/user/:id", (req, res) => {
+  User.findById(req.params.id, (err, result) => {
+      if (err) {
+          res.send("An Error Occured!");
+          console.log("error:");
+      } else {
+          res.send(result);
+          console.log(req.params.id);
+      }
+  })
+})
+
+
+
+
+// router.post("/facebook", (req,res)=>{
+
+// // Build Firebase credential with the Facebook access token.
+// var credential = firebase.auth.FacebookAuthProvider.credential(access_token);
+
+// // Sign in with credential from the Google user.
+// firebase.auth().signInWithCredential(credential).catch(function(error) {
+//   // Handle Errors here.
+//   var errorCode = error.code;
+//   var errorMessage = error.message;
+//   // The email of the user's account used.
+//   var email = error.email;
+//   // The firebase.auth.AuthCredential type that was used.
+//   var credential = error.credential;
+//   // ...
+// });
+    
+// })
+
 router.post("/login", async (req, res, next) => {
   if (Object.keys(req.body).length === 0) {
     console.log('sorry u didnt send any data')
     res.status(400).send('you didnt send any data')
   } else {
-    if (!req.body.email) {
-      res.status(400).send('please input password ')
-    }
-   else if (!req.body.password) {
-      res.status(400).send(
-        "please input password "
-      )
-    } else
+  //   if (!req.body.email) {
+  //     res.status(400).send('please input password ')
+  //   }
+  //  else if (!req.body.password) {
+  //     res.status(400).send(
+  //       "please input password "
+  //     )
+  //   } else
     await User.findOne({
-      email: req.body.email
+      $or: [
+        {email: req.body.test},
+        {phone: req.body.test}
+    ]
     })
       .then(user => {
         console.log(req.body)

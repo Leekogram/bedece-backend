@@ -7,7 +7,8 @@ router.post('/', (req, res) => {
     let newBuyer = new Buyer({
          currency: req.body.currency,
          units: req.body.units,
-         userId: req.body.userId
+         userId: req.body.userId,
+         
     })
     newBuyer
     .save()

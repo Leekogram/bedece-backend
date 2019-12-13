@@ -1,15 +1,24 @@
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 const buySchema = new schema({
-    currency:{
+    currency: {
         type: String
     },
-    units:{
+    units: {
         type: String
     },
-    userId :{
-        type:  mongoose.Schema.Types.ObjectId
+    userId: {
+        type: mongoose.Schema.Types.ObjectId
         //this is the id of the person making the purchase
+    },
+    transactionId: {
+        type: String
+    },
+    isDelivered: {
+        type: Boolean
+    },
+    deliveryMethod: {
+        type: String
     },
     created_date: {
         type: Date,
@@ -22,5 +31,5 @@ const buySchema = new schema({
 
     }
 });
-const buyModel =  mongoose.model('buy', buySchema);
+const buyModel = mongoose.model('buy', buySchema);
 module.exports = buyModel;
