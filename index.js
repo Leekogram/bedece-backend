@@ -1,3 +1,4 @@
+
 const express = require('express')
 const app = express()
 var mongoose = require('mongoose');
@@ -15,7 +16,7 @@ require("firebase/auth");
 require("firebase/firestore");
 
 
-//  mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true});
+  // mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true});
 
 mongoose.connect('mongodb+srv://sayil:sayil2194@cluster0-knm9b.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
 
@@ -43,6 +44,6 @@ app.use(bodyParser.urlencoded({
 
 app.get('/', (req, res) => res.send('Hello World!'))
 app.use('/reg', require('./routes/signup-loginRoutes'))
-app.use('/buy', require('./routes/purchase/buyRoutes'))
+app.use('/trans', require('./routes/transactions/buyRoutes'))
 
 app.listen(process.env.PORT || port, () => console.log(`Example app listening on port ${port}!`))

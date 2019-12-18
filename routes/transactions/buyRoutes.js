@@ -1,13 +1,19 @@
 const router = require("express").Router();
 const Buyer = require('../../models/purchase/buyShema')
 
-
-router.post('/', (req, res) => {
+router.get('/', (req, res)=>{
+  res.send('its now working')
+})
+router.post('/buy', (req, res) => {
    
     let newBuyer = new Buyer({
          currency: req.body.currency,
          units: req.body.units,
+         estimatedValue: req.body.estimatedValue,
          userId: req.body.userId,
+         transactionId:req.body.transactionId,
+         isDelivered:req.body.isDelivered,
+         deliveryMethod:req.body.deliveryMethod,
          
     })
     newBuyer
@@ -21,4 +27,15 @@ router.post('/', (req, res) => {
     });
   
 })
+router.get('/all-buys', (req, res)=>{
+  
+    Buyer.find((err, result) => {
+      if (err) res.send(err)
+  
+      res.send(result)
+   
+  })
+})
+
+
 module.exports = router

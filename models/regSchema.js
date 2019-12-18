@@ -4,23 +4,23 @@ let RegSchema = new Schema({
     fullName: {
         type: String
     },
-    address:{
-         type: String
+    address: {
+        type: String
     },
-    accountNumber:{
+    accountNumber: {
         type: Number
     },
-    accountName:{
+    accountName: {
         type: String
     },
-    bankName:{
+    bankName: {
         type: String
-     },
-    Dob:{
+    },
+    Dob: {
         type: Date
     },
     phone: {
-           type: String
+        type: String
     },
     email: {
         type: String
@@ -28,6 +28,10 @@ let RegSchema = new Schema({
     password: {
         type: String
 
+    },
+    organisation: {
+        type: String
+        //for corporate or individual
     },
     created_date: {
         type: Date,

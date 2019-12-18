@@ -5,7 +5,10 @@ const buySchema = new schema({
         type: String
     },
     units: {
-        type: String
+        type: Number
+    },
+    estimatedValue: {
+        type: Number
     },
     userId: {
         type: mongoose.Schema.Types.ObjectId
@@ -15,9 +18,13 @@ const buySchema = new schema({
         type: String
     },
     isDelivered: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     deliveryMethod: {
+        type: String
+    },
+    deliveryAddress: {
         type: String
     },
     created_date: {
@@ -28,7 +35,6 @@ const buySchema = new schema({
     updated: {
         type: Date,
         default: Date.now,
-
     }
 });
 const buyModel = mongoose.model('buy', buySchema);
