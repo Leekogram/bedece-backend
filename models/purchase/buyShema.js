@@ -15,7 +15,8 @@ const buySchema = new schema({
         //this is the id of the person making the purchase
     },
     transactionId: {
-        type: String
+        type: mongoose.Schema.Types.ObjectId
+        // this is the generated transaction id 
     },
     isDelivered: {
         type: Boolean,
