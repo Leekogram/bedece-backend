@@ -27,6 +27,7 @@ router.post('/buy', (req, res) => {
     });
   
 })
+// to get all the buys
 router.get('/all-buys', (req, res)=>{
   
     Buyer.find((err, result) => {
@@ -35,6 +36,35 @@ router.get('/all-buys', (req, res)=>{
       res.send(result)
    
   })
+})
+
+// get all the buys made by a single user
+router.get('/all-buy/:id', (req, res)=>{
+  
+  Buyer.find({userId:req.params.id},(err, result) => {
+    if (err) res.send(err)
+
+    res.send(result)
+ 
+})
+})
+
+ 
+// to update a buy with its ID
+router.put('/update-buy/:id',(req,res)=>{
+  var newInfo = req.body
+  console.log(req.body)
+  Buyer.findByIdAndUpdate(req.params.id,newInfo,(err, result) => {
+   if (err) {
+   console.log(err)
+   } else {
+     res.json({
+             message: "Successfully updated",
+           //  authData
+           result
+          })
+   }
+ })
 })
 
 

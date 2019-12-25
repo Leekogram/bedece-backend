@@ -102,13 +102,13 @@ router.get('/users', (req, res) => {
 
 router.get("/user/:id", (req, res) => {
   User.findById(req.params.id, (err, result) => {
-      if (err) {
-          res.send("An Error Occured!");
-          console.log("error:");
-      } else {
-          res.send(result);
-          console.log(req.params.id);
-      }
+    if (err) {
+      res.send("An Error Occured!");
+      console.log("error:");
+    } else {
+      res.send(result);
+      console.log(req.params.id);
+    }
   })
 })
 
@@ -131,7 +131,7 @@ router.get("/user/:id", (req, res) => {
 //   var credential = error.credential;
 //   // ...
 // });
-    
+
 // })
 
 router.post("/login", async (req, res, next) => {
@@ -139,19 +139,19 @@ router.post("/login", async (req, res, next) => {
     console.log('sorry u didnt send any data')
     res.status(400).send('you didnt send any data')
   } else {
-  //   if (!req.body.email) {
-  //     res.status(400).send('please input password ')
-  //   }
-  //  else if (!req.body.password) {
-  //     res.status(400).send(
-  //       "please input password "
-  //     )
-  //   } else
+    //   if (!req.body.email) {
+    //     res.status(400).send('please input password ')
+    //   }
+    //  else if (!req.body.password) {
+    //     res.status(400).send(
+    //       "please input password "
+    //     )
+    //   } else
     await User.findOne({
       $or: [
-        {email: req.body.emailOrPhone},
-        {phone: req.body.emailOrPhone}
-    ]
+        { email: req.body.emailOrPhone },
+        { phone: req.body.emailOrPhone }
+      ]
     })
       .then(user => {
         console.log(req.body)
@@ -172,8 +172,6 @@ router.post("/login", async (req, res, next) => {
               token: token,
               user: user
             })
-
-
           } else {
             res.send("wrong login details");
             console.log("failed password didnt match")
@@ -185,7 +183,6 @@ router.post("/login", async (req, res, next) => {
         // console.log(req.body.email);
 
       });
-
   }
 });
 
