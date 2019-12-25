@@ -49,6 +49,19 @@ router.get('/all-buy/:id', (req, res)=>{
 })
 })
 
+router.get('/get-buy/:id',(req,res)=>{
+
+  Buyer.find({_id:req.params.id},(err, result) => {
+   if (err) {
+   console.log(err)
+   } else {
+     res.json({
+           result
+          })
+   }
+ })
+})
+
  
 // to update a buy with its ID
 router.put('/update-buy/:id',(req,res)=>{
