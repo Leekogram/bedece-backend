@@ -50,7 +50,6 @@ router.get('/all-buy/:id', (req, res)=>{
 })
 
 router.get('/get-buy/:id',(req,res)=>{
-
   Buyer.find({_id:req.params.id},(err, result) => {
    if (err) {
    console.log(err)

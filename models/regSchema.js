@@ -1,7 +1,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 let RegSchema = new Schema({
-    fullName: {
+    fname: {
+        type: String
+    },
+    lname: {
+        type: String
+    },
+    email:{
         type: String
     },
     address: {
@@ -29,7 +35,19 @@ let RegSchema = new Schema({
         type: String
 
     },
-    organisation: {
+    acctType: {
+        type: String
+        //for corporate or individual
+    },
+    rcNumber: {
+        type: String
+        //for corporate or individual
+    },
+    busPhoneNum: {
+        type: String
+        //for corporate or individual
+    },
+    busEmail: {
         type: String
         //for corporate or individual
     },
