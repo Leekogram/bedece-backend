@@ -19,8 +19,8 @@ router.post('/register', (req, res) => {
     res.send('you didnt send any data')
   } else {
     // console.log(req.body, 'is the body')
-    if (!req.body.password || req.body.password.length < 8) {
-      errors.push("Password must not be less than 8 characters")
+    if (!req.body.password || req.body.password.length <4) {
+      errors.push("Pin must not be less than 4")
       res.status(404).json({
         status: 'error',
         message: errors,
@@ -44,8 +44,7 @@ router.post('/register', (req, res) => {
       }).then(user => {
         if (user) {
           errors.push("an account already exist with this email address")
-          res.status(404).send({
-            status: 400,
+          res.status(404).json({
             message: errors
           })
           console.log("this account exists")
@@ -74,7 +73,9 @@ router.post('/register', (req, res) => {
                 newUser
                   .save()
                   .then(user => {
-                    res.status(200).send("succesfully registered");
+                    res.status(200).json({
+                      message: "success"
+                    });
                     console.log("success")
                   })
                   .catch(err => {
@@ -95,7 +96,7 @@ router.get('/users', (req, res) => {
   User.find((err, result) => {
     if (err) res.send(err)
 
-    res.send(result)
+    res.send({result: result})
   })
 })
 
