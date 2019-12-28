@@ -16,9 +16,9 @@ require("firebase/auth");
 require("firebase/firestore");
 
 
-  // mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true});
+  mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true});
 
-mongoose.connect('mongodb+srv://sayil:sayil2194@cluster0-knm9b.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
+// mongoose.connect('mongodb+srv://sayil:sayil2194@cluster0-knm9b.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
 
 
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -45,5 +45,6 @@ app.use(bodyParser.urlencoded({
 app.get('/', (req, res) => res.send('Hello World!'))
 app.use('/reg', require('./routes/signup-loginRoutes'))
 app.use('/trans', require('./routes/transactions/buyRoutes'))
+app.use('/trans-sell', require('./routes/transactions/sellRoutes'))
 
 app.listen(process.env.PORT || port, () => console.log(`Example app listening on port ${port}!`))
