@@ -19,7 +19,7 @@ router.post('/register', (req, res) => {
     res.send('you didnt send any data')
   } else {
     // console.log(req.body, 'is the body')
-    if (!req.body.password || req.body.password.length <4) {
+    if (!req.body.password || req.body.password.length < 4) {
       errors.push("Pin must not be less than 4")
       res.status(404).json({
         status: 'error',
@@ -96,7 +96,7 @@ router.get('/users', (req, res) => {
   User.find((err, result) => {
     if (err) res.send(err)
 
-    res.send({result: result})
+    res.send({ result: result })
   })
 })
 
@@ -157,8 +157,9 @@ router.post("/login", async (req, res, next) => {
       .then(user => {
         console.log(req.body)
         if (user == null) {
-          resstatus(400).json({
-            message: "User not found"
+          res.status(400).json({
+            message: "wrong login details",
+            devMessage: "this user wasnt found"
           })
           console.log("not seen")
         }
@@ -174,7 +175,8 @@ router.post("/login", async (req, res, next) => {
               user: user
             })
           } else {
-            res.send("wrong login details");
+            res.status(400).json({ message: "wrong login details" ,
+          devMessage:"passwords didnt match"});
             console.log("failed password didnt match")
             console.log(req.body)
           }

@@ -68,7 +68,7 @@ router.get('/all-sell/:id', (req, res) => {
 
     })
 })
-
+// get a particular sell with its ID
 router.get('/get-sell/:id', (req, res) => {
     Seller.find({ _id: req.params.id }, (err, result) => {
         if (err) {
@@ -84,7 +84,8 @@ router.get('/get-sell/:id', (req, res) => {
 
 // to update a sell with its ID
 router.put('/update-sell/:id', (req, res) => {
-    var newInfo = req.body
+    // var newInfo = req.body
+    let newInfo = req.body
     console.log(req.body)
     Seller.findByIdAndUpdate(req.params.id, newInfo, (err, result) => {
         if (err) {
