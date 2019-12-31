@@ -7,21 +7,23 @@ let RegSchema = new Schema({
     lname: {
         type: String
     },
-    email:{
+    email: {
         type: String
     },
     address: {
         type: String
     },
-    accountNumber: {
-        type: Number
-    },
-    accountName: {
-        type: String
-    },
-    bankName: {
-        type: String
-    },
+    bank: [{
+        accountNumber: {
+            type: Number
+        },
+        accountName: {
+            type: String
+        },
+        bankName: {
+            type: String
+        }
+    }],
     Dob: {
         type: Date
     },

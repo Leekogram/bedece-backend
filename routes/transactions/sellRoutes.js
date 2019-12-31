@@ -25,10 +25,7 @@ router.post('/sell', (req, res) => {
         isDelivered: req.body.isDelivered,
         deliveryMethod: req.body.deliveryMethod,
         deliveryAddress:
-            req.body.deliveryAddress,
-
-
-
+        req.body.deliveryAddress,
     })
     newSeller
         .save()
@@ -87,7 +84,7 @@ router.put('/update-sell/:id', (req, res) => {
     // var newInfo = req.body
     let newInfo = req.body
     console.log(req.body)
-    Seller.findByIdAndUpdate(req.params.id, newInfo, (err, result) => {
+    Seller.findByIdAndUpdate(req.params.id, newInfo,{new: true}, (err, result) => {
         if (err) {
             console.log(err)
         } else {

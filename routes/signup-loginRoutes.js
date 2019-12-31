@@ -40,10 +40,13 @@ router.post('/register', (req, res) => {
       console.log(errors)
     } else {
       User.findOne({
-        email: req.body.email
+        $or: [
+          { email: req.body.email },
+          { phone: req.body.phone }
+        ]
       }).then(user => {
         if (user) {
-          errors.push("an account already exist with this email address")
+          errors.push("either phone or email is already registered with another account")
           res.status(404).json({
             message: errors
           })
@@ -52,9 +55,7 @@ router.post('/register', (req, res) => {
           const newUser = new User({
             fullName: req.body.fullName,
             address: req.body.address,
-            accountNumber: req.body.accountNumber,
-            accountName: req.body.accountName,
-            bankName: req.body.bankName,
+
             Dob: req.body.Dob,
             phone: req.body.phone,
             email: req.body.email,
@@ -62,7 +63,14 @@ router.post('/register', (req, res) => {
             business: {
               type: String
               // for either trustee or corporate
-            }
+            },
+            bank: [
+              {
+                accountNumber: req.body.accountNumber,
+                accountName: req.body.accountName,
+                bankName: req.body.bankName,
+              }
+            ]
           });
 
           bcrypt.genSalt(10, (err, salt) => {
@@ -99,6 +107,34 @@ router.get('/users', (req, res) => {
     res.send({ result: result })
   })
 })
+
+
+router.post('/addBank/:id', (req, res) => {
+  let newdet = new User({
+    bank:[{
+      accountNumber: req.body.accountNumber,
+      accountName: req.body.accountName,
+      bankName: req.body.bankName
+    }]
+    
+  })
+
+  User.findByIdAndUpdate(req.params.id,
+    { $push: { bank: newdet.bank } },
+    function (err, doc) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(newdet)
+        res.status(200).send({
+          message: "added successful"
+        })
+      }
+    }
+  );
+
+}
+)
 
 
 router.get("/user/:id", (req, res) => {
@@ -170,13 +206,15 @@ router.post("/login", async (req, res, next) => {
             // res.status(200).send("ok");
             console.log("successful")
             const token = jwt.sign({ user }, "my_secret");
-            res.json({
+            res.send({
               token: token,
               user: user
             })
           } else {
-            res.status(400).json({ message: "wrong login details" ,
-          devMessage:"passwords didnt match"});
+            res.status(400).json({
+              message: "wrong login details",
+              devMessage: "passwords didnt match"
+            });
             console.log("failed password didnt match")
             console.log(req.body)
           }

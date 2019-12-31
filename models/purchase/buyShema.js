@@ -1,14 +1,17 @@
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 const buySchema = new schema({
-    currency: {
-        type: String
+    give: {
+        giveCurrency: String,
+        giveAmount: String
     },
-    units: {
-        type: Number
+    recieve: {
+        recieveCurrency: String,
+        recieveAmount : Number
     },
-    estimatedValue: {
-        type: Number
+    transDetails: {
+        creditAccount: String,
+        refference: String
     },
     userId: {
         type: mongoose.Schema.Types.ObjectId
