@@ -5,7 +5,7 @@ router.get('/', (req, res) => {
   res.send('its now working')
 })
 router.post('/buy', (req, res) => {
-
+     
   let newBuyer = new Buyer({
     give: {
       giveCurrency: req.body.giveCurrency,
@@ -40,7 +40,6 @@ router.post('/buy', (req, res) => {
 })
 // to get all the buys
 router.get('/all-buys', (req, res) => {
-
   Buyer.find((err, result) => {
     if (err) res.send(err)
 
@@ -48,6 +47,9 @@ router.get('/all-buys', (req, res) => {
 
   })
 })
+
+
+
 
 // get all the buys made by a single user
 router.get('/all-buy/:id', (req, res) => {

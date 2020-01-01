@@ -101,52 +101,74 @@ router.post('/register', (req, res) => {
 })
 
 router.get('/users', (req, res) => {
-  User.find((err, result) => {
-    if (err) res.send(err)
-
-    res.send({ result: result })
-  })
+  let sess = req.session;
+  if(sess.emailOrPhone){
+    User.find((err, result) => {
+      if (err) res.send(err)
+  
+      res.send({ result: result })
+    })
+  } else {
+    res.status(400).send({
+      message:"login first"
+    })
+  }
+ 
 })
 
 
 router.post('/addBank/:id', (req, res) => {
-  let newdet = new User({
-    bank:[{
-      accountNumber: req.body.accountNumber,
-      accountName: req.body.accountName,
-      bankName: req.body.bankName
-    }]
-    
-  })
-
-  User.findByIdAndUpdate(req.params.id,
-    { $push: { bank: newdet.bank } },
-    function (err, doc) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(newdet)
-        res.status(200).send({
-          message: "added successful"
-        })
+  let sess = req.session;
+  if(sess.emailOrPhone){
+    let newdet = new User({
+      bank: [{
+        accountNumber: req.body.accountNumber,
+        accountName: req.body.accountName,
+        bankName: req.body.bankName
+      }]
+  
+    })
+  
+    User.findByIdAndUpdate(req.params.id,
+      { $push: { bank: newdet.bank } },
+      function (err, doc) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(newdet)
+          res.status(200).send({
+            message: "added successful"
+          })
+        }
       }
-    }
-  );
+    );
+  }
+  else{
+    res.send({message:"please login first"})
+  }
+ 
 
 }
 )
 
 
 router.get("/user/:id", (req, res) => {
-  User.findById(req.params.id, (err, result) => {
-    if (err) {
-      res.send("An Error Occured!");
-      console.log("error:");
-    } else {
-      res.send(result);
-      console.log(req.params.id);
-    }
-  })
+  let sess = req.session;
+  if (sess.emailOrPhone) {
+    User.findById(req.params.id, (err, result) => {
+      if (err) {
+        res.send("An Error Occured!");
+        console.log("error:");
+      } else {
+        res.send(result);
+        console.log(req.params.id);
+      }
+    })
+    
+  }else {
+    res.status(400).send({message: "you have to login in first"})
+  }
+
 })
 
 
@@ -170,20 +192,27 @@ router.get("/user/:id", (req, res) => {
 // });
 
 // })
+router.get('/logout',(req,res) => {
+  req.session.destroy((err) => {
+      if(err) {
+          return console.log(err);
+      }
+      // 
+      res.send({
+        message:"session terminated"
+      })
+  });
+
+});
 
 router.post("/login", async (req, res, next) => {
+  let sess = req.session;
+  sess.emailOrPhone = req.body.emailOrPhone
   if (Object.keys(req.body).length === 0) {
     console.log('sorry u didnt send any data')
     res.status(400).send('you didnt send any data')
   } else {
-    //   if (!req.body.email) {
-    //     res.status(400).send('please input password ')
-    //   }
-    //  else if (!req.body.password) {
-    //     res.status(400).send(
-    //       "please input password "
-    //     )
-    //   } else
+
     await User.findOne({
       $or: [
         { email: req.body.emailOrPhone },

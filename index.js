@@ -9,16 +9,16 @@ const UserRouter = require("./routes/signup-loginRoutes");
 const port = 2194;
 // Firebase App (the core Firebase SDK) is always required and
 // must be listed before other Firebase SDKs
-
+var session = require('express-session');
 
 // Add the Firebase products that you want to use
 require("firebase/auth");
 require("firebase/firestore");
 
 
-// mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true, useFindAndModify: false });
+mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true, useFindAndModify: false });
 
-mongoose.connect('mongodb+srv://sayil:sayil2194@cluster0-knm9b.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
+// mongoose.connect('mongodb+srv://sayil:sayil2194@cluster0-knm9b.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
 
 
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -27,12 +27,6 @@ db.once('open', function() {
   console.log('we are connected')
 });
 
- 
-
-// var corsOptions = {
-//   origin: 'https://bcd-backend.herokuapp.com',
-//   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-// }
 app.use(cors())
 // parse application/json
 app.use(bodyParser.json())
@@ -40,7 +34,7 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 
-
+app.use(session({secret: "sayil sunday",saveUninitialized: true,resave: true}));
 
 app.get('/', (req, res) => res.send('Hello World!'))
 app.use('/reg', require('./routes/signup-loginRoutes'))
