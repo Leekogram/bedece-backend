@@ -13,6 +13,15 @@ let RegSchema = new Schema({
     address: {
         type: String
     },
+    city: {
+        type: String
+    },
+    country: {
+        type: String
+    },
+    image: {
+        type: String
+    },
     bank: [{
         accountNumber: {
             type: Number
@@ -53,6 +62,7 @@ let RegSchema = new Schema({
         type: String
         //for corporate or individual
     },
+
     created_date: {
         type: Date,
         default: Date.now,

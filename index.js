@@ -7,6 +7,21 @@ var cors = require('cors')
 var db = mongoose.connection;
 const UserRouter = require("./routes/signup-loginRoutes");
 const port = 2194;
+
+var multipart = require('connect-multiparty');
+
+
+
+var multer  = require('multer')
+// set storage
+var storage = multer.diskStorage({
+  destination: 'uploads/'
+})
+ 
+var upload = multer({ storage: storage })
+
+
+
 // Firebase App (the core Firebase SDK) is always required and
 // must be listed before other Firebase SDKs
 var session = require('express-session');
@@ -30,10 +45,17 @@ db.once('open', function() {
 app.use(cors())
 // parse application/json
 app.use(bodyParser.json())
+
+// for parsing application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
   extended: false
 }));
 
+// for parsing multipart/form-data
+ 
+app.use(express.static('public'));
+
+// for express-sessions
 app.use(session({secret: "sayil sunday",saveUninitialized: true,resave: true}));
 
 app.get('/', (req, res) => res.send('Hello World!'))

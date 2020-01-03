@@ -5,6 +5,26 @@ const jwt = require("jsonwebtoken");
 var emailCheck = require('email-check');
 var firebase = require("firebase/app");
 
+
+// for uploading images
+var multipart = require('connect-multiparty');
+var multipartMiddleware = multipart();
+
+var multer = require('multer')
+// set storage
+var storage = multer.diskStorage({
+  destination: 'uploads/'
+})
+
+var upload = multer({ storage: storage })
+
+const cloudinary = require('cloudinary');
+cloudinary.config({
+  cloud_name: 'sayil',
+  api_key: '443611676341187',
+  api_secret: 'wAPlHaXu39fxiKuBr9ZN4Gp6IxA'
+});
+
 router.get('/', (req, res) => {
   console.log("signup works");
   res.send("working")
@@ -100,35 +120,77 @@ router.post('/register', (req, res) => {
   }
 })
 
+
+router.post('/tres', (req, res) => {
+  console.log(req.body, req.files)
+})
+
+
+router.post("/image/:id", multipartMiddleware, async (req, res) => {
+
+  console.log(req.body, req.files)
+  let x = await cloudinary.v2.uploader.upload(
+    req.files.image.path, {
+    width: 700,
+    gravity: "south",
+    y: 80,
+    color: "white"
+  },
+    function (error, result) {
+      if (error) {
+        console.log("error here")
+      }
+      // res.json({
+      //   data: result
+      // });
+      imagePath = {
+        data: result.secure_url
+      };
+      console.log(imagePath.data, "is the image path");
+
+  User.findByIdAndUpdate(req.params.id, { image: imagePath.data } , { new: true, upsert: true}, (err, result) => {
+    if (err) {
+      console.log(err)
+    } else {
+      res.json({
+        message: "Successfully updated",
+        //  authData
+        result
+      })
+    }
+  })
+  });
+})
+
 router.get('/users', (req, res) => {
   let sess = req.session;
-  if(sess.emailOrPhone){
+  if (sess.emailOrPhone) {
     User.find((err, result) => {
       if (err) res.send(err)
-  
+
       res.send({ result: result })
     })
   } else {
     res.status(400).send({
-      message:"login first"
+      message: "login first"
     })
   }
- 
+
 })
 
 
 router.post('/addBank/:id', (req, res) => {
   let sess = req.session;
-  if(sess.emailOrPhone){
+  if (sess.emailOrPhone) {
     let newdet = new User({
       bank: [{
         accountNumber: req.body.accountNumber,
         accountName: req.body.accountName,
         bankName: req.body.bankName
       }]
-  
+
     })
-  
+
     User.findByIdAndUpdate(req.params.id,
       { $push: { bank: newdet.bank } },
       function (err, doc) {
@@ -143,10 +205,10 @@ router.post('/addBank/:id', (req, res) => {
       }
     );
   }
-  else{
-    res.send({message:"please login first"})
+  else {
+    res.send({ message: "please login first" })
   }
- 
+
 
 }
 )
@@ -164,13 +226,31 @@ router.get("/user/:id", (req, res) => {
         console.log(req.params.id);
       }
     })
-    
-  }else {
-    res.status(400).send({message: "you have to login in first"})
+
+  } else {
+    res.status(400).send({ message: "you have to login in first" })
   }
 
 })
 
+
+// to update a user with its ID
+router.put('/update-user/:id', (req, res) => {
+  // var newInfo = req.body
+  let newInfo = req.body
+  console.log(newInfo)
+  User.findByIdAndUpdate(req.params.id, newInfo, {upsert: true, new: true}, (err, result) => {
+      if (err) {
+          console.log(err)
+      } else {
+          res.json({
+              message: "Successfully updated",
+              //  authData
+              result
+          })
+      }
+  })
+})
 
 
 
@@ -192,15 +272,15 @@ router.get("/user/:id", (req, res) => {
 // });
 
 // })
-router.get('/logout',(req,res) => {
+router.get('/logout', (req, res) => {
   req.session.destroy((err) => {
-      if(err) {
-          return console.log(err);
-      }
-      // 
-      res.send({
-        message:"session terminated"
-      })
+    if (err) {
+      return console.log(err);
+    }
+    // 
+    res.send({
+      message: "session terminated"
+    })
   });
 
 });
