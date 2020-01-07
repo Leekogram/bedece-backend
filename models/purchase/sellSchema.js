@@ -10,7 +10,13 @@ const sellSchema = new schema({
         recieveAmount : Number
     },
     transDetails: {
-        creditAccount: String,
+        // please, these feilds are populated from the reg schema
+        // you get the bank details from
+        creditAccount: {
+            accountName:String,
+            accountNumber: String,
+            bankName: String
+        },
         refference: String
     },
     userId: {

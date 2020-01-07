@@ -213,9 +213,10 @@ router.post('/addBank/:id', (req, res) => {
 }
 )
 
-
+// to get a single user
 router.get("/user/:id", (req, res) => {
   let sess = req.session;
+  console.log(sess)
   if (sess.emailOrPhone) {
     User.findById(req.params.id, (err, result) => {
       if (err) {
@@ -226,7 +227,26 @@ router.get("/user/:id", (req, res) => {
         console.log(req.params.id);
       }
     })
+  } else {
+    res.status(400).send({ message: "you have to login in first" })
+  }
 
+})
+
+
+router.get("/user-bank/:id", (req, res) => {
+  let sess = req.session;
+  console.log(sess)
+  if (sess.emailOrPhone) {
+    User.findById(req.params.id,'bank', (err, result) => {
+      if (err) {
+        res.send("An Error Occured!");
+        console.log("error:");
+      } else {
+        res.send(result);
+        console.log(req.params.id);
+      }
+    })
   } else {
     res.status(400).send({ message: "you have to login in first" })
   }
