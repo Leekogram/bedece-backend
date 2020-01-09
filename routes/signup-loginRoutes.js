@@ -73,17 +73,18 @@ router.post('/register', (req, res) => {
           console.log("this account exists")
         } else {
           const newUser = new User({
-            fullName: req.body.fullName,
+            fname: req.body.fname,
+            lname: req.body.lname,
             address: req.body.address,
-
             Dob: req.body.Dob,
             phone: req.body.phone,
             email: req.body.email,
             password: req.body.password,
-            business: {
-              type: String
-              // for either trustee or corporate
-            },
+            acctType: req.body.acctType,
+            rcNumber: req.body.rcNumber,
+            busPhoneNum: req.body.busPhoneNumber,
+            busEmail: req.body.busEmail,
+            aboutMe:req.body.aboutMe,
             bank: [
               {
                 accountNumber: req.body.accountNumber,
@@ -148,18 +149,18 @@ router.post("/image/:id", multipartMiddleware, async (req, res) => {
       };
       console.log(imagePath.data, "is the image path");
 
-  User.findByIdAndUpdate(req.params.id, { image: imagePath.data } , { new: true, upsert: true}, (err, result) => {
-    if (err) {
-      console.log(err)
-    } else {
-      res.json({
-        message: "Successfully updated",
-        //  authData
-        result
+      User.findByIdAndUpdate(req.params.id, { image: imagePath.data }, { new: true, upsert: true }, (err, result) => {
+        if (err) {
+          console.log(err)
+        } else {
+          res.json({
+            message: "Successfully updated",
+            //  authData
+            result
+          })
+        }
       })
-    }
-  })
-  });
+    });
 })
 
 router.get('/users', (req, res) => {
@@ -238,7 +239,7 @@ router.get("/user-bank/:id", (req, res) => {
   let sess = req.session;
   console.log(sess)
   if (sess.emailOrPhone) {
-    User.findById(req.params.id,'bank', (err, result) => {
+    User.findById(req.params.id, 'bank', (err, result) => {
       if (err) {
         res.send("An Error Occured!");
         console.log("error:");
@@ -259,16 +260,16 @@ router.put('/update-user/:id', (req, res) => {
   // var newInfo = req.body
   let newInfo = req.body
   console.log(newInfo)
-  User.findByIdAndUpdate(req.params.id, newInfo, {upsert: true, new: true}, (err, result) => {
-      if (err) {
-          console.log(err)
-      } else {
-          res.json({
-              message: "Successfully updated",
-              //  authData
-              result
-          })
-      }
+  User.findByIdAndUpdate(req.params.id, newInfo, { upsert: true, new: true }, (err, result) => {
+    if (err) {
+      console.log(err)
+    } else {
+      res.json({
+        message: "Successfully updated",
+        //  authData
+        result
+      })
+    }
   })
 })
 

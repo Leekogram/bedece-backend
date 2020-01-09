@@ -62,6 +62,9 @@ let RegSchema = new Schema({
         type: String
         //for corporate or individual
     },
+    aboutMe:{
+            type: String
+    },
 
     created_date: {
         type: Date,

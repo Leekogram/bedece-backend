@@ -10,7 +10,13 @@ const buySchema = new schema({
         recieveAmount : Number
     },
     transDetails: {
-        creditAccount: String,
+        // please, these feilds are populated from the reg schema
+        // you get the users bank details from eg. https://bcd-backend.herokuapp.com/reg/user-bank/5e0ead95e49b090017f758ec
+        creditAccount: {
+            accountName:String,
+            accountNumber: String,
+            bankName: String
+        },
         refference: String
     },
     userId: {
