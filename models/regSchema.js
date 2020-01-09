@@ -7,6 +7,9 @@ let RegSchema = new Schema({
     lname: {
         type: String
     },
+    userName:{
+         type: String
+    },
     email: {
         type: String
     },

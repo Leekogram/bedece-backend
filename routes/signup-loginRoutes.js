@@ -75,6 +75,7 @@ router.post('/register', (req, res) => {
           const newUser = new User({
             fname: req.body.fname,
             lname: req.body.lname,
+            userName:req.body.userName,
             address: req.body.address,
             Dob: req.body.Dob,
             phone: req.body.phone,
@@ -129,7 +130,7 @@ router.post('/tres', (req, res) => {
 
 router.post("/image/:id", multipartMiddleware, async (req, res) => {
 
-  console.log(req.body, req.files)
+  console.log(req.body, req.files, req.params.id)
   let x = await cloudinary.v2.uploader.upload(
     req.files.image.path, {
     width: 700,
@@ -303,7 +304,6 @@ router.get('/logout', (req, res) => {
       message: "session terminated"
     })
   });
-
 });
 
 router.post("/login", async (req, res, next) => {
