@@ -210,8 +210,6 @@ router.post('/addBank/:id', (req, res) => {
   else {
     res.send({ message: "please login first" })
   }
-
-
 }
 )
 
@@ -268,7 +266,7 @@ router.put('/update-user/:id', (req, res) => {
       res.json({
         message: "Successfully updated",
         //  authData
-        result
+        result:result
       })
     }
   })
