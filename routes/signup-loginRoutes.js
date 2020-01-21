@@ -75,7 +75,7 @@ router.post('/register', (req, res) => {
           const newUser = new User({
             fname: req.body.fname,
             lname: req.body.lname,
-            userName:req.body.userName,
+            userName: req.body.userName,
             address: req.body.address,
             Dob: req.body.Dob,
             phone: req.body.phone,
@@ -85,7 +85,7 @@ router.post('/register', (req, res) => {
             rcNumber: req.body.rcNumber,
             busPhoneNum: req.body.busPhoneNumber,
             busEmail: req.body.busEmail,
-            aboutMe:req.body.aboutMe,
+            aboutMe: req.body.aboutMe,
             bank: [
               {
                 accountNumber: req.body.accountNumber,
@@ -165,92 +165,72 @@ router.post("/image/:id", multipartMiddleware, async (req, res) => {
 })
 
 router.get('/users', (req, res) => {
-  let sess = req.session;
-  if (sess.emailOrPhone) {
-    User.find((err, result) => {
-      if (err) res.send(err)
 
-      res.send({ result: result })
-    })
-  } else {
-    res.status(400).send({
-      message: "login first"
-    })
-  }
+  User.find((err, result) => {
+    if (err) res.send(err)
+
+    res.send({ result: result })
+  })
 
 })
 
 
 router.post('/addBank/:id', (req, res) => {
-  let sess = req.session;
-  if (sess.emailOrPhone) {
-    let newdet = new User({
-      bank: [{
-        accountNumber: req.body.accountNumber,
-        accountName: req.body.accountName,
-        bankName: req.body.bankName
-      }]
 
-    })
+  let newdet = new User({
+    bank: [{
+      accountNumber: req.body.accountNumber,
+      accountName: req.body.accountName,
+      bankName: req.body.bankName
+    }]
 
-    User.findByIdAndUpdate(req.params.id,
-      { $push: { bank: newdet.bank } },
-      function (err, doc) {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log(newdet)
-          res.status(200).send({
-            message: "added successful"
-          })
-        }
+  })
+
+  User.findByIdAndUpdate(req.params.id,
+    { $push: { bank: newdet.bank } },
+    function (err, doc) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(newdet)
+        res.status(200).send({
+          message: "added successful"
+        })
       }
-    );
-  }
-  else {
-    res.send({ message: "please login first" })
-  }
+    }
+  );
 }
+ 
+
 )
 
 // to get a single user
 router.get("/user/:id", (req, res) => {
-  let sess = req.session;
-  console.log(sess)
-  if (sess.emailOrPhone) {
-    User.findById(req.params.id, (err, result) => {
-      if (err) {
-        res.send("An Error Occured!");
-        console.log("error:");
-      } else {
-        res.send(result);
-        console.log(req.params.id);
-      }
-    })
-  } else {
-    res.status(400).send({ message: "you have to login in first" })
-  }
+
+  User.findById(req.params.id, (err, result) => {
+    if (err) {
+      res.send("An Error Occured!");
+      console.log("error:");
+    } else {
+      res.send(result);
+      console.log(req.params.id);
+    }
+  })
 
 })
 
 
 router.get("/user-bank/:id", (req, res) => {
-  let sess = req.session;
-  console.log(sess)
-  if (sess.emailOrPhone) {
-    User.findById(req.params.id, 'bank', (err, result) => {
-      if (err) {
-        res.send("An Error Occured!");
-        console.log("error:");
-      } else {
-        res.send(result);
-        console.log(req.params.id);
-      }
-    })
-  } else {
-    res.status(400).send({ message: "you have to login in first" })
-  }
 
+  User.findById(req.params.id, 'bank', (err, result) => {
+    if (err) {
+      res.send("An Error Occured!");
+      console.log("error:");
+    } else {
+      res.send(result);
+      console.log(req.params.id);
+    }
+  })
 })
 
 
@@ -266,7 +246,7 @@ router.put('/update-user/:id', (req, res) => {
       res.json({
         message: "Successfully updated",
         //  authData
-        result:result
+        result: result
       })
     }
   })
@@ -305,8 +285,7 @@ router.get('/logout', (req, res) => {
 });
 
 router.post("/login", async (req, res, next) => {
-  let sess = req.session;
-  sess.emailOrPhone = req.body.emailOrPhone
+
   if (Object.keys(req.body).length === 0) {
     console.log('sorry u didnt send any data')
     res.status(400).send('you didnt send any data')
