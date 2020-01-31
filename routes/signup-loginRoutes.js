@@ -129,7 +129,6 @@ router.post('/tres', (req, res) => {
 
 
 router.post("/image/:id", multipartMiddleware, async (req, res) => {
-
   console.log(req.body, req.files, req.params.id)
   let x = await cloudinary.v2.uploader.upload(
     req.files.image.path, {
@@ -165,27 +164,21 @@ router.post("/image/:id", multipartMiddleware, async (req, res) => {
 })
 
 router.get('/users', (req, res) => {
-
   User.find((err, result) => {
     if (err) res.send(err)
-
     res.send({ result: result })
   })
-
 })
 
 
 router.post('/addBank/:id', (req, res) => {
-
   let newdet = new User({
     bank: [{
       accountNumber: req.body.accountNumber,
       accountName: req.body.accountName,
       bankName: req.body.bankName
     }]
-
   })
-
   User.findByIdAndUpdate(req.params.id,
     { $push: { bank: newdet.bank } },
     function (err, doc) {
@@ -199,14 +192,10 @@ router.post('/addBank/:id', (req, res) => {
       }
     }
   );
-}
- 
-
-)
+})
 
 // to get a single user
 router.get("/user/:id", (req, res) => {
-
   User.findById(req.params.id, (err, result) => {
     if (err) {
       res.send("An Error Occured!");
@@ -216,12 +205,10 @@ router.get("/user/:id", (req, res) => {
       console.log(req.params.id);
     }
   })
-
 })
 
 
 router.get("/user-bank/:id", (req, res) => {
-
   User.findById(req.params.id, 'bank', (err, result) => {
     if (err) {
       res.send("An Error Occured!");

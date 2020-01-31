@@ -10,8 +10,6 @@ const port = 2194;
 
 var multipart = require('connect-multiparty');
 
-
-
 var multer  = require('multer')
 // set storage
 var storage = multer.diskStorage({
@@ -31,7 +29,7 @@ require("firebase/auth");
 require("firebase/firestore");
 
 
-  // mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true, useFindAndModify: false });
+// mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true, useFindAndModify: false });
 
 mongoose.connect('mongodb+srv://sayil:sayil2194@cluster0-knm9b.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
 
