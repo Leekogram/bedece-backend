@@ -13,9 +13,9 @@ const sellSchema = new schema({
         // please, these feilds are populated from the reg schema
         // you get the users bank details from eg. https://bcd-backend.herokuapp.com/reg/user-bank/5e0ead95e49b090017f758ec
         creditAccount: {
-            accountName:String,
-            accountNumber: String,
-            bankName: String
+            bcdAccountName:String,
+            bcdAccountNumber: String,
+            bcdBankName: String
         },
         refference: String
     },

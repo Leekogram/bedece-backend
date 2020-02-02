@@ -16,7 +16,11 @@ router.post('/buy', (req, res) => {
       recieveAmount: req.body.recieveAmount
     },
     transDetails: {
-      creditAccount: req.body.creditAccount,
+      creditAccount: {
+        bcdAccountName:req.body.bcdAccountName,
+        bcdAccountNumber:req.body.bcdAccountNumber,
+        bcdBankName:req.body.bcdBankName
+      },
       refference: req.body.refference
     },
     userId: req.body.userId,

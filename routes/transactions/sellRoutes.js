@@ -16,7 +16,11 @@ router.post('/sell', (req, res) => {
             recieveAmount: req.body.recieveAmount
         },
         transDetails: {
-            creditAccount: req.body.creditAccount,
+            creditAccount: {
+                bcdAccountName:req.body.bcdAccountName,
+                bcdAccountNumber:req.body.bcdAccountNumber,
+                bcdBankName:req.body.bcdBankName
+            },
             refference: req.body.refference
         },
 
@@ -42,7 +46,6 @@ router.post('/sell', (req, res) => {
 })
 // to get all the sells
 router.get('/all-sell', (req, res) => {
-
     Seller.find((err, result) => {
         if (err) res.send(err)
 

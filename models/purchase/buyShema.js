@@ -7,15 +7,15 @@ const buySchema = new schema({
     },
     recieve: {
         recieveCurrency: String,
-        recieveAmount : Number
+        recieveAmount: Number
     },
     transDetails: {
         // please, these feilds are populated from the reg schema
         // you get the users bank details from eg. https://bcd-backend.herokuapp.com/reg/user-bank/5e0ead95e49b090017f758ec
         creditAccount: {
-            accountName:String,
-            accountNumber: String,
-            bankName: String
+            bcdAccountName: String,
+            bcdAccountNumber: String,
+            bcdBankName: String
         },
         refference: String
     },
@@ -27,7 +27,7 @@ const buySchema = new schema({
         type: mongoose.Schema.Types.ObjectId
         // this is the generated transaction id 
     },
-   
+
     isDelivered: {
         type: Boolean,
         default: false
