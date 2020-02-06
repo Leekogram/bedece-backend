@@ -1,0 +1,4 @@
+
+{"message":"status:SUCCESS, user:undefined, type:buy, give:Dollars78900, recieve:undefinedundefined, transactionID:undefined","level":"info","timestamp":"2020-02-06T01:03:29.505Z"}
+{"message":"status:SUCCESS, user:undefined, type:sell, give:naira57899, recieve:undefinedundefined, transactionID:undefined","level":"info","timestamp":"2020-02-06T01:05:16.063Z"}
+{"message":"status:SUCCESS, user:Admin, type:Update Currency, currencyID:5e205a201a8e1e001750e1c2","level":"info","timestamp":"2020-02-06T01:44:28.421Z"}

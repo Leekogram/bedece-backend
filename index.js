@@ -7,7 +7,11 @@ var cors = require('cors')
 var db = mongoose.connection;
 const UserRouter = require("./routes/signup-loginRoutes");
 const port = 2194;
+//this file is required so we can query our logs 
+require('./workaround')
 
+//this file is required so i can use the logger configuration
+const logger = require('./logConfig')
 var multipart = require('connect-multiparty');
 
 var multer  = require('multer')
@@ -61,5 +65,7 @@ app.use('/reg', require('./routes/signup-loginRoutes'))
 app.use('/trans', require('./routes/transactions/buyRoutes'))
 app.use('/trans-sell', require('./routes/transactions/sellRoutes'))
 app.use('/fx', require('./routes/fxRoutes/fxroutes'))
+app.use('/logs', require('./routes/loggerRoutes'))
+
 
 app.listen(process.env.PORT || port, () => console.log(`Example app listening on port ${port}!`))

@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const Buyer = require('../../models/purchase/buyShema')
+const logger = require('../../logConfig')
+var MongoClient = require('mongodb').MongoClient;
 
 router.get('/', (req, res) => {
   res.send('its now working')
@@ -36,14 +38,17 @@ router.post('/buy', (req, res) => {
         message: "saved successfully"
       });
       console.log("success")
+      logger.info( `status:SUCCESS, user:${req.body.userId}, type:buy, give: ${req.body.giveCurrency} ${req.body.giveAmount}, recieve: ${req.body.recieveCurrency} ${req.body.recieveAmount}, transactionID:${req.body.transactionId}`)
     })
     .catch(err => {
       console.log(err);
+      logger.info( `status:FAILURE, user:${req.body.userId}, type:buy, give: ${req.body.giveCurrency} ${req.body.giveAmount}, recieve: ${req.body.recieveCurrency} ${req.body.recieveAmount}, transactionID:${req.body.transactionId}`)
     });
+   
 
 })
 // to get all the buys
-router.get('/all-buys', (req, res) => {
+router.get('/all-buys', (db,req, res) => {
   Buyer.find((err, result) => {
     if (err) res.send(err)
 
@@ -51,9 +56,7 @@ router.get('/all-buys', (req, res) => {
 
   })
 })
-
-
-
+ 
 
 // get all the buys made by a single user
 router.get('/all-buy/:id', (req, res) => {

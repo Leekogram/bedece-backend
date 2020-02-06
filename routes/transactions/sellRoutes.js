@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Seller = require('../../models/purchase/sellSchema')
+const logger = require('../../logConfig')
 
 router.get('/t', (req, res) => {
     res.send('its now working')
@@ -37,10 +38,12 @@ router.post('/sell', (req, res) => {
             res.status(200).json({
                 message: "saved successfully"
             });
+            logger.info( `status:SUCCESS, user:${req.body.userId}, type:sell, give:${req.body.giveCurrency}${req.body.giveAmount}, recieve:${req.body.recieveCurrency}${req.body.recieveAmount}, transactionID:${req.body.transactionId}`)
             console.log("success")
         })
         .catch(err => {
             console.log(err);
+            logger.info( `status:FAILURE, user:${req.body.userId}, type:buy, give:${req.body.giveCurrency}${req.body.giveAmount}, recieve:${req.body.recieveCurrency}${req.body.recieveAmount}, transactionID:${req.body.transactionId}`)
         });
 
 })
