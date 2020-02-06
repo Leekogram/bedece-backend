@@ -2,7 +2,7 @@
 const router = require("express").Router();
 const logger = require('./../logConfig')
 
-router.get('/', (req, res) => {
+router.get('/log', (req, res) => {
 
     logger.query({}, function(err, results) {
       if (err) {
