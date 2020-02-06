@@ -8,6 +8,10 @@ let RateSchema = new Schema({
         type: String,
         default: 1
     },
+    rateFromNaira: {
+        type: String,
+        default: 1
+    },
     created_date: {
         type: Date,
         default: Date.now,

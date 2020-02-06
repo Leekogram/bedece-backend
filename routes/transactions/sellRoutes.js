@@ -22,6 +22,11 @@ router.post('/sell', (req, res) => {
                 bcdAccountNumber:req.body.bcdAccountNumber,
                 bcdBankName:req.body.bcdBankName
             },
+            debitAccount: {
+                clientAccountName:req.body.bcdAccountName,
+                clientAccountNumber:req.body.bcdAccountNumber,
+                clientBankName:req.body.bcdBankName
+            },
             refference: req.body.refference
         },
 

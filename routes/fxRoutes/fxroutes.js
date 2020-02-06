@@ -9,7 +9,8 @@ router.get('/', (req, res) => {
 router.post('/currency', (req, res) => {
     let newRate = new Rates({
         currency: req.body.currency,
-        rateToNaira: req.body.rateToNaira
+        rateToNaira: req.body.rateToNaira,
+        rateFromNaira: req.body.rateFromNaira
     })
    
     newRate

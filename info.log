@@ -2,3 +2,8 @@
 {"message":"status:SUCCESS, user:undefined, type:buy, give:Dollars78900, recieve:undefinedundefined, transactionID:undefined","level":"info","timestamp":"2020-02-06T01:03:29.505Z"}
 {"message":"status:SUCCESS, user:undefined, type:sell, give:naira57899, recieve:undefinedundefined, transactionID:undefined","level":"info","timestamp":"2020-02-06T01:05:16.063Z"}
 {"message":"status:SUCCESS, user:Admin, type:Update Currency, currencyID:5e205a201a8e1e001750e1c2","level":"info","timestamp":"2020-02-06T01:44:28.421Z"}
+{"message":"status:SUCCESS, user:undefined, type:sell, give:undefinedundefined, recieve:NAIRA12332434, transactionID:undefined","level":"info","timestamp":"2020-02-06T13:04:54.795Z"}
+{"message":"status:SUCCESS, user:Admin, type:Update Currency, currencyID:5e2059c81a8e1e001750e1c1","level":"info","timestamp":"2020-02-06T22:06:03.580Z"}
+{"message":"status:SUCCESS, user:Admin, type:Update Currency, currencyID:5e205a201a8e1e001750e1c2","level":"info","timestamp":"2020-02-06T22:11:10.772Z"}
+{"message":"status:SUCCESS, user:Admin, type:Update Currency, currencyID:5e205a2a1a8e1e001750e1c3","level":"info","timestamp":"2020-02-06T22:47:12.339Z"}
+{"message":"status:SUCCESS, user:Admin, type:Update Currency, currencyID:5e205a431a8e1e001750e1c4","level":"info","timestamp":"2020-02-06T22:48:41.570Z"}

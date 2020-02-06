@@ -17,6 +17,11 @@ const sellSchema = new schema({
             bcdAccountNumber: String,
             bcdBankName: String
         },
+        debitAccount: {
+            clientAccountName:String,
+            clientAccountNumber: String,
+            clientBankName: String
+        },
         refference: String
     },
     userId: {
