@@ -6,7 +6,7 @@ router.get('/log', (req, res) => {
 
     logger.query({}, function(err, results) {
       if (err) {
-        res.status(400).json(err);
+        res.send(err);
     } else {
         res.send(results);
     }
