@@ -28,9 +28,9 @@ const buySchema = new schema({
         // this is the generated transaction id 
     },
 
-    isDelivered: {
-        type: Boolean,
-        default: false
+    status: {
+        type: String,
+        default: "pending"
     },
     deliveryMethod: {
         type: String
