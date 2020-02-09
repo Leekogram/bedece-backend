@@ -27,7 +27,7 @@ router.post('/buy', (req, res) => {
     },
     userId: req.body.userId,
     transactionId: req.body.transactionId,
-    isDelivered: req.body.isDelivered,
+    status: req.body.status,
     deliveryMethod: req.body.deliveryMethod,
 
   })
@@ -48,7 +48,7 @@ router.post('/buy', (req, res) => {
 
 })
 // to get all the buys
-router.get('/all-buys', (db,req, res) => {
+router.get('/all-buys', (req, res) => {
   Buyer.find((err, result) => {
     if (err) res.send(err)
 

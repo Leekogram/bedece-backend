@@ -23,16 +23,16 @@ router.post('/sell', (req, res) => {
                 bcdBankName:req.body.bcdBankName
             },
             debitAccount: {
-                clientAccountName:req.body.bcdAccountName,
-                clientAccountNumber:req.body.bcdAccountNumber,
-                clientBankName:req.body.bcdBankName
+                clientAccountName:req.body.clientAccountName,
+                clientAccountNumber:req.body. clientAccountNumber,
+                clientBankName:req.body.clientBankName
             },
             refference: req.body.refference
         },
 
         userId: req.body.userId,
         transactionId: req.body.transactionId,
-        isDelivered: req.body.isDelivered,
+        status: req.body.status,
         deliveryMethod: req.body.deliveryMethod,
         deliveryAddress:
         req.body.deliveryAddress,

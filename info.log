@@ -7,3 +7,4 @@
 {"message":"status:SUCCESS, user:Admin, type:Update Currency, currencyID:5e205a201a8e1e001750e1c2","level":"info","timestamp":"2020-02-06T22:11:10.772Z"}
 {"message":"status:SUCCESS, user:Admin, type:Update Currency, currencyID:5e205a2a1a8e1e001750e1c3","level":"info","timestamp":"2020-02-06T22:47:12.339Z"}
 {"message":"status:SUCCESS, user:Admin, type:Update Currency, currencyID:5e205a431a8e1e001750e1c4","level":"info","timestamp":"2020-02-06T22:48:41.570Z"}
+{"message":"status:SUCCESS, user:5df0e34e2dffde001728d8cb, type:buy, give: dollars 5000, recieve: pounds 2345, transactionID:5df0e34e2dffde001728d8cb","level":"info","timestamp":"2020-02-07T00:32:13.494Z"}

@@ -86,13 +86,13 @@ router.post('/register', (req, res) => {
             busPhoneNum: req.body.busPhoneNumber,
             busEmail: req.body.busEmail,
             aboutMe: req.body.aboutMe,
-            bank: [
-              {
-                accountNumber: req.body.accountNumber,
-                accountName: req.body.accountName,
-                bankName: req.body.bankName,
-              }
-            ]
+            // bank: [
+            //   {
+            //     accountNumber: req.body.accountNumber,
+            //     accountName: req.body.accountName,
+            //     bankName: req.body.bankName,
+            //   }
+            // ]
           });
 
           bcrypt.genSalt(10, (err, salt) => {
@@ -207,17 +207,37 @@ router.get("/user/:id", (req, res) => {
   })
 })
 
-
-router.get("/user-bank/:id", (req, res) => {
-  User.findById(req.params.id, 'bank', (err, result) => {
+// filter user to get banks
+router.get("/user-banks/:id", (req, res) => {
+  User.findById(req.params.id, (err, result) => {
     if (err) {
       res.send("An Error Occured!");
       console.log("error:");
     } else {
-      res.send(result);
+      res.send(result.bank);
       console.log(req.params.id);
     }
   })
+})
+
+
+// delete a users bank
+router.get("/delUser-bank/:id/:bankId", (req, res) => {
+  User.update(
+    { _id: req.params.id },
+    { $pull: { bank: { _id: req.params.bankId } } },
+    function (err) {
+      if (err) {
+        res.send("theres an error")
+        console.log(err)
+      }
+      else {
+        res.send("deleted")
+        console.log("done")
+      }
+    }
+  )
+
 })
 
 
