@@ -280,15 +280,11 @@ router.put('/update-user/:id', (req, res) => {
 
 // })
 router.get('/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      return console.log(err);
-    }
-    // 
+  
     res.send({
       message: "session terminated"
     })
-  });
+
 });
 
 router.post("/login", async (req, res, next) => {
