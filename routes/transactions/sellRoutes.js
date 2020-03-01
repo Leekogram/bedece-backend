@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const Seller = require('../../models/purchase/sellSchema')
 const logger = require('../../logConfig')
-
+const User = require ('../../models/regSchema')
+var nodemailer = require('nodemailer');
 router.get('/t', (req, res) => {
     res.send('its now working')
 })
@@ -45,6 +46,43 @@ router.post('/sell', (req, res) => {
             });
             logger.info( `status:SUCCESS, user:${req.body.userId}, type:sell, give:${req.body.giveCurrency}${req.body.giveAmount}, recieve:${req.body.recieveCurrency}${req.body.recieveAmount}, transactionID:${req.body.transactionId}`)
             console.log("success")
+
+             // this fetches the users details to get their mails
+      User.find({ _id: req.body.userId  }, (err, result) => {
+        if (err) { res.send(err) }
+        else {
+            // res.send(result) 
+            console.log(req.body.userId)
+
+          var transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: 'sundaysayil4u@gmail.com',
+              pass: 'sayil2194'
+            }
+          });
+          var mailOptions = {
+            from: 'sundaysayil4u@gmail.com',
+            to: result[0].email,
+            subject: 'Sending Email using Node.js',
+            html: `<h1>hi ${result[0].fname} ${result[0].lname}  </h1> <br><p> you made a purchase of with the following details </p>  <br>
+          <p> ${newSeller}</p>
+      <p>in the following projects: ${req.body.interests}</p><br>
+      phone:${req.body.phone}`
+          };
+
+          transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+              console.log(error);
+              // res.send(error)
+            } else {
+              console.log('Email sent: ' + info.response);
+              // res.send('Email sent, Thank You!! ');
+            }
+          });;
+        }
+
+      })
         })
         .catch(err => {
             console.log(err);
