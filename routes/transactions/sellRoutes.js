@@ -41,8 +41,9 @@ router.post('/sell', (req, res) => {
     newSeller
         .save()
         .then(seller => {
-            res.status(200).json({
-                message: "saved successfully"
+            res.json({
+                message: "saved successfully",
+                id:newSeller._id
             });
             logger.info( `status:SUCCESS, user:${req.body.userId}, type:sell, give:${req.body.giveCurrency}${req.body.giveAmount}, recieve:${req.body.recieveCurrency}${req.body.recieveAmount}, transactionID:${req.body.transactionId}`)
             console.log("success")
@@ -58,17 +59,65 @@ router.post('/sell', (req, res) => {
             service: 'gmail',
             auth: {
               user: 'sundaysayil4u@gmail.com',
-              pass: 'sayil2194'
+              pass: 'elisha2194'
             }
           });
           var mailOptions = {
-            from: 'sundaysayil4u@gmail.com',
+            from: 'bdc (sell)',
             to: result[0].email,
-            subject: 'Sending Email using Node.js',
-            html: `<h1>hi ${result[0].fname} ${result[0].lname}  </h1> <br><p> you made a purchase of with the following details </p>  <br>
-          <p> ${newSeller}</p>
-      <p>in the following projects: ${req.body.interests}</p><br>
-      phone:${req.body.phone}`
+            subject: '313BDC transactions (sell)',
+            html: `
+            <h2>313BDC</h2>
+            <div> 313BDC <br>
+            Babura House Plaza,<br>
+            Addis Ababa Cresent,<br>
+            Off Ladi Kwali Street<br>
+            Wuse Zone 4, Abuja
+            </div>        
+            <p>Dear ${result[0].fname},  </p> you made a transaction with the following details 
+            <table style="width:100%">
+            <caption>Transactions</caption> <br>
+            <tr>
+              <td style="border: 1px solid black;
+            border-collapse: collapse;">Transaction ID</td>
+              <td style="border: 1px solid black;
+            border-collapse: collapse;">${ newSeller._id}</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid black;
+            border-collapse: collapse;">BDC ACCOUNT NUMBER</td>
+              <td style="border: 1px solid black;
+            border-collapse: collapse;">${ newSeller.transDetails.creditAccount.bcdAccountNumber}</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid black;
+            border-collapse: collapse;">ACCOUNT HOLDER</td>
+              <td style="border: 1px solid black;
+            border-collapse: collapse;">${ newSeller.transDetails.creditAccount.bcdAccountName}</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid black;
+            border-collapse: collapse;">BANK NAME</td>
+              <td style="border: 1px solid black;
+            border-collapse: collapse;">${ newSeller.transDetails.creditAccount.bcdBankName}</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid black;
+            border-collapse: collapse;">PAYMENT</td>
+              <td style="border: 1px solid black;
+            border-collapse: collapse;">${ newSeller.pay.payAmount} ${newSeller.pay.payCurrency}</td>
+            </tr>
+            <tr>
+            <td style="border: 1px solid black;
+            border-collapse: collapse;">RECIEVED</td>
+            <td style="border: 1px solid black;
+            border-collapse: collapse;">${ newSeller.recieve.recieveAmount} ${newSeller.recieve.recieveCurrency}</td>
+            </tr>
+          </table> <br>
+          Thanks, <br>
+          The 313BDC team <br>
+          08031230313, 08099936398, 07058890313
+         `
           };
 
           transporter.sendMail(mailOptions, function (error, info) {
