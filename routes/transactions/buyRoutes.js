@@ -2,6 +2,7 @@ const router = require("express").Router();
 const Buyer = require('../../models/purchase/buyShema')
 const User = require('../../models/regSchema')
 const logger = require('../../logConfig')
+const TransLog = require ('../../TranslogerConfig')
 var MongoClient = require('mongodb').MongoClient;
 var nodemailer = require('nodemailer');
 
@@ -29,7 +30,7 @@ router.post('/buy', (req, res) => {
     },
     userId: req.body.userId,
     transactionId: req.body.transactionId,
-    status: req.body.status,
+    // status: req.body.status,
     deliveryMethod: req.body.deliveryMethod,
 
   })
@@ -43,6 +44,11 @@ router.post('/buy', (req, res) => {
       });
       console.log("success")
       logger.info(`status:SUCCESS, user:${req.body.userId}, type:buy, give: ${req.body.giveCurrency} ${req.body.giveAmount}, recieve: ${req.body.recieveCurrency} ${req.body.recieveAmount}, transactionID:${req.body.transactionId}`);
+
+      TransLog.info({
+        userName:newBuyer.userId, transId:newBuyer.transactionId, activity:"Buy Currency", amount:newBuyer.give.giveAmount,
+        currency:newBuyer.give.giveCurrency, status:newBuyer.status, date:Date.now
+      })
 
       // this fetches the users details to get their mails
       User.find({ _id: req.body.userId }, (err, result) => {

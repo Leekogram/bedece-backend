@@ -22,8 +22,6 @@ var storage = multer.diskStorage({
  
 var upload = multer({ storage: storage })
 
-
-
 // Firebase App (the core Firebase SDK) is always required and
 // must be listed before other Firebase SDKs
 var session = require('express-session');
@@ -33,9 +31,9 @@ require("firebase/auth");
 require("firebase/firestore");
 
 
-  // mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true, useFindAndModify: false });
+  mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true, useFindAndModify: false });
 
-mongoose.connect('mongodb+srv://sayil:sayil2194@cluster0-knm9b.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
+// mongoose.connect('mongodb+srv://sayil:sayil2194@cluster0-knm9b.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
 
 
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -66,6 +64,7 @@ app.use('/trans', require('./routes/transactions/buyRoutes'))
 app.use('/trans-sell', require('./routes/transactions/sellRoutes'))
 app.use('/fx', require('./routes/fxRoutes/fxroutes'))
 app.use('/logs', require('./routes/loggerRoutes'))
+app.use('/admin', require('./routes/admin/adminRoutes'))
 
 
 app.listen(process.env.PORT || port, () => console.log(`Example app listening on port ${port}!`))
