@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+
+  <title>Document</title>
+</head>
+
+<body>
+
+  <div id="app">
+    <h1>{{message}} welcome to bdc</h1>
+
+    enter the your email <br>
+    <input type="email" name="" id="" v-model="email"> <br>
+    <button @click="send()">send</button>
+    <h1>{{msg}}</h1>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+</body>
+
+
+
+
+<script>
+
+  var app = new Vue({
+    el: '#app',
+    data: {
+      message: 'Hello Vue!',
+      email: "",
+      msg: ""
+    },
+    methods: {
+      send() {
+        var self = this
+        axios.post('/reg/fpass', {
+          email: this.email,
+        })
+          .then(function (response) {
+            console.log(response);
+            self.msg = response.data.message
+            // self.spiner = false
+            // self.call = true
+
+            // alert("you are in ", response)
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
+    }
+  })
+
+</script>
+
+
+</html>

@@ -160,7 +160,7 @@ router.post("/login", async (req, res, next) => {
 
   if (Object.keys(req.body).length === 0) {
     console.log('sorry u didnt send any data')
-    res.status(400).send('you didnt send any data')
+    res.send('you didnt send any data')
   } else {
 
     await User.findOne({
@@ -172,7 +172,7 @@ router.post("/login", async (req, res, next) => {
       .then(user => {
         console.log(req.body)
         if (user == null) {
-          res.status(400).json({
+          res.status.json({
             message: "wrong login details",
             devMessage: "this user wasnt found"
           })

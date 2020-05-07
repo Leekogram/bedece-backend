@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+    <script src="https://npmcdn.com/vue-router/dist/vue-router.js"></script>
+
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id="app">
+        <h1>{{message}} welcome to bdc</h1>
+        enter the your password <br>
+        <input type="password" name="" id="" v-model="password"> <br>
+        <button @click="send()">send</button>
+        <h1>{{msg}}</h1>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+</body>
+
+
+<script>
+
+    const router = new VueRouter({
+        mode: 'history',
+        routes: [
+            
+        ]
+    })
+
+    var app = new Vue({
+        router,
+        el: '#app',
+        data: {
+            message: 'Hello Vue!',
+            password: "",
+            msg: ""
+        },
+        methods: {
+
+            send() {
+                var self = this
+                let newD = {
+                    password: this.password
+                }
+                axios
+                    .post(`/test/reset-pass/${this.$route.query.e}/${this.$route.query.q}`, newD)
+                    .then(function (response) {
+                        console.log(response);
+                        self.msg = response.data.message
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                console.log(this.$route.query.e)
+            }
+        }
+    })
+</script>
+
+
+</html>
