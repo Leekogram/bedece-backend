@@ -42,7 +42,7 @@ router.post('/register', (req, res) => {
   } else {
     // console.log(req.body, 'is the body')
     if (!req.body.password || req.body.password.length < 4) {
-      errors.push("Pin must not be less than 4")
+      errors.push("Password must not be less than four characters")
       res.status(404).json({
         status: 'error',
         message: errors,
@@ -346,14 +346,17 @@ router.get("/resetPass2", (req, res) => {
 })
 
 router.post('/fpass', async (req, res) => {
+  
   if (Object.keys(req.body).length === 0) {
-    res.send("you didnt send any data")
+    res.json({
+      message:"please enter email"
+    })
   } else {
     await User.findOne({ email: req.body.email }).then(user => {
       console.log(req.body)
       if (user == null) {
         res.json({
-          message: "wrong email",
+          message: "Email address is not associated with any account",
           devMessage: "no user has registered with the email"
         })
         console.log("not seen")
@@ -377,7 +380,7 @@ router.post('/fpass', async (req, res) => {
           <div> 313BDC <br>
           dear ${user.fname} ${user.fname}
           </div>        
-          follow this  <a href="https://bcd-backend.herokuapp.com/reg/resetPass2/?e=${user._id}&q=${token}">link</a> to reset your password. <br> this link expires after an hour. if you did not make this request, kindly ignore the mail.
+          follow this  <a href="http://localhost:2194/reg/resetPass2/?e=${user._id}&q=${token}">link</a> to reset your password. <br> this link expires after an hour. if you did not make this request, kindly ignore the mail.
           Thanks, <br>
           The 313BDC team <br>
           08031230313, 08099936398, 07058890313 `
@@ -390,7 +393,7 @@ router.post('/fpass', async (req, res) => {
             console.log('Email sent: ' + info.response);
             // res.send('Email sent, Thank You!! ');
             res.json({
-              message: "the link has been sent to your mail",
+              message: "The link has been sent to your Email",
               data: user
             })
           }

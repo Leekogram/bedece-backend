@@ -13,12 +13,12 @@ const TransLog = createLogger({
             format: format.combine(format.timestamp(), format.json())
         }),
 
-        // new transports.MongoDB({
-        //     level:'info',
-        //     db: "mongodb+srv://sayil:sayil2194@cluster0-knm9b.mongodb.net/test?retryWrites=true&w=majority",
-        //     collection:'TransLogs',
-        //     format: format.combine(format.timestamp(), format.json())
-        // })
+        new transports.MongoDB({
+            level:'info',
+            db: "mongodb+srv://sayil:SEYILNEN2194@cluster0-0j8cs.mongodb.net/test?retryWrites=true&w=majority",
+            collection:'TransLogs',
+            format: format.combine(format.timestamp(), format.json())
+        })
     ]
 })
 module.exports = TransLog
