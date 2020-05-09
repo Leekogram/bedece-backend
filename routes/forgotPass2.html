@@ -15214,9 +15214,8 @@
                 <div class="header-body text-center mb-7">
                     <div class="row justify-content-center">
                         <div class="col-xl-5 col-lg-6 col-md-8 px-5">
-                            <h1 class="text-white">Forgot Your Password!</h1>
-                            <p class="text-lead text-white">Please Enter your Email associated with this account to
-                                reset your
+                            <h1 class="text-white">Reset Password!</h1>
+                            <p class="text-lead text-white">Please Enter your new
                                 password</p>
                         </div>
                     </div>
@@ -15251,7 +15250,7 @@
 
                                     <input class="form-control" placeholder="Password " type="text" v-model="password">
                                     <br>
-                                    <input class="form-control" placeholder="onfirm Password " type="text"
+                                    <input class="form-control" placeholder="Confirm Password " type="text"
                                         v-model="Cpassword">
 
 
@@ -15309,14 +15308,16 @@
 
             send() {
                 var self = this
-                // self.spiner = true
+                self.spiner = true
                 console.log(self.password)
                 if (self.password.length == 0) {
+                    self.spiner = false
                     self.msg = "Please enter password"
                     console.log("pls worf")
                 }
                 else
                     if (self.password != self.Cpassword) {
+                        self.spiner = false
                         self.msg = "Password and Confirm passwords must match"
 
 
