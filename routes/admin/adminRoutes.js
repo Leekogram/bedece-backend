@@ -1,7 +1,8 @@
 const router = require("express").Router();
-const User = require('../../models/admin/adminSchema')
+const AdminUser = require('../../models/admin/adminSchema')
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
+var nodemailer = require('nodemailer');
 
 
 
@@ -58,7 +59,7 @@ router.post('/regAdmin', (req, res) => {
       res.send(errors);
       console.log(errors)
     } else {
-      User.findOne({
+      AdminUser.findOne({
         $or: [
           { email: req.body.email },
           { phone: req.body.phone }
@@ -71,13 +72,10 @@ router.post('/regAdmin', (req, res) => {
           })
           console.log("this account exists")
         } else {
-          const newAdmin = new User({
-           
+          const newAdmin = new AdminUser({
             email: req.body.email,
             password: req.body.password,
-           
           });
-
           bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(newAdmin.password, salt, (err, hash) => {
               if (err) res.send("error saving");
@@ -105,6 +103,116 @@ router.post('/regAdmin', (req, res) => {
   }
 })
 
+
+router.post('/fpass', async (req, res) => {
+
+  if (Object.keys(req.body).length === 0) {
+    res.json({
+      message: "please enter email"
+    })
+  } else {
+    await AdminUser.findOne({ email: req.body.email }).then(user => {
+      console.log(req.body)
+      if (user == null) {
+        res.json({
+          message: "Email address is not associated with any Admin",
+          devMessage: "no admin has registered with the email"
+        })
+        console.log("not seen")
+      }
+      else {
+        const token = jwt.sign({ exp: Math.floor(Date.now() / 1000) + (60 * 60), user }, "my_secret");
+
+        var transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: 'sundaysayil4u@gmail.com',
+            pass: 'seyilnen2194'
+          }
+        });
+        var mailOptions = {
+          from: 'bcd ',
+          to: user.email,
+          subject: '313bdc Password reset',
+          html: ` 
+          <h2>313BDC</h2>
+          <div> 313BDC <br>
+          dear ADMIN ${user.email}
+          </div>        
+          follow this  <a href="https://bcd-backend.herokuapp.com/reg/resetPass2/?e=${user._id}&q=${token}">link</a> to reset your password. <br> this link expires after an hour. if you did not make this request, kindly ignore the mail.
+          Thanks, <br>
+          The 313BDC team <br>
+          08031230313, 08099936398, 07058890313 `
+        };
+        transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            console.log(error);
+            // res.send(error)
+          } else {
+            console.log('Email sent: ' + info.response);
+            // res.send('Email sent, Thank You!! ');
+            res.json({
+              message: "The link has been sent to your Email",
+              data: user
+            })
+          }
+        });;
+      }
+    });
+  }
+})
+
+
+
+router.post("/reset-pass/:id/:token", (req, res) => {
+  // console.log(req.params.token)
+
+  // i verify the token here
+  jwt.verify(req.params.token, "my_secret", (err, authData) => {
+    if (err) {
+      console.log("errorror")
+      res.json({
+        message: "sorry, this link has expired"
+      })
+    }
+    else {
+      let newInfo = req.body
+      if (req.body.password == "") {
+        res.json({
+          message: "please send password",
+          //  authData
+
+        })
+      } else {
+        console.log(newInfo.password)
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(newInfo.password, salt, (err, hash) => {
+            if (err) throw error;
+            else {
+              newInfo.password = hash;
+              AdminUser.findByIdAndUpdate(req.params.id, newInfo, { upsert: true, new: true }, (err, result) => {
+                if (err) {
+                  console.log(err)
+                } else {
+                  res.json({
+                    message: "Successfully updated",
+                    //  authData
+                    result: result
+                  })
+                }
+              })
+              // console.log(newAdminUser);
+            }
+          });
+        });
+        console.log("success", newInfo)
+      }
+
+    }
+  })
+
+})
+
 // router.post("/image/:id", multipartMiddleware, async (req, res) => {
 //   console.log(req.body, req.files, req.params.id)
 //   let x = await cloudinary.v2.uploader.upload(
@@ -126,7 +234,7 @@ router.post('/regAdmin', (req, res) => {
 //       };
 //       console.log(imagePath.data, "is the image path");
 
-//       User.findByIdAndUpdate(req.params.id, { image: imagePath.data }, { new: true, upsert: true }, (err, result) => {
+//       AdminUser.findByIdAndUpdate(req.params.id, { image: imagePath.data }, { new: true, upsert: true }, (err, result) => {
 //         if (err) {
 //           console.log(err)
 //         } else {
@@ -141,7 +249,7 @@ router.post('/regAdmin', (req, res) => {
 // })
 
 router.get('/users', (req, res) => {
-  User.find((err, result) => {
+  AdminUser.find((err, result) => {
     if (err) res.send(err)
     res.send({ result: result })
   })
@@ -149,10 +257,9 @@ router.get('/users', (req, res) => {
 
 
 router.get('/logout', (req, res) => {
-  
-    res.send({
-      message: "session terminated"
-    })
+  res.send({
+    message: "session terminated"
+  })
 
 });
 
@@ -163,7 +270,7 @@ router.post("/login", async (req, res, next) => {
     res.send('you didnt send any data')
   } else {
 
-    await User.findOne({
+    await AdminUser.findOne({
       $or: [
         { email: req.body.emailOrPhone },
         { phone: req.body.emailOrPhone }

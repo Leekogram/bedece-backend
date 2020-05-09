@@ -1,13 +1,18 @@
 const router = require("express").Router();
 const Seller = require('../../models/purchase/sellSchema')
 const logger = require('../../logConfig')
-const User = require ('../../models/regSchema')
+const User = require('../../models/regSchema')
 var nodemailer = require('nodemailer');
 router.get('/t', (req, res) => {
     res.send('its now working')
 })
-router.post('/sell', (req, res) => {
+router.post('/sell', async (req, res) => {
+    let userDetails
+    await User.find({ _id: req.body.userId }, (err, result) => {
+        userDetails = result;
 
+    })
+    console.log(userDetails[0].fname, "out")
     let newSeller = new Seller({
         pay: {
             payCurrency: req.body.payCurrency,
@@ -19,54 +24,62 @@ router.post('/sell', (req, res) => {
         },
         transDetails: {
             creditAccount: {
-                bcdAccountName:req.body.bcdAccountName,
-                bcdAccountNumber:req.body.bcdAccountNumber,
-                bcdBankName:req.body.bcdBankName
+                bcdAccountName: req.body.bcdAccountName,
+                bcdAccountNumber: req.body.bcdAccountNumber,
+                bcdBankName: req.body.bcdBankName
             },
             debitAccount: {
-                clientAccountName:req.body.clientAccountName,
-                clientAccountNumber:req.body. clientAccountNumber,
-                clientBankName:req.body.clientBankName
+                clientAccountName: req.body.clientAccountName,
+                clientAccountNumber: req.body.clientAccountNumber,
+                clientBankName: req.body.clientBankName
             },
             refference: req.body.refference
         },
 
         userId: req.body.userId,
+        user: {
+            fname: userDetails[0].fname,
+            lname: userDetails[0].lname,
+            email: userDetails[0].email,
+            phone: userDetails[0].phone
+        },
         transactionId: req.body.transactionId,
         status: req.body.status,
         deliveryMethod: req.body.deliveryMethod,
         deliveryAddress:
-        req.body.deliveryAddress,
+            req.body.deliveryAddress,
     })
+
+    console.log(newSeller)
     newSeller
         .save()
         .then(seller => {
             res.json({
                 message: "saved successfully",
-                id:newSeller._id
+                id: newSeller._id
             });
-            logger.info( `status:SUCCESS, user:${req.body.userId}, type:sell, give:${req.body.giveCurrency}${req.body.giveAmount}, recieve:${req.body.recieveCurrency}${req.body.recieveAmount}, transactionID:${req.body.transactionId}`)
+            logger.info(`status:SUCCESS, user:${req.body.userId}, type:sell, give:${req.body.giveCurrency}${req.body.giveAmount}, recieve:${req.body.recieveCurrency}${req.body.recieveAmount}, transactionID:${req.body.transactionId}`)
             console.log("success")
 
-             // this fetches the users details to get their mails
-      User.find({ _id: req.body.userId  }, (err, result) => {
-        if (err) { res.send(err) }
-        else {
-            // res.send(result) 
-            console.log(req.body.userId)
+            // this fetches the users details to get their mails
+            User.find({ _id: req.body.userId }, (err, result) => {
+                if (err) { res.send(err) }
+                else {
+                    // res.send(result) 
+                    console.log(req.body.userId)
 
-          var transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-              user: 'sundaysayil4u@gmail.com',
-              pass: 'elisha2194'
-            }
-          });
-          var mailOptions = {
-            from: 'bdc (sell)',
-            to: result[0].email,
-            subject: '313BDC transactions (sell)',
-            html: `
+                    var transporter = nodemailer.createTransport({
+                        service: 'gmail',
+                        auth: {
+                            user: 'sundaysayil4u@gmail.com',
+                            pass: 'elisha2194'
+                        }
+                    });
+                    var mailOptions = {
+                        from: 'bdc (sell)',
+                        to: result[0].email,
+                        subject: '313BDC transactions (sell)',
+                        html: `
             <h2>313BDC</h2>
             <div> 313BDC <br>
             Babura House Plaza,<br>
@@ -118,24 +131,24 @@ router.post('/sell', (req, res) => {
           The 313BDC team <br>
           08031230313, 08099936398, 07058890313
          `
-          };
+                    };
 
-          transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-              console.log(error);
-              // res.send(error)
-            } else {
-              console.log('Email sent: ' + info.response);
-              // res.send('Email sent, Thank You!! ');
-            }
-          });;
-        }
+                    transporter.sendMail(mailOptions, function (error, info) {
+                        if (error) {
+                            console.log(error);
+                            // res.send(error)
+                        } else {
+                            console.log('Email sent: ' + info.response);
+                            // res.send('Email sent, Thank You!! ');
+                        }
+                    });;
+                }
 
-      })
+            })
         })
         .catch(err => {
             console.log(err);
-            logger.info( `status:FAILURE, user:${req.body.userId}, type:buy, give:${req.body.giveCurrency}${req.body.giveAmount}, recieve:${req.body.recieveCurrency}${req.body.recieveAmount}, transactionID:${req.body.transactionId}`)
+            logger.info(`status:FAILURE, user:${req.body.userId}, type:buy, give:${req.body.giveCurrency}${req.body.giveAmount}, recieve:${req.body.recieveCurrency}${req.body.recieveAmount}, transactionID:${req.body.transactionId}`)
         });
 
 })
@@ -182,7 +195,7 @@ router.put('/update-sell/:id', (req, res) => {
     // var newInfo = req.body
     let newInfo = req.body
     console.log(req.body)
-    Seller.findByIdAndUpdate(req.params.id, newInfo,{new: true}, (err, result) => {
+    Seller.findByIdAndUpdate(req.params.id, newInfo, { new: true }, (err, result) => {
         if (err) {
             console.log(err)
         } else {

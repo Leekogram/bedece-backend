@@ -23,6 +23,12 @@ const buySchema = new schema({
         type: mongoose.Schema.Types.ObjectId
         //this is the id of the person making the purchase
     },
+    user:{
+        fname:"",
+        lname:"",
+        email:"",
+        phone:""
+    },
     transactionId: {
         type: mongoose.Schema.Types.ObjectId
         // this is the generated transaction id 

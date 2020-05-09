@@ -9,7 +9,13 @@ var nodemailer = require('nodemailer');
 router.get('/', (req, res) => {
   res.send('its now working')
 })
-router.post('/buy', (req, res) => {
+router.post('/buy', async (req, res) => {
+  let userDetails
+  await User.find({ _id: req.body.userId }, (err, result) => {
+      userDetails = result;
+
+  })
+  console.log(userDetails[0].fname, "out")
 
   let newBuyer = new Buyer({
     give: {
@@ -29,11 +35,18 @@ router.post('/buy', (req, res) => {
       refference: req.body.refference
     },
     userId: req.body.userId,
+    user: {
+      fname: userDetails[0].fname,
+      lname: userDetails[0].lname,
+      email: userDetails[0].email,
+      phone: userDetails[0].phone
+  },
     transactionId: req.body.transactionId,
     // status: req.body.status,
     deliveryMethod: req.body.deliveryMethod,
 
   })
+  
   newBuyer
     .save()
     .then(buyer => {
