@@ -69,8 +69,9 @@ router.post('/register', (req, res) => {
       }).then(user => {
         if (user) {
           errors.push("either phone or email is already registered with another account")
-          res.status(404).json({
-            message: errors
+          res.json({
+            devMessage: errors,
+            
           })
           console.log("this account exists")
         } else {
@@ -105,9 +106,47 @@ router.post('/register', (req, res) => {
                 newUser
                   .save()
                   .then(user => {
+
                     res.status(200).json({
                       message: "success"
                     });
+
+                    var transporter = nodemailer.createTransport({
+                      service: 'gmail',
+                      auth: {
+                        user: 'sundaysayil4u@gmail.com',
+                        pass: 'seyilnen2194'
+                      }
+                    });
+                    var mailOptions = {
+                      from: 'bcd ',
+                      to: req.body.email,
+                      subject: 'Welcome to 313BDC',
+                      html: ` 
+                      <h1>Welcome to BDC!</h1>
+                      We're so excited you're here. We made this platform easy and accessible via mobile and web so our value d customers like you can carry our forex transaction without hassle physical movement.
+                      
+                      
+                      ,<a href="https://bdc.smartapps.com.ng/login" >
+                      GET STARTED </a> <br>
+                      Thanks, <br>
+                      The 313BDC team <br>
+                      08031230313, 08099936398, 07058890313 `
+                    };
+                    transporter.sendMail(mailOptions, function (error, info) {
+                      if (error) {
+                        console.log(error);
+                        // res.send(error)
+                      } else {
+                        console.log('Email sent: ' + info.response);
+                        // res.send('Email sent, Thank You!! ');
+                        res.json({
+                          message: "The link has been sent to your Email",
+                          data: user
+                        })
+                      }
+                    });;
+                    
                     console.log("success")
                   })
                   .catch(err => {

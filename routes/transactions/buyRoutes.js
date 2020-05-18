@@ -12,10 +12,17 @@ router.get('/', (req, res) => {
 router.post('/buy', async (req, res) => {
   let userDetails
   await User.find({ _id: req.body.userId }, (err, result) => {
-      userDetails = result;
+      if(err){
+        res.json({
+          message: "Error: User, Unverified User"
+        })
+      }
+      else{
+        userDetails = result
+      }
 
   })
-  console.log(userDetails[0].fname, "out")
+  // console.log(userDetails[0].fname, "out")
 
   let newBuyer = new Buyer({
     give: {
@@ -31,8 +38,7 @@ router.post('/buy', async (req, res) => {
         bcdAccountName: req.body.bcdAccountName,
         bcdAccountNumber: req.body.bcdAccountNumber,
         bcdBankName: req.body.bcdBankName
-      },
-      refference: req.body.refference
+      }
     },
     userId: req.body.userId,
     user: {
@@ -56,7 +62,7 @@ router.post('/buy', async (req, res) => {
 
       });
       console.log("success")
-      logger.info(`status:SUCCESS, user:${req.body.userId}, type:buy, give: ${req.body.giveCurrency} ${req.body.giveAmount}, recieve: ${req.body.recieveCurrency} ${req.body.recieveAmount}, transactionID:${req.body.transactionId}`);
+      logger.info(`status:SUCCESS, user:${req.body.userId}, type:buy, give: ${req.body.giveCurrency} ${req.body.giveAmount}, recieve: ${req.body.recieveCurrency} ${req.body.recieveAmount}, transactionID:${req.body.transactionId}, referenceId:${req.body.refference}`);
 
       TransLog.info({
         userName:newBuyer.userId, transId:newBuyer.transactionId, activity:"Buy Currency", amount:newBuyer.give.giveAmount,
@@ -68,12 +74,13 @@ router.post('/buy', async (req, res) => {
         if (err) { res.send(err) }
         else {
           console.log(result[0].email)
+          console.log(newBuyer, 'are the current users details')
 
           var transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
               user: 'sundaysayil4u@gmail.com',
-              pass: 'elisha2194'
+              pass: 'seyilnen2194'
             }
           });
           var mailOptions = {
@@ -91,12 +98,7 @@ router.post('/buy', async (req, res) => {
             <p>Dear ${result[0].fname},  </p> you made a transaction with the following details 
             <table style="width:100%">
             <caption>Transactions</caption> <br>
-            <tr>
-              <td style="border: 1px solid black;
-            border-collapse: collapse;">Transaction ID</td>
-              <td style="border: 1px solid black;
-            border-collapse: collapse;">${ newBuyer._id}</td>
-            </tr>
+           
             <tr>
               <td style="border: 1px solid black;
             border-collapse: collapse;">BDC ACCOUNT NUMBER</td>
@@ -127,6 +129,12 @@ router.post('/buy', async (req, res) => {
             <td style="border: 1px solid black;
             border-collapse: collapse;">${ newBuyer.recieve.recieveAmount} ${newBuyer.recieve.recieveCurrency}</td>
             </tr>
+            <tr>
+            <td style="border: 1px solid black;
+            border-collapse: collapse;">REFFERENCE</td>
+            <td style="border: 1px solid black;
+            border-collapse: collapse;">${ newBuyer.transDetails.refference}</td>
+            </tr>
           </table> <br>
           Thanks, <br>
           The 313BDC team <br>
@@ -151,15 +159,9 @@ router.post('/buy', async (req, res) => {
     .catch(err => {
       console.log(err);
       logger.info(`status:FAILURE, user:${req.body.userId}, type:buy, give: ${req.body.giveCurrency} ${req.body.giveAmount}, recieve: ${req.body.recieveCurrency} ${req.body.recieveAmount}, transactionID:${req.body.transactionId}`)
-
-
     });
-
-
-
-
-
 })
+
 // to get all the buys
 router.get('/all-buys', (req, res) => {
   Buyer.find((err, result) => {

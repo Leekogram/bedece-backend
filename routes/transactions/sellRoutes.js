@@ -33,7 +33,7 @@ router.post('/sell', async (req, res) => {
                 clientAccountNumber: req.body.clientAccountNumber,
                 clientBankName: req.body.clientBankName
             },
-            refference: req.body.refference
+           
         },
 
         userId: req.body.userId,
@@ -72,7 +72,7 @@ router.post('/sell', async (req, res) => {
                         service: 'gmail',
                         auth: {
                             user: 'sundaysayil4u@gmail.com',
-                            pass: 'elisha2194'
+                            pass: 'seyilnen2194'
                         }
                     });
                     var mailOptions = {
@@ -81,7 +81,7 @@ router.post('/sell', async (req, res) => {
                         subject: '313BDC transactions (sell)',
                         html: `
             <h2>313BDC</h2>
-            <div> 313BDC <br>
+          
             Babura House Plaza,<br>
             Addis Ababa Cresent,<br>
             Off Ladi Kwali Street<br>
@@ -90,12 +90,7 @@ router.post('/sell', async (req, res) => {
             <p>Dear ${result[0].fname},  </p> you made a transaction with the following details 
             <table style="width:100%">
             <caption>Transactions</caption> <br>
-            <tr>
-              <td style="border: 1px solid black;
-            border-collapse: collapse;">Transaction ID</td>
-              <td style="border: 1px solid black;
-            border-collapse: collapse;">${ newSeller._id}</td>
-            </tr>
+          
             <tr>
               <td style="border: 1px solid black;
             border-collapse: collapse;">BDC ACCOUNT NUMBER</td>
@@ -125,6 +120,12 @@ router.post('/sell', async (req, res) => {
             border-collapse: collapse;">RECIEVED</td>
             <td style="border: 1px solid black;
             border-collapse: collapse;">${ newSeller.recieve.recieveAmount} ${newSeller.recieve.recieveCurrency}</td>
+            </tr>
+            <tr>
+            <td style="border: 1px solid black;
+            border-collapse: collapse;">REFFERENCE</td>
+            <td style="border: 1px solid black;
+            border-collapse: collapse;">${ newSeller.transDetails.refference}</td>
             </tr>
           </table> <br>
           Thanks, <br>

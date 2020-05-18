@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
+let customId = mongoose.Types.ObjectId()
+
 const buySchema = new schema({
     give: {
         giveCurrency: String,
@@ -17,7 +19,11 @@ const buySchema = new schema({
             bcdAccountNumber: String,
             bcdBankName: String
         },
-        refference: String
+        refference: {
+            type:String,
+            default:`BCD/${new Date().toLocaleDateString()}/${customId}`,
+            once:true
+        }
     },
     userId: {
         type: mongoose.Schema.Types.ObjectId
