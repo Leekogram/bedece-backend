@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Seller = require('../../models/purchase/sellSchema')
 const logger = require('../../logConfig')
+const transLogs = require('../../models/purchase/transLogsModels')
 const User = require('../../models/regSchema')
 var nodemailer = require('nodemailer');
 router.get('/t', (req, res) => {
@@ -33,7 +34,7 @@ router.post('/sell', async (req, res) => {
                 clientAccountNumber: req.body.clientAccountNumber,
                 clientBankName: req.body.clientBankName
             },
-           
+
         },
 
         userId: req.body.userId,
@@ -60,6 +61,46 @@ router.post('/sell', async (req, res) => {
             });
             logger.info(`status:SUCCESS, user:${req.body.userId}, type:sell, give:${req.body.giveCurrency}${req.body.giveAmount}, recieve:${req.body.recieveCurrency}${req.body.recieveAmount}, transactionID:${req.body.transactionId}`)
             console.log("success")
+
+            // preparing to send data to all transaction logs
+            let newTransLog = new transLogs({
+                Type: "SELL",
+                give: {
+                    giveCurrency: req.body.giveCurrency,
+                    giveAmount: req.body.giveAmount
+                },
+                recieve: {
+                    recieveCurrency: req.body.recieveCurrency,
+                    recieveAmount: req.body.recieveAmount
+                },
+                transDetails: {
+                    creditAccount: {
+                        bcdAccountName: req.body.bcdAccountName,
+                        bcdAccountNumber: req.body.bcdAccountNumber,
+                        bcdBankName: req.body.bcdBankName
+                    }
+                },
+                userId: req.body.userId,
+                user: {
+                    fname: userDetails[0].fname,
+                    lname: userDetails[0].lname,
+                    email: userDetails[0].email,
+                    phone: userDetails[0].phone
+                },
+                // transactionId: req.body.transactionId,
+                // status: req.body.status,
+                deliveryMethod: req.body.deliveryMethod,
+
+            })
+
+            newTransLog
+                .save()
+                .then(trans => {
+                    res.json({
+                        message: "saved successfully",
+                        id: newBuyer._id
+                    })
+                })
 
             // this fetches the users details to get their mails
             User.find({ _id: req.body.userId }, (err, result) => {

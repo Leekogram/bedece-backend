@@ -31,9 +31,9 @@ require("firebase/auth");
 require("firebase/firestore");
 
 
-// mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true, useFindAndModify: false });
+mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true, useFindAndModify: false });
 
- mongoose.connect('mongodb+srv://sayil:SEYILNEN2194@cluster0-0j8cs.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
+//  mongoose.connect('mongodb+srv://sayil:SEYILNEN2194@cluster0-0j8cs.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
 
 
 
@@ -64,6 +64,7 @@ app.use('/reg', require('./routes/signup-loginRoutes'))
 app.use('/test', require('./routes/sign-test'))
 app.use('/trans', require('./routes/transactions/buyRoutes'))
 app.use('/trans-sell', require('./routes/transactions/sellRoutes'))
+app.use('/trans-logs', require('./routes/transactions/transLogsRoutes'))
 app.use('/fx', require('./routes/fxRoutes/fxroutes'))
 app.use('/logs', require('./routes/loggerRoutes'))
 app.use('/admin', require('./routes/admin/adminRoutes'))

@@ -1,8 +1,9 @@
 const router = require("express").Router();
 const Buyer = require('../../models/purchase/buyShema')
 const User = require('../../models/regSchema')
+const transLogs = require('../../models/purchase/transLogsModels')
 const logger = require('../../logConfig')
-const TransLog = require ('../../TranslogerConfig')
+const TransLog = require('../../TranslogerConfig')
 var MongoClient = require('mongodb').MongoClient;
 var nodemailer = require('nodemailer');
 
@@ -12,14 +13,14 @@ router.get('/', (req, res) => {
 router.post('/buy', async (req, res) => {
   let userDetails
   await User.find({ _id: req.body.userId }, (err, result) => {
-      if(err){
-        res.json({
-          message: "Error: User, Unverified User"
-        })
-      }
-      else{
-        userDetails = result
-      }
+    if (err) {
+      res.json({
+        message: "Error: User, Unverified User"
+      })
+    }
+    else {
+      userDetails = result
+    }
 
   })
   // console.log(userDetails[0].fname, "out")
@@ -46,13 +47,13 @@ router.post('/buy', async (req, res) => {
       lname: userDetails[0].lname,
       email: userDetails[0].email,
       phone: userDetails[0].phone
-  },
-    transactionId: req.body.transactionId,
+    },
+    // transactionId: req.body.transactionId,
     // status: req.body.status,
     deliveryMethod: req.body.deliveryMethod,
 
   })
-  
+
   newBuyer
     .save()
     .then(buyer => {
@@ -65,10 +66,52 @@ router.post('/buy', async (req, res) => {
       logger.info(`status:SUCCESS, user:${req.body.userId}, type:buy, give: ${req.body.giveCurrency} ${req.body.giveAmount}, recieve: ${req.body.recieveCurrency} ${req.body.recieveAmount}, transactionID:${req.body.transactionId}, referenceId:${req.body.refference}`);
 
       TransLog.info({
-        userName:newBuyer.userId, transId:newBuyer.transactionId, activity:"Buy Currency", amount:newBuyer.give.giveAmount,
-        currency:newBuyer.give.giveCurrency, status:newBuyer.status, date:Date.now
+        firstname: newBuyer.user.fname, lastname: newBuyer.user.lastname, email: newBuyer.user.email, refference: newBuyer.transDetails.refference, activity: "Buy Currency", amount: newBuyer.give.giveAmount,
+        currency: newBuyer.give.giveCurrency, status: newBuyer.status, date: Date.now
       })
 
+
+      // preparing to send data to all transaction logs
+      let newTransLog = new transLogs({
+        Type: "BUY",
+        give: {
+          giveCurrency: req.body.giveCurrency,
+          giveAmount: req.body.giveAmount
+        },
+        recieve: {
+          recieveCurrency: req.body.recieveCurrency,
+          recieveAmount: req.body.recieveAmount
+        },
+        transDetails: {
+          creditAccount: {
+            bcdAccountName: req.body.bcdAccountName,
+            bcdAccountNumber: req.body.bcdAccountNumber,
+            bcdBankName: req.body.bcdBankName
+          }
+        },
+        userId: req.body.userId,
+        user: {
+          fname: userDetails[0].fname,
+          lname: userDetails[0].lname,
+          email: userDetails[0].email,
+          phone: userDetails[0].phone
+        },
+        // transactionId: req.body.transactionId,
+        // status: req.body.status,
+        deliveryMethod: req.body.deliveryMethod,
+
+      })
+
+      newTransLog
+        .save()
+        .then(trans => {
+          res.json({
+            message: "saved successfully",
+            id: newBuyer._id
+          })
+        })
+
+        
       // this fetches the users details to get their mails
       User.find({ _id: req.body.userId }, (err, result) => {
         if (err) { res.send(err) }
@@ -150,7 +193,7 @@ router.post('/buy', async (req, res) => {
               console.log('Email sent: ' + info.response);
               // res.send('Email sent, Thank You!! ');
             }
-          });;
+          });
         }
 
       })
