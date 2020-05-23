@@ -1,11 +1,14 @@
 const router = require("express").Router();
 const User = require('../models/regSchema')
+const HTML = require('./emailTemplates/welcomeMail');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 var emailCheck = require('email-check');
 var firebase = require("firebase/app");
 const path = require("path")
 var nodemailer = require('nodemailer');
+
+
 
 
 // for uploading images
@@ -71,7 +74,7 @@ router.post('/register', (req, res) => {
           errors.push("either phone or email is already registered with another account")
           res.json({
             devMessage: errors,
-            
+
           })
           console.log("this account exists")
         } else {
@@ -118,20 +121,23 @@ router.post('/register', (req, res) => {
                         pass: 'seyilnen2194'
                       }
                     });
+                    // instanciating class for html
+                    var tt = new HTML.A(newUser.fname, newUser.lname)
                     var mailOptions = {
                       from: 'bcd ',
                       to: req.body.email,
                       subject: 'Welcome to 313BDC',
-                      html: ` 
-                      <h1>Welcome to BDC!</h1>
-                      We're so excited you're here. We made this platform easy and accessible via mobile and web so our value d customers like you can carry our forex transaction without hassle physical movement.
-                      
-                      
-                      ,<a href="https://bdc.smartapps.com.ng/login" >
-                      GET STARTED </a> <br>
-                      Thanks, <br>
-                      The 313BDC team <br>
-                      08031230313, 08099936398, 07058890313 `
+                      html: tt.getMail()
+                      //  ` 
+                      // <h1>Welcome to BDC!</h1>
+                      // We're so excited you're here. We made this platform easy and accessible via mobile and web so our value d customers like you can carry our forex transaction without hassle physical movement.
+
+
+                      // ,<a href="https://bdc.smartapps.com.ng/login" >
+                      // GET STARTED </a> <br>
+                      // Thanks, <br>
+                      // The 313BDC team <br>
+                      // 08031230313, 08099936398, 07058890313 `
                     };
                     transporter.sendMail(mailOptions, function (error, info) {
                       if (error) {
@@ -146,7 +152,7 @@ router.post('/register', (req, res) => {
                         })
                       }
                     });;
-                    
+
                     console.log("success")
                   })
                   .catch(err => {
@@ -385,10 +391,10 @@ router.get("/resetPass2", (req, res) => {
 })
 
 router.post('/fpass', async (req, res) => {
-  
+
   if (Object.keys(req.body).length === 0) {
     res.json({
-      message:"please enter email"
+      message: "please enter email"
     })
   } else {
     await User.findOne({ email: req.body.email }).then(user => {
@@ -402,7 +408,7 @@ router.post('/fpass', async (req, res) => {
       }
       else {
         const token = jwt.sign({ exp: Math.floor(Date.now() / 1000) + (60 * 60), user }, "my_secret");
-        
+
         var transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
@@ -458,11 +464,11 @@ router.post("/reset-pass/:id/:token", (req, res) => {
     else {
       let newInfo = req.body
       if (req.body.password == "") {
-          res.json({
-            message: "please send password",
-            //  authData
-           
-          })
+        res.json({
+          message: "please send password",
+          //  authData
+
+        })
       } else {
         console.log(newInfo.password)
         bcrypt.genSalt(10, (err, salt) => {
