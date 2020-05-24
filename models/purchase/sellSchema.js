@@ -26,7 +26,7 @@ const sellSchema = new schema({
         },
         refference: {
             type:String,
-            default:`BCD/${new Date().toLocaleDateString()}/${customId}`,
+            default:`BDC/${new Date().toLocaleDateString()}/${customId}`,
             once:true
         }
     },
