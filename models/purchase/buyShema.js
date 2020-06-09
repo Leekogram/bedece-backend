@@ -35,10 +35,10 @@ const buySchema = new schema({
         email:"",
         phone:""
     },
-    transactionId: {
-        type: mongoose.Schema.Types.ObjectId
-        // this is the generated transaction id 
-    },
+    // transactionId: {
+    //     type: mongoose.Schema.Types.ObjectId
+    //     // this is the generated transaction id 
+    // },
 
     status: {
         type: String,
