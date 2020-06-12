@@ -27,7 +27,7 @@ let RegSchema = new Schema({
     },
     bank: [{
         accountNumber: {
-            type: Number
+            type: String
         },
         accountName: {
             type: String
