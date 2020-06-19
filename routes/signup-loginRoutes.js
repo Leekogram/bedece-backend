@@ -477,8 +477,7 @@ router.post("/changePass/:id", async (req, res, next) => {
           // if (err) throw err;
           if (isMatch) {
             // res.status(200).send("ok");
-            console.log("successful")
-   =
+          
             bcrypt.genSalt(10, (err, salt) => {
               bcrypt.hash(req.body.newPassWord, salt, (err, hash) => {
                 if (err) throw error;
