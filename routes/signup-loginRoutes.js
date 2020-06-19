@@ -285,23 +285,6 @@ router.get("/delUser-bank/:id/:bankId", (req, res) => {
 })
 
 
-// to update a user with its ID
-router.put('/update-user/:id', (req, res) => {
-  // var newInfo = req.body
-  let newInfo = req.body
-  console.log(newInfo)
-  User.findByIdAndUpdate(req.params.id, newInfo, { upsert: true, new: true }, (err, result) => {
-    if (err) {
-      console.log(err)
-    } else {
-      res.json({
-        message: "Successfully updated",
-        //  authData
-        result: result
-      })
-    }
-  })
-})
 
 
 
@@ -448,6 +431,91 @@ router.post('/fpass', async (req, res) => {
   }
 })
 
+
+// to update a user with its ID
+router.put('/update-user/:id', (req, res) => {
+  // var newInfo = req.body
+  let newInfo = req.body
+  console.log(newInfo)
+  User.findByIdAndUpdate(req.params.id, newInfo, { upsert: true, new: true }, (err, result) => {
+    if (err) {
+      console.log(err)
+    } else {
+      res.json({
+        message: "Successfully updated",
+        //  authData
+        result: result
+      })
+    }
+  })
+})
+
+router.post("/changePass/:id", async (req, res, next) => {
+
+  if (Object.keys(req.body).length === 0) {
+    console.log('sorry u didnt send any data')
+    res.status(400).send('you didnt send any data')
+  } else {
+
+    await User.findOne({
+      $or: [
+        { email: req.body.emailOrPhone },
+        { phone: req.body.emailOrPhone }
+      ]
+    })
+      .then(user => {
+        console.log(req.body)
+        if (user == null) {
+          res.status(400).json({
+            message: "wrong login details",
+            devMessage: "this user wasnt found"
+          })
+          console.log("not seen")
+        }
+
+        bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
+          // if (err) throw err;
+          if (isMatch) {
+            // res.status(200).send("ok");
+            console.log("successful")
+   =
+            bcrypt.genSalt(10, (err, salt) => {
+              bcrypt.hash(req.body.newPassWord, salt, (err, hash) => {
+                if (err) throw error;
+                else {
+               let  newPass ={
+                 password:hash
+               };
+                
+                User.findByIdAndUpdate(req.params.id, newPass, { upsert: true, new: true }, (err, result) => {
+                  if (err) {
+                    console.log(err)
+                  } else {
+                    res.json({
+                      message: "Successfully updated",
+                      //  authData
+                      result: result
+                    })
+                  }
+                })
+                }})})
+
+          } else {
+            res.status(400).json({
+              message: "wrong login details",
+              devMessage: "passwords didnt match"
+            });
+            console.log("failed password didnt match")
+            console.log(req.body)
+          }
+        });
+
+        // console.log(req.body.password);
+        // console.log(req.body.email);
+
+      });
+  }
+});
 
 
 router.post("/reset-pass/:id/:token", (req, res) => {
