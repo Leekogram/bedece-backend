@@ -395,8 +395,8 @@ router.post('/fpass', async (req, res) => {
         var transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
-            user: '313bureau@gmail.com',
-            pass: '08067713959'
+            user: 'Leekogram@gmail.com',
+            pass: '08034362556'
           }
         });
         var mailOptions = {
