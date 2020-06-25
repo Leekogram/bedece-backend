@@ -373,7 +373,7 @@ router.get("/resetPass2", (req, res) => {
   res.sendFile(path.join(__dirname + '/forgotPass2.html'))
 })
 
-router.post('/fpass', async (req, res) => {
+router.get('/fpass', async (req, res) => {
 
   if (Object.keys(req.body).length === 0) {
     res.json({
