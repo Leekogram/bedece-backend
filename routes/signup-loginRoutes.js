@@ -117,8 +117,8 @@ router.post('/register', (req, res) => {
                     var transporter = nodemailer.createTransport({
                       service: 'gmail',
                       auth: {
-                        user: 'Leekogram@gmail.com',
-                        pass: '08034362556'
+                        user: '313bureau@gmail.com',
+                        pass: '08067713959'
                       }
                     });
                     // instanciating class for html
@@ -395,8 +395,8 @@ router.post('/fpass', async (req, res) => {
         var transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
-            user: 'Leekogram@gmail.com',
-            pass: '08034362556'
+            user: '313bureau@gmail.com',
+            pass: '08067713959'
           }
         });
         var mailOptions = {
