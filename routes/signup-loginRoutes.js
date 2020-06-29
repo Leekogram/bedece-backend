@@ -118,7 +118,7 @@ router.post('/register', (req, res) => {
                       service: 'gmail',
                       auth: {
                         user: '313bureau@gmail.com',
-                        pass: '08067713959'
+                        pass: '08067713959bdc'
                       }
                     });
                     // instanciating class for html
@@ -396,7 +396,7 @@ router.post('/fpass', async (req, res) => {
           service: 'gmail',
           auth: {
             user: '313bureau@gmail.com',
-            pass: '08067713959'
+            pass: '08067713959bdc'
           }
         });
         var mailOptions = {
