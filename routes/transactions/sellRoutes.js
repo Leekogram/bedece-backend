@@ -100,7 +100,8 @@ router.post('/sell', async (req, res) => {
                         bcdAccountName: req.body.bcdAccountName,
                         bcdAccountNumber: req.body.bcdAccountNumber,
                         bcdBankName: req.body.bcdBankName
-                    }
+                    },
+                    refference:`${myTime}${day}${month}${year}313BDC${counter.length+1}`
                 },
                 userId: req.body.userId,
                 user: {

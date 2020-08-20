@@ -11,13 +11,13 @@ router.get('/', (req, res) => {
   res.send('its now working')
 })
 router.post('/buy', async (req, res) => {
-  var a = new Date(); 
-var month = ("0" + (a.getMonth() + 1)).slice(-2); 
-var day = ("0" + a.getDate()).slice(-2); 
-var year = a.getFullYear()
-var hours = a.getHours();
-var minutes = a.getMinutes();
-var myTime = ('0000' + (hours * 100 + minutes)).slice(-4);
+  var a = new Date();
+  var month = ("0" + (a.getMonth() + 1)).slice(-2);
+  var day = ("0" + a.getDate()).slice(-2);
+  var year = a.getFullYear()
+  var hours = a.getHours();
+  var minutes = a.getMinutes();
+  var myTime = ('0000' + (hours * 100 + minutes)).slice(-4);
 
   let userDetails
   let counter
@@ -33,7 +33,7 @@ var myTime = ('0000' + (hours * 100 + minutes)).slice(-4);
 
   })
 
-  await Buyer.find( (err, result) => {
+  await Buyer.find((err, result) => {
     if (err) {
       res.json({
         message: "Error: User, Unverified User"
@@ -61,7 +61,7 @@ var myTime = ('0000' + (hours * 100 + minutes)).slice(-4);
         bcdAccountNumber: req.body.bcdAccountNumber,
         bcdBankName: req.body.bcdBankName
       },
-      refference:`${myTime}${day}${month}${year}313BDC${counter.length+1}`
+      refference: `${myTime}${day}${month}${year}313BDC${counter.length + 1}`
     },
     userId: req.body.userId,
     user: {
@@ -109,7 +109,8 @@ var myTime = ('0000' + (hours * 100 + minutes)).slice(-4);
             bcdAccountName: req.body.bcdAccountName,
             bcdAccountNumber: req.body.bcdAccountNumber,
             bcdBankName: req.body.bcdBankName
-          }
+          },
+          refference: `${myTime}${day}${month}${year}313BDC${counter.length + 1}`
         },
         userId: req.body.userId,
         user: {
@@ -133,7 +134,7 @@ var myTime = ('0000' + (hours * 100 + minutes)).slice(-4);
           })
         })
 
-        
+
       // this fetches the users details to get their mails
       User.find({ _id: req.body.userId }, (err, result) => {
         if (err) { res.send(err) }
@@ -221,7 +222,8 @@ var myTime = ('0000' + (hours * 100 + minutes)).slice(-4);
       })
 
     })
-    .catch(err => {border
+    .catch(err => {
+      border
       console.log(err);
       logger.info(`status:FAILURE, user:${req.body.userId}, type:buy, give: ${req.body.giveCurrency} ${req.body.giveAmount}, recieve: ${req.body.recieveCurrency} ${req.body.recieveAmount}, transactionID:${req.body.transactionId}`)
     });
