@@ -406,9 +406,9 @@ router.post('/fpass', async (req, res) => {
           html: ` 
           <h2>313BDC</h2>
           <div> 313BDC <br>
-          dear ${user.fname} ${user.fname}
+          Dear ${user.fname} ${user.fname}
           </div>        
-          follow this  <a href="https://bdc-backend.herokuapp.com/reg/resetPass2/?e=${user._id}&q=${token}">link</a> to reset your password. <br> this link expires after an hour. if you did not make this request, kindly ignore the mail.
+          follow this  <a href="https://bdc-backend.herokuapp.com/reg/resetPass2/?e=${user._id}&q=${token}">link</a> to reset your password. <br> this link expires after an hour. if you did not make this request, or you belived that an unauthorised person has accessed your account, kindly log into your account without delay to review and update your security settings.
           Thanks, <br>
           The 313BDC team <br>
           08031230313, 08099936398, 07058890313 `

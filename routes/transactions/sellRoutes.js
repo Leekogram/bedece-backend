@@ -8,11 +8,32 @@ router.get('/t', (req, res) => {
     res.send('its now working')
 })
 router.post('/sell', async (req, res) => {
+
+    var a = new Date();
+    var month = ("0" + (a.getMonth() + 1)).slice(-2);
+    var day = ("0" + a.getDate()).slice(-2);
+    var year = a.getFullYear()
+    var hours = a.getHours();
+    var minutes = a.getMinutes();
+    var myTime = ('0000' + (hours * 100 + minutes)).slice(-4);
+    let counter
+
     let userDetails
     await User.find({ _id: req.body.userId }, (err, result) => {
         userDetails = result;
 
     })
+    await Seller.find( (err, result) => {
+        if (err) {
+          res.json({
+            message: "Error: User, Unverified User"
+          })
+        }
+        else {
+          counter = result
+        }
+    
+      })
     console.log(userDetails[0].fname, "out")
     let newSeller = new Seller({
         pay: {
@@ -34,6 +55,7 @@ router.post('/sell', async (req, res) => {
                 clientAccountNumber: req.body.clientAccountNumber,
                 clientBankName: req.body.clientBankName
             },
+            refference:`${myTime}${day}${month}${year}313BDC${counter.length}`
 
         },
 
