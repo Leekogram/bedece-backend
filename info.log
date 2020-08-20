@@ -40,3 +40,12 @@
 {"message":"status:SUCCESS, user:5e0b304da6925720970f654b, type:sell, give:undefinedundefined, recieve:NAIRA12332434, transactionID:undefined","level":"info","timestamp":"2020-05-28T12:13:26.911Z"}
 {"message":"status:SUCCESS, user:5ecc253a262a860017579e8c, type:sell, give:undefinedundefined, recieve:NAIRA12332434, transactionID:undefined","level":"info","timestamp":"2020-05-28T12:22:51.160Z"}
 {"message":"status:SUCCESS, user:5ecc253a262a860017579e8c, type:sell, give:undefinedundefined, recieve:NAIRA12332434, transactionID:undefined","level":"info","timestamp":"2020-05-28T12:22:58.522Z"}
+{"message":"status:SUCCESS, user:5f3c3bb94d17ef14b39d74c0, type:buy, give: dollars 5000, recieve: pounds 2345, transactionID:undefined, referenceId:undefined","level":"info","timestamp":"2020-08-19T13:14:01.739Z"}
+{"message":"status:SUCCESS, user:5f3c3bb94d17ef14b39d74c0, type:buy, give: dollars 5000, recieve: pounds 2345, transactionID:undefined, referenceId:undefined","level":"info","timestamp":"2020-08-19T13:18:03.671Z"}
+{"message":"status:SUCCESS, user:5f3c3bb94d17ef14b39d74c0, type:buy, give: dollars 5000, recieve: pounds 2345, transactionID:undefined, referenceId:undefined","level":"info","timestamp":"2020-08-20T08:08:43.399Z"}
+{"message":"status:SUCCESS, user:5f3c3bb94d17ef14b39d74c0, type:buy, give: dollars 5000, recieve: pounds 2345, transactionID:undefined, referenceId:undefined","level":"info","timestamp":"2020-08-20T08:11:47.520Z"}
+{"message":"status:SUCCESS, user:5f3c3bb94d17ef14b39d74c0, type:buy, give: dollars 5000, recieve: pounds 2345, transactionID:undefined, referenceId:undefined","level":"info","timestamp":"2020-08-20T08:31:28.655Z"}
+{"message":"status:SUCCESS, user:5f3c3bb94d17ef14b39d74c0, type:buy, give: dollars 5000, recieve: pounds 2345, transactionID:undefined, referenceId:undefined","level":"info","timestamp":"2020-08-20T08:33:21.336Z"}
+{"message":"status:SUCCESS, user:5f3c3bb94d17ef14b39d74c0, type:buy, give: dollars 5000, recieve: pounds 2345, transactionID:undefined, referenceId:undefined","level":"info","timestamp":"2020-08-20T08:34:56.279Z"}
+{"message":"status:SUCCESS, user:5f3c3bb94d17ef14b39d74c0, type:buy, give: dollars 5000, recieve: pounds 2345, transactionID:undefined, referenceId:undefined","level":"info","timestamp":"2020-08-20T08:42:11.144Z"}
+{"message":"status:SUCCESS, user:5f3c3bb94d17ef14b39d74c0, type:buy, give: dollars 5000, recieve: pounds 2345, transactionID:undefined, referenceId:undefined","level":"info","timestamp":"2020-08-20T08:43:40.510Z"}
