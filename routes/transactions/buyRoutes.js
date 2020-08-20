@@ -221,7 +221,7 @@ var myTime = ('0000' + (hours * 100 + minutes)).slice(-4);
       })
 
     })
-    .catch(err => {
+    .catch(err => {border
       console.log(err);
       logger.info(`status:FAILURE, user:${req.body.userId}, type:buy, give: ${req.body.giveCurrency} ${req.body.giveAmount}, recieve: ${req.body.recieveCurrency} ${req.body.recieveAmount}, transactionID:${req.body.transactionId}`)
     });

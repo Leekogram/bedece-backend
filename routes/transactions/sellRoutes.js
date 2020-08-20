@@ -84,7 +84,7 @@ router.post('/sell', async (req, res) => {
             logger.info(`status:SUCCESS, user:${req.body.userId}, type:sell, give:${req.body.giveCurrency}${req.body.giveAmount}, recieve:${req.body.recieveCurrency}${req.body.recieveAmount}, transactionID:${req.body.transactionId}`)
             console.log("success")
 
-            // preparing to send data to all transaction logs
+            // preparing to send data to all transaction logsborder
             let newTransLog = new transLogs({
                 Type: "SELL",
                 give: {
