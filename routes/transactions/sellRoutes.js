@@ -55,7 +55,7 @@ router.post('/sell', async (req, res) => {
                 clientAccountNumber: req.body.clientAccountNumber,
                 clientBankName: req.body.clientBankName
             },
-            refference:`${myTime}${day}${month}${year}313BDC${counter.length}`
+            refference:`${myTime}${day}${month}${year}313BDC${counter.length+1}`
 
         },
 
