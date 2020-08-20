@@ -61,7 +61,7 @@ var myTime = ('0000' + (hours * 100 + minutes)).slice(-4);
         bcdAccountNumber: req.body.bcdAccountNumber,
         bcdBankName: req.body.bcdBankName
       },
-      refference:`${myTime}${day}${month}${year}313BDC${month}${counter.length}`
+      refference:`${myTime}${day}${month}${year}313BDC${counter.length}`
     },
     userId: req.body.userId,
     user: {
