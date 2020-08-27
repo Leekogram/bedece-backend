@@ -406,11 +406,11 @@ router.post('/fpass', async (req, res) => {
           html: ` 
           <h2>313BDC</h2>
           <div> 313BDC <br>
-          Dear ${user.fname} ${user.fname}
+          Dear ${user.fname} ${user.lname}, <br><br>
           </div>        
-          follow this  <a href="https://bdc-backend.herokuapp.com/reg/resetPass2/?e=${user._id}&q=${token}">link</a> to reset your password. <br> this link expires after an hour. if you did not make this request, or you belived that an unauthorised person has accessed your account, kindly log into your account without delay to review and update your security settings.
-          Thanks, <br>
-          The 313BDC team <br>
+          Follow this  <a href="https://bdc-backend.herokuapp.com/reg/resetPass2/?e=${user._id}&q=${token}">link</a> to reset your password.  this link expires after an hour. <br><br> if you did not make this request, or you believed that an unauthorised person has accessed your account, kindly log into your account without delay to review and update your security settings.<br><br>
+          Sincerely, <br><br>
+          313BDC Support <br><br>
           08031230313, 08099936398, 07058890313 `
         };
         transporter.sendMail(mailOptions, function (error, info) {
