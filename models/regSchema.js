@@ -7,8 +7,8 @@ let RegSchema = new Schema({
     lname: {
         type: String
     },
-    userName:{
-         type: String
+    userName: {
+        type: String
     },
     email: {
         type: String
@@ -33,6 +33,9 @@ let RegSchema = new Schema({
             type: String
         },
         bankName: {
+            type: String
+        },
+        currencyType: {
             type: String
         }
     }],
@@ -65,8 +68,8 @@ let RegSchema = new Schema({
         type: String
         //for corporate or individual
     },
-    aboutMe:{
-            type: String
+    aboutMe: {
+        type: String
     },
 
     created_date: {
