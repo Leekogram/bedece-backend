@@ -220,7 +220,8 @@ router.post('/addBank/:id', (req, res) => {
     bank: [{
       accountNumber: req.body.accountNumber,
       accountName: req.body.accountName,
-      bankName: req.body.bankName
+      bankName: req.body.bankName,
+      currencyType: req.body.currencyType
     }]
   })
   User.findByIdAndUpdate(req.params.id,
