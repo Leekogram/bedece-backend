@@ -416,7 +416,7 @@ router.post('/fpass', async (req, res) => {
           Follow this  <a href="reset313.herokuapp.com/reg/resetPass2/?e=${user._id}&q=${token}">link</a> to reset your password,  this link expires after an hour. <br> if you did not make this request, or you believe that an unauthorised person has accessed your account, kindly log into your account without delay to review and update your security settings.<br><br>
           Sincerely, <br><br>
           313BDC Support <br><br>
-          08031230313, 08099936398, 07058890313 `
+          08031230313, 08099936398, 07058890313`
         };
         transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
