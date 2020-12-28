@@ -19,6 +19,22 @@ router.get('/logs', (req, res) => {
 
 
 
+  router.get('/user-trans-logs', (req, res) => {
+    let status
+    if( !req.query.status){
+    status = "pending"
+    }else{
+      status = req.query.status
+    }
+    console.log(status)
+    Trans.find({userId:req.query.uid, status:status},(err, result) => {
+      if (err) res.send(err)
+      res.send(result)
+    }).sort( { created_date: -1 } )
+  })
+
+
+
 
 router.get('/excel', function (req, res) {
   Trans.find((err, result) => {

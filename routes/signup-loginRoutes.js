@@ -224,8 +224,6 @@ router.post('/addBank/:id', (req, res) => {
       currencyType: req.body.currencyType
     }]
   })
-
-
   User.findByIdAndUpdate(req.params.id,
     { $push: { bank: newdet.bank } },
     function (err, doc) {

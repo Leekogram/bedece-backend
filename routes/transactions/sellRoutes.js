@@ -226,7 +226,7 @@ router.get('/all-sell', (req, res) => {
             result: result
         })
 
-    })
+    }).sort( { created_date: -1 } )
 })
 
 // get all the sells made by a single user
