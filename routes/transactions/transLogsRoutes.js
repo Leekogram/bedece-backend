@@ -27,7 +27,7 @@ router.get('/logs', (req, res) => {
       status = req.query.status
     }
     console.log(status)
-    Trans.find({userId:req.query.uid, status:status},(err, result) => {
+    Trans.find({userId:req.query.uid, status},(err, result) => {
       if (err) res.send(err)
       res.send(result)
     }).sort( { created_date: -1 } )
