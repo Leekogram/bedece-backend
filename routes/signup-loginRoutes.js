@@ -229,6 +229,7 @@ router.post('/addBank/:id', (req, res) => {
     function (err, doc) {
       if (err) {
         console.log(err);
+        res.send("error occured")
       } else {
         console.log(newdet)
         res.status(200).send({
@@ -254,6 +255,7 @@ router.get("/user/:id", (req, res) => {
 
 // filter user to get banks
 router.get("/user-banks/:id", (req, res) => {
+  console.log(req.params.id)
   User.findById(req.params.id, (err, result) => {
     if (err) {
       res.send("An Error Occured!");
@@ -407,12 +409,12 @@ router.post('/fpass', async (req, res) => {
           html: ` 
           <h2>313BDC</h2>
           <div> 313BDC <br>
-          Dear ${user.lname}, <br><br>
+          Dear ${user.fname}, <br><br>
           </div>        
-          Follow this  <a href="https://bdc-backend.herokuapp.com/reg/resetPass2/?e=${user._id}&q=${token}">link</a> to reset your password,  this link expires after an hour. <br> if you did not make this request, or you believe that an unauthorised person has accessed your account, kindly log into your account without delay to review and update your security settings.<br><br>
+          Follow this  <a href="reset313.herokuapp.com/reg/resetPass2/?e=${user._id}&q=${token}">link</a> to reset your password,  this link expires after an hour. <br> if you did not make this request, or you believe that an unauthorised person has accessed your account, kindly log into your account without delay to review and update your security settings.<br><br>
           Sincerely, <br><br>
           313BDC Support <br><br>
-          08031230313, 08099936398, 07058890313 `
+          08031230313, 08099936398, 07058890313`
         };
         transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
@@ -478,27 +480,29 @@ router.post("/changePass/:id", async (req, res, next) => {
           // if (err) throw err;
           if (isMatch) {
             // res.status(200).send("ok");
-          
+
             bcrypt.genSalt(10, (err, salt) => {
               bcrypt.hash(req.body.newPassWord, salt, (err, hash) => {
                 if (err) throw error;
                 else {
-               let  newPass ={
-                 password:hash
-               };
-                
-                User.findByIdAndUpdate(req.params.id, newPass, { upsert: true, new: true }, (err, result) => {
-                  if (err) {
-                    console.log(err)
-                  } else {
-                    res.json({
-                      message: "Successfully updated",
-                      //  authData
-                      result: result
-                    })
-                  }
-                })
-                }})})
+                  let newPass = {
+                    password: hash
+                  };
+
+                  User.findByIdAndUpdate(req.params.id, newPass, { upsert: true, new: true }, (err, result) => {
+                    if (err) {
+                      console.log(err)
+                    } else {
+                      res.json({
+                        message: "Successfully updated",
+                        //  authData
+                        result: result
+                      })
+                    }
+                  })
+                }
+              })
+            })
 
           } else {
             res.status(400).json({

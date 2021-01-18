@@ -194,7 +194,7 @@ router.get('/all-buys', (req, res) => {
   Buyer.find((err, result) => {
     if (err) res.send(err)
     res.send(result)
-  })
+  }).sort( { created_date: -1 } )
 })
 
 
