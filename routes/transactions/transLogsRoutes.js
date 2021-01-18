@@ -17,7 +17,21 @@ router.get('/logs', (req, res) => {
     }).sort( { created_date: -1 } )
   })
 
+  router.get('/user-logs/:uid', (req, res) => {
 
+    Trans.find({userId:req.params.uid},(err, result) => {
+      if (err) res.send(err)
+      res.send(result)
+    }).sort( { created_date: -1 } )
+  })
+
+  router.get('/user-logs-status/:uid', (req, res) => {
+    
+    Trans.find({userId:req.params.uid, status:req.query.status},(err, result) => {
+      if (err) res.send(err)
+      res.send(result)
+    }).sort( { created_date: -1 } )
+  })
 
 
 router.get('/excel', function (req, res) {

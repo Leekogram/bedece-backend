@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 let customId = mongoose.Types.ObjectId()
+let gen = require ("../utility/referenceGenerator")
+
 
 const sellSchema = new schema({
     pay: {
@@ -27,8 +29,11 @@ const sellSchema = new schema({
         refference: {
             type:String,
             // default:`BDC/${new Date().toLocaleDateString()}/${customId}`,
-            // once:true
+            once:true,
+            default:gen
         }
+
+
     },
     userId: {
         type: mongoose.Schema.Types.ObjectId

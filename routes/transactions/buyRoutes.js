@@ -11,16 +11,8 @@ router.get('/', (req, res) => {
   res.send('its now working')
 })
 router.post('/buy', async (req, res) => {
-  var a = new Date();
-  var month = ("0" + (a.getMonth() + 1)).slice(-2);
-  var day = ("0" + a.getDate()).slice(-2);
-  var year = a.getFullYear()
-  var hours = a.getHours();
-  var minutes = a.getMinutes();
-  var myTime = ('0000' + (hours * 100 + minutes)).slice(-4);
 
-  let userDetails
-  let counter
+
   await User.find({ _id: req.body.userId }, (err, result) => {
     if (err) {
       res.json({
@@ -61,7 +53,7 @@ router.post('/buy', async (req, res) => {
         bcdAccountNumber: req.body.bcdAccountNumber,
         bcdBankName: req.body.bcdBankName
       },
-      refference: `${myTime}${day}${month}${year}313BDC${counter.length + 1}`
+      // refference: `${myTime}${day}${month}${year}313BDC${counter.length + 1}`
     },
     userId: req.body.userId,
     user: {
@@ -76,12 +68,13 @@ router.post('/buy', async (req, res) => {
 
   })
 
+  // res.send(newBuyer)
   newBuyer
     .save()
     .then(buyer => {
       res.json({
         message: "saved successfully",
-        id: newBuyer._id
+        buyer
 
       });
       console.log("success")
@@ -93,46 +86,13 @@ router.post('/buy', async (req, res) => {
       })
 
 
-      // preparing to send data to all transaction logs
-      let newTransLog = new transLogs({
-        Type: "BUY",
-        give: {
-          giveCurrency: req.body.giveCurrency,
-          giveAmount: req.body.giveAmount
-        },
-        recieve: {
-          recieveCurrency: req.body.recieveCurrency,
-          recieveAmount: req.body.recieveAmount
-        },
-        transDetails: {
-          creditAccount: {
-            bcdAccountName: req.body.bcdAccountName,
-            bcdAccountNumber: req.body.bcdAccountNumber,
-            bcdBankName: req.body.bcdBankName
-          },
-          refference: `${myTime}${day}${month}${year}313BDC${counter.length + 1}`
-        },
-        userId: req.body.userId,
-        user: {
-          fname: userDetails[0].fname,
-          lname: userDetails[0].lname,
-          email: userDetails[0].email,
-          phone: userDetails[0].phone
-        },
-        // transactionId: req.body.transactionId,
-        // status: req.body.status,
-        deliveryMethod: req.body.deliveryMethod,
 
-      })
-
+      newBuyer
+      let newTransLog = new transLogs(req.body)
+      console.log(newTransLog)
       newTransLog
         .save()
-        .then(trans => {
-          res.json({
-            message: "saved successfully",
-            id: newBuyer._id
-          })
-        })
+        
 
 
       // this fetches the users details to get their mails
@@ -164,7 +124,7 @@ router.post('/buy', async (req, res) => {
             <p>Dear ${result[0].fname},  </p> you made a transaction with the following details 
             <table style="width:100%">
             <caption>Transactions</caption> <br>
-           
+
             <tr>
               <td style="border: 1px solid black;
             border-collapse: collapse;">BDC ACCOUNT NUMBER</td>
@@ -223,7 +183,7 @@ router.post('/buy', async (req, res) => {
 
     })
     .catch(err => {
-      border
+    
       console.log(err);
       logger.info(`status:FAILURE, user:${req.body.userId}, type:buy, give: ${req.body.giveCurrency} ${req.body.giveAmount}, recieve: ${req.body.recieveCurrency} ${req.body.recieveAmount}, transactionID:${req.body.transactionId}`)
     });
@@ -242,6 +202,16 @@ router.get('/all-buys', (req, res) => {
 router.get('/all-buy/:id', (req, res) => {
 
   Buyer.find({ userId: req.params.id }, (err, result) => {
+    if (err) res.send(err)
+
+    res.send(result)
+
+  })
+})
+
+router.get('/all-buy-status/:id', (req, res) => {
+
+  Buyer.find({ userId: req.params.id , status:req.query.status}, (err, result) => {
     if (err) res.send(err)
 
     res.send(result)

@@ -2,18 +2,11 @@ const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 let customId = mongoose.Types.ObjectId()
 // autoIncrement = require('mongoose-auto-increment');
-
+let gen = require ("../utility/referenceGenerator")
 // var connection = mongoose.createConnection("mongodb://localhost/test");
 // autoIncrement.initialize(connection);
 
-var a = new Date(); 
-var month = ("0" + (a.getMonth() + 1)).slice(-2); 
-var day = ("0" + a.getDate()).slice(-2); 
-var year = a.getFullYear()
 
-var hours = a.getHours();
-var minutes = a.getMinutes();
-var myTime = ('0000' + (hours * 100 + minutes)).slice(-4);
 
 const buySchema = new schema({
     give: {
@@ -35,7 +28,9 @@ const buySchema = new schema({
         refference: {
             type:String,
             // default:`${myTime}${day}${month}${year}313BDC${month}${customId}`,
-            // once:true
+            default:gen,
+
+            once:true
         }
     },
     userId: {
