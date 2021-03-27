@@ -33,9 +33,9 @@ require("firebase/firestore");
 
  //  mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true, useFindAndModify: false });
 
-// mongoose.connect('mongodb+srv://sayil:SEYILNEN2194@cluster0-0j8cs.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
+mongoose.connect('mongodb+srv://sayil:SEYILNEN2194@cluster0-0j8cs.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
 
-mongoose.connect('mongodb+srv://Jinn:jinnpassword@313bdccluster.x64qt.mongodb.net/313bdcCluster?retryWrites=true&w=majority', {useNewUrlParser: true})
+// mongoose.connect('mongodb+srv://313Tester:313bdc@313TestCluster.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true})
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
