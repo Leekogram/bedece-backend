@@ -196,27 +196,30 @@ router.post('/sell', async (req, res) => {
 })
 // to get all the sells
 router.get('/all-sell', (req, res) => {
-    Seller.find((err, result) => {
+    filter = req.query
+
+    Seller.find(filter,(err, result) => {
         if (err) res.send(err)
 
         res.status(200).send({
             result: result
         })
 
-    })
+    }).sort({ created_date: -1 })
 })
 
 // get all the sells made by a single user
 router.get('/all-sell/:id', (req, res) => {
-
-    Seller.find({ userId: req.params.id }, (err, result) => {
+    filter = req.query
+    filter['userId'] = req.params.id
+    Seller.find(filter, (err, result) => {
         if (err) res.send(err)
 
         res.status(200).send({
             result: result
         })
 
-    })
+    }).sort({ created_date: -1 })
 })
 // get a particular sell with its ID
 router.get('/get-sell/:id', (req, res) => {

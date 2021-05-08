@@ -111,7 +111,7 @@ router.post('/buy', async (req, res) => {
           })
         })
 
-        
+
       // this fetches the users details to get their mails
       User.find({ _id: req.body.userId }, (err, result) => {
         if (err) { res.send(err) }
@@ -146,37 +146,37 @@ router.post('/buy', async (req, res) => {
               <td style="border: 1px solid black;
             border-collapse: collapse;">BDC ACCOUNT NUMBER</td>
               <td style="border: 1px solid black;
-            border-collapse: collapse;">${ newBuyer.transDetails.creditAccount.bcdAccountNumber}</td>
+            border-collapse: collapse;">${newBuyer.transDetails.creditAccount.bcdAccountNumber}</td>
             </tr>
             <tr>
               <td style="border: 1px solid black;
             border-collapse: collapse;">ACCOUNT HOLDER</td>
               <td style="border: 1px solid black;
-            border-collapse: collapse;">${ newBuyer.transDetails.creditAccount.bcdAccountName}</td>
+            border-collapse: collapse;">${newBuyer.transDetails.creditAccount.bcdAccountName}</td>
             </tr>
             <tr>
               <td style="border: 1px solid black;
             border-collapse: collapse;">BANK NAME</td>
               <td style="border: 1px solid black;
-            border-collapse: collapse;">${ newBuyer.transDetails.creditAccount.bcdBankName}</td>
+            border-collapse: collapse;">${newBuyer.transDetails.creditAccount.bcdBankName}</td>
             </tr>
             <tr>
               <td style="border: 1px solid black;
             border-collapse: collapse;">PAYMENT</td>
               <td style="border: 1px solid black;
-            border-collapse: collapse;">${ newBuyer.give.giveAmount} ${newBuyer.give.giveCurrency}</td>
+            border-collapse: collapse;">${newBuyer.give.giveAmount} ${newBuyer.give.giveCurrency}</td>
             </tr>
             <tr>
             <td style="border: 1px solid black;
             border-collapse: collapse;">RECIEVED</td>
             <td style="border: 1px solid black;
-            border-collapse: collapse;">${ newBuyer.recieve.recieveAmount} ${newBuyer.recieve.recieveCurrency}</td>
+            border-collapse: collapse;">${newBuyer.recieve.recieveAmount} ${newBuyer.recieve.recieveCurrency}</td>
             </tr>
             <tr>
             <td style="border: 1px solid black;
             border-collapse: collapse;">REFFERENCE</td>
             <td style="border: 1px solid black;
-            border-collapse: collapse;">${ newBuyer.transDetails.refference}</td>
+            border-collapse: collapse;">${newBuyer.transDetails.refference}</td>
             </tr>
           </table> <br>
           Thanks, <br>
@@ -207,22 +207,26 @@ router.post('/buy', async (req, res) => {
 
 // to get all the buys
 router.get('/all-buys', (req, res) => {
-  Buyer.find((err, result) => {
+  filter = req.query
+
+  Buyer.find(filter, (err, result) => {
     if (err) res.send(err)
     res.send(result)
-  })
+  }).sort({ created_date: -1 })
 })
 
 
 // get all the buys made by a single user
 router.get('/all-buy/:id', (req, res) => {
-
-  Buyer.find({ userId: req.params.id }, (err, result) => {
+  filter = req.query
+  filter['userId'] = req.params.id
+  // res.send(filter)
+  Buyer.find(filter, (err, result) => {
     if (err) res.send(err)
 
     res.send(result)
 
-  })
+  }).sort({ created_date: -1 })
 })
 
 router.get('/get-buy/:id', (req, res) => {

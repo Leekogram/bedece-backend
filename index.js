@@ -31,7 +31,7 @@ require("firebase/auth");
 require("firebase/firestore");
 
 
- //  mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true, useFindAndModify: false });
+  // mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true, useFindAndModify: false });
 
 // mongoose.connect('mongodb+srv://sayil:SEYILNEN2194@cluster0-0j8cs.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
 
