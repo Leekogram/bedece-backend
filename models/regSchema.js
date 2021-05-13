@@ -25,6 +25,9 @@ let RegSchema = new Schema({
     image: {
         type: String
     },
+    logged_in:{
+        type: Boolean, default : false
+    },
     bank: [{
         accountNumber: {
             type: String

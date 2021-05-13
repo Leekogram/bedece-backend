@@ -136,37 +136,37 @@ router.post('/sell', async (req, res) => {
               <td style="border: 1px solid black;
             border-collapse: collapse;">BDC ACCOUNT NUMBER</td>
               <td style="border: 1px solid black;
-            border-collapse: collapse;">${ newSeller.transDetails.creditAccount.bcdAccountNumber}</td>
+            border-collapse: collapse;">${newSeller.transDetails.creditAccount.bcdAccountNumber}</td>
             </tr>
             <tr>
               <td style="border: 1px solid black;
             border-collapse: collapse;">ACCOUNT HOLDER</td>
               <td style="border: 1px solid black;
-            border-collapse: collapse;">${ newSeller.transDetails.creditAccount.bcdAccountName}</td>
+            border-collapse: collapse;">${newSeller.transDetails.creditAccount.bcdAccountName}</td>
             </tr>
             <tr>
               <td style="border: 1px solid black;
             border-collapse: collapse;">BANK NAME</td>
               <td style="border: 1px solid black;
-            border-collapse: collapse;">${ newSeller.transDetails.creditAccount.bcdBankName}</td>
+            border-collapse: collapse;">${newSeller.transDetails.creditAccount.bcdBankName}</td>
             </tr>
             <tr>
               <td style="border: 1px solid black;
             border-collapse: collapse;">PAYMENT</td>
               <td style="border: 1px solid black;
-            border-collapse: collapse;">${ newSeller.pay.payAmount} ${newSeller.pay.payCurrency}</td>
+            border-collapse: collapse;">${newSeller.pay.payAmount} ${newSeller.pay.payCurrency}</td>
             </tr>
             <tr>
             <td style="border: 1px solid black;
             border-collapse: collapse;">RECIEVED</td>
             <td style="border: 1px solid black;
-            border-collapse: collapse;">${ newSeller.recieve.recieveAmount} ${newSeller.recieve.recieveCurrency}</td>
+            border-collapse: collapse;">${newSeller.recieve.recieveAmount} ${newSeller.recieve.recieveCurrency}</td>
             </tr>
             <tr>
             <td style="border: 1px solid black;
             border-collapse: collapse;">REFFERENCE</td>
             <td style="border: 1px solid black;
-            border-collapse: collapse;">${ newSeller.transDetails.refference}</td>
+            border-collapse: collapse;">${newSeller.transDetails.refference}</td>
             </tr>
           </table> <br>
           Thanks, <br>
@@ -196,20 +196,47 @@ router.post('/sell', async (req, res) => {
 })
 // to get all the sells
 router.get('/all-sell', (req, res) => {
-    filter = req.query
-
-    Seller.find(filter,(err, result) => {
-        if (err) res.send(err)
-
-        res.status(200).send({
-            result: result
+    if (!req.query.startDate || !req.query.endDate) {
+        res.send({
+            error: true,
+            message: "please enter date range for start and end"
         })
+    } else {
 
-    }).sort({ created_date: -1 })
+        filter = req.query
+        filter['created_date'] = { $gte: req.query.startDate, $lte: req.query.endDate }
+        delete filter.startDate
+        delete filter.endDate
+        console.log(filter)
+      
+
+        Seller.find(filter, (err, result) => {
+            if (err) res.send(err)
+
+            res.status(200).send({
+                result: result
+            })
+
+        }).sort({ created_date: -1 })
+    }
 })
 
 // get all the sells made by a single user
 router.get('/all-sell/:id', (req, res) => {
+
+    if (!req.query.startDate || !req.query.endDate) {
+        res.send({
+            error: true,
+            message: "please enter date range for start and end"
+        })
+    } else {
+
+        filter = req.query
+        filter['created_date'] = { $gte: req.query.startDate, $lte: req.query.endDate }
+        delete filter.startDate
+        delete filter.endDate
+        console.log(filter)
+    
     filter = req.query
     filter['userId'] = req.params.id
     Seller.find(filter, (err, result) => {
@@ -219,7 +246,7 @@ router.get('/all-sell/:id', (req, res) => {
             result: result
         })
 
-    }).sort({ created_date: -1 })
+    }).sort({ created_date: -1 })}
 })
 // get a particular sell with its ID
 router.get('/get-sell/:id', (req, res) => {

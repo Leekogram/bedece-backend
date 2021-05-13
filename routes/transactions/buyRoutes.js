@@ -12,18 +12,23 @@ router.get('/', (req, res) => {
 })
 router.post('/buy', async (req, res) => {
   let userDetails
-  await User.find({ _id: req.body.userId }, (err, result) => {
+  let findUser = await User.find({ _id: req.body.userId }, (err, result) => {
     if (err) {
       res.json({
         message: "Error: User, Unverified User"
       })
     }
-    else {
+    else if (result) {
       userDetails = result
+    }
+    else {
+      res.json({
+        message: "Error: User, Unverified User"
+      })
     }
 
   })
-  // console.log(userDetails[0].fname, "out")
+  console.log(findUser)
 
   let newBuyer = new Buyer({
     give: {
@@ -207,26 +212,52 @@ router.post('/buy', async (req, res) => {
 
 // to get all the buys
 router.get('/all-buys', (req, res) => {
-  filter = req.query
+  if (!req.query.startDate || !req.query.endDate) {
+    res.send({
+      error: true,
+      message: "please enter date range for start and end"
+    })
+  } else {
 
-  Buyer.find(filter, (err, result) => {
-    if (err) res.send(err)
-    res.send(result)
-  }).sort({ created_date: -1 })
+    filter = req.query
+    filter['created_date'] = { $gte: req.query.startDate, $lte: req.query.endDate }
+    delete filter.startDate
+    delete filter.endDate
+    console.log(filter)
+
+    Buyer.find(filter, (err, result) => {
+      if (err) res.send(err)
+      res.send(result)
+    }).sort({ created_date: -1 })
+  }
+
 })
 
 
 // get all the buys made by a single user
 router.get('/all-buy/:id', (req, res) => {
-  filter = req.query
-  filter['userId'] = req.params.id
-  // res.send(filter)
-  Buyer.find(filter, (err, result) => {
-    if (err) res.send(err)
+  if (!req.query.startDate || !req.query.endDate) {
+    res.send({
+      error: true,
+      message: "please enter date range for start and end"
+    })
+  }
+  else {
+    filter = req.query
+    filter['userId'] = req.params.id
+    filter['created_date'] = { $gte: req.query.startDate, $lte: req.query.endDate }
+    delete filter.startDate
+    delete filter.endDate
+    // res.send(filter)
+    Buyer.find(filter, (err, result) => {
+      if (err) res.send(err)
 
-    res.send(result)
+      res.send(result)
 
-  }).sort({ created_date: -1 })
+    }).sort({ created_date: -1 })
+  }
+
+
 })
 
 router.get('/get-buy/:id', (req, res) => {

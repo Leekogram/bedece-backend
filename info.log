@@ -42,3 +42,6 @@
 {"message":"status:SUCCESS, user:5ecc253a262a860017579e8c, type:sell, give:undefinedundefined, recieve:NAIRA12332434, transactionID:undefined","level":"info","timestamp":"2020-05-28T12:22:58.522Z"}
 {"message":"status:SUCCESS, user:60957cfb65c2c1bbfe4abc7c, type:buy, give: dollars 5000, recieve: pounds 2345, transactionID:undefined, referenceId:undefined","level":"info","timestamp":"2021-05-07T17:53:02.408Z"}
 {"message":"status:SUCCESS, user:60957cfb65c2c1bbfe4abc7c, type:buy, give: naira 250, recieve: dollars 2345, transactionID:undefined, referenceId:undefined","level":"info","timestamp":"2021-05-08T07:24:27.562Z"}
+{"message":"status:SUCCESS, user:609c51dba1a91329bef1d26b, type:buy, give: naira 250, recieve: dollars 2345, transactionID:undefined, referenceId:undefined","level":"info","timestamp":"2021-05-13T08:08:07.977Z"}
+{"message":"status:SUCCESS, user:609c51dba1a91329bef1d26b, type:buy, give: naira 250, recieve: dollars 2345, transactionID:undefined, referenceId:undefined","level":"info","timestamp":"2021-05-13T08:09:03.704Z"}
+{"message":"status:SUCCESS, user:609c51dba1a91329bef1d26b, type:sell, give:undefinedundefined, recieve:NAIRA12332434, transactionID:undefined","level":"info","timestamp":"2021-05-13T08:30:27.022Z"}

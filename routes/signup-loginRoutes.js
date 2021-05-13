@@ -306,8 +306,12 @@ router.get("/delUser-bank/:id/:bankId", (req, res) => {
 // });
 
 // })
-router.get('/logout', (req, res) => {
+router.get('/logout/:id', async (req, res) => {
+ 
 
+  let x = await User.findByIdAndUpdate(req.params.id, { logged_in: false},{new: true}, (err, doc)=>{
+    console.log(doc)
+  })
   res.send({
     message: "session terminated"
   })
@@ -337,12 +341,15 @@ router.post("/login", async (req, res, next) => {
           console.log("not seen")
         }
 
-        bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
+        bcrypt.compare(req.body.password, user.password, async (err, isMatch) => {
           if (err) throw err;
           if (isMatch) {
             // res.status(200).send("ok");
-            console.log("successful")
+            console.log(user)
             const token = jwt.sign({ user }, "my_secret");
+           let x = await User.findByIdAndUpdate(user._id, { logged_in: true}, {new: true},(err, doc)=>{
+              console.log(doc)
+            })
             res.send({
               token: token,
               user: user
