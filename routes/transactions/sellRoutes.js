@@ -15,6 +15,7 @@ router.post('/sell', async (req, res) => {
     })
     console.log(userDetails[0].fname, "out")
     let newSeller = new Seller({
+        Type: "SELL",
         pay: {
             payCurrency: req.body.payCurrency,
             payAmount: req.body.payAmount

@@ -307,9 +307,9 @@ router.get("/delUser-bank/:id/:bankId", (req, res) => {
 
 // })
 router.get('/logout/:id', async (req, res) => {
- 
 
-  let x = await User.findByIdAndUpdate(req.params.id, { logged_in: false},{new: true}, (err, doc)=>{
+
+  let x = await User.findByIdAndUpdate(req.params.id, { logged_in: false }, { new: true }, (err, doc) => {
     console.log(doc)
   })
   res.send({
@@ -347,7 +347,7 @@ router.post("/login", async (req, res, next) => {
             // res.status(200).send("ok");
             console.log(user)
             const token = jwt.sign({ user }, "my_secret");
-           let x = await User.findByIdAndUpdate(user._id, { logged_in: true}, {new: true},(err, doc)=>{
+            let x = await User.findByIdAndUpdate(user._id, { logged_in: true }, { new: true }, (err, doc) => {
               console.log(doc)
             })
             res.send({
@@ -457,6 +457,20 @@ router.put('/update-user/:id', (req, res) => {
   })
 })
 
+
+
+// to update a user with its ID
+router.get('/search', (req, res) => {
+  // var newInfo = req.body
+  User.find({ $text: { $search: req.query.search } })
+    .exec(function (err, docs) {
+      res.send({ doc: docs, err })
+    })
+})
+
+
+
+
 router.post("/changePass/:id", async (req, res, next) => {
 
   if (Object.keys(req.body).length === 0) {
@@ -484,27 +498,29 @@ router.post("/changePass/:id", async (req, res, next) => {
           // if (err) throw err;
           if (isMatch) {
             // res.status(200).send("ok");
-          
+
             bcrypt.genSalt(10, (err, salt) => {
               bcrypt.hash(req.body.newPassWord, salt, (err, hash) => {
                 if (err) throw error;
                 else {
-               let  newPass ={
-                 password:hash
-               };
-                
-                User.findByIdAndUpdate(req.params.id, newPass, { upsert: true, new: true }, (err, result) => {
-                  if (err) {
-                    console.log(err)
-                  } else {
-                    res.json({
-                      message: "Successfully updated",
-                      //  authData
-                      result: result
-                    })
-                  }
-                })
-                }})})
+                  let newPass = {
+                    password: hash
+                  };
+
+                  User.findByIdAndUpdate(req.params.id, newPass, { upsert: true, new: true }, (err, result) => {
+                    if (err) {
+                      console.log(err)
+                    } else {
+                      res.json({
+                        message: "Successfully updated",
+                        //  authData
+                        result: result
+                      })
+                    }
+                  })
+                }
+              })
+            })
 
           } else {
             res.status(400).json({

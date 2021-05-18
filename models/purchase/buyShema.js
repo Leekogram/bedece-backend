@@ -3,6 +3,10 @@ const schema = mongoose.Schema;
 let customId = mongoose.Types.ObjectId()
 
 const buySchema = new schema({
+    Type: {
+        type: String,
+        once: true
+    },
     give: {
         giveCurrency: String,
         giveAmount: String
@@ -60,5 +64,7 @@ const buySchema = new schema({
         default: Date.now,
     }
 });
+
+
 const buyModel = mongoose.model('buy', buySchema);
 module.exports = buyModel;

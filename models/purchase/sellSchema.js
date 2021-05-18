@@ -3,6 +3,10 @@ const schema = mongoose.Schema;
 let customId = mongoose.Types.ObjectId()
 
 const sellSchema = new schema({
+    Type: {
+        type: String,
+        once: true
+    },
     pay: {
         payCurrency: String,
         payAmount : Number

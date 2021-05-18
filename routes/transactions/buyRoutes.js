@@ -31,6 +31,7 @@ router.post('/buy', async (req, res) => {
   console.log(findUser)
 
   let newBuyer = new Buyer({
+    Type: "BUY",
     give: {
       giveCurrency: req.body.giveCurrency,
       giveAmount: req.body.giveAmount
@@ -225,11 +226,11 @@ router.get('/all-buys', (req, res) => {
     delete filter.endDate
     console.log(filter)
 
-    Buyer.find(filter, (err, result) => {
+ Buyer.find(filter, (err, result) => {
       if (err) res.send(err)
       res.send(result)
     }).sort({ created_date: -1 })
-  }
+  }   
 
 })
 

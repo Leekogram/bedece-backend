@@ -65,5 +65,6 @@ let TransSchema = new Schema({
 
 
 })
+TransSchema.index({'$**': 'text'})
 const TransModel = mongoose.model('TransModel', TransSchema)
 module.exports = TransModel;
