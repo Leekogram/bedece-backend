@@ -222,6 +222,39 @@ router.get('/all-sell', (req, res) => {
     }
 })
 
+
+router.get('/all-sells-audit', (req, res) => {
+    console.log(req.query)
+  
+    Seller.aggregate(
+      [{
+          '$match': {
+            created_date: {
+              '$gte': new Date(req.query.startDate),
+              '$lt': new Date(req.query.endDate)
+            }
+          }
+        },
+        {
+          $group: {
+            _id: "$recieve.recieveCurrency",
+            "total": {
+              $sum: "$recieve.recieveAmount"
+            }
+          }
+        }
+      ],
+      function (err, result) {
+        if (err) {
+          res.send(err);
+        } else {
+          res.json(result);
+        }
+      }
+    );
+  
+  })
+
 // get all the sells made by a single user
 router.get('/all-sell/:id', (req, res) => {
 

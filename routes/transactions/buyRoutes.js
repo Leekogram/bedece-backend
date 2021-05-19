@@ -12,16 +12,16 @@ router.get('/', (req, res) => {
 })
 router.post('/buy', async (req, res) => {
   let userDetails
-  let findUser = await User.find({ _id: req.body.userId }, (err, result) => {
+  let findUser = await User.find({
+    _id: req.body.userId
+  }, (err, result) => {
     if (err) {
       res.json({
         message: "Error: User, Unverified User"
       })
-    }
-    else if (result) {
+    } else if (result) {
       userDetails = result
-    }
-    else {
+    } else {
       res.json({
         message: "Error: User, Unverified User"
       })
@@ -72,8 +72,15 @@ router.post('/buy', async (req, res) => {
       logger.info(`status:SUCCESS, user:${req.body.userId}, type:buy, give: ${req.body.giveCurrency} ${req.body.giveAmount}, recieve: ${req.body.recieveCurrency} ${req.body.recieveAmount}, transactionID:${req.body.transactionId}, referenceId:${req.body.refference}`);
 
       TransLog.info({
-        firstname: newBuyer.user.fname, lastname: newBuyer.user.lastname, email: newBuyer.user.email, refference: newBuyer.transDetails.refference, activity: "Buy Currency", amount: newBuyer.give.giveAmount,
-        currency: newBuyer.give.giveCurrency, status: newBuyer.status, date: Date.now
+        firstname: newBuyer.user.fname,
+        lastname: newBuyer.user.lastname,
+        email: newBuyer.user.email,
+        refference: newBuyer.transDetails.refference,
+        activity: "Buy Currency",
+        amount: newBuyer.give.giveAmount,
+        currency: newBuyer.give.giveCurrency,
+        status: newBuyer.status,
+        date: Date.now
       })
 
 
@@ -119,9 +126,12 @@ router.post('/buy', async (req, res) => {
 
 
       // this fetches the users details to get their mails
-      User.find({ _id: req.body.userId }, (err, result) => {
-        if (err) { res.send(err) }
-        else {
+      User.find({
+        _id: req.body.userId
+      }, (err, result) => {
+        if (err) {
+          res.send(err)
+        } else {
           console.log(result[0].email)
           console.log(newBuyer, 'are the current users details')
 
@@ -221,16 +231,54 @@ router.get('/all-buys', (req, res) => {
   } else {
 
     filter = req.query
-    filter['created_date'] = { $gte: req.query.startDate, $lte: req.query.endDate }
+    filter['created_date'] = {
+      $gte: req.query.startDate,
+      $lte: req.query.endDate
+    }
     delete filter.startDate
     delete filter.endDate
     console.log(filter)
 
- Buyer.find(filter, (err, result) => {
+    Buyer.find(filter, (err, result) => {
       if (err) res.send(err)
       res.send(result)
-    }).sort({ created_date: -1 })
-  }   
+    }).sort({
+      created_date: -1
+    })
+  }
+
+})
+
+// to get all the buys
+router.get('/all-buys-audit', (req, res) => {
+  console.log(req.query)
+
+  Buyer.aggregate(
+    [{
+        '$match': {
+          created_date: {
+            '$gte': new Date(req.query.startDate),
+            '$lt': new Date(req.query.endDate)
+          }
+        }
+      },
+      {
+        $group: {
+          _id: "$recieve.recieveCurrency",
+          "total": {
+            $sum: "$recieve.recieveAmount"
+          }
+        }
+      }
+    ],
+    function (err, result) {
+      if (err) {
+        res.send(err);
+      } else {
+        res.json(result);
+      }
+    }
+  );
 
 })
 
@@ -242,11 +290,13 @@ router.get('/all-buy/:id', (req, res) => {
       error: true,
       message: "please enter date range for start and end"
     })
-  }
-  else {
+  } else {
     filter = req.query
     filter['userId'] = req.params.id
-    filter['created_date'] = { $gte: req.query.startDate, $lte: req.query.endDate }
+    filter['created_date'] = {
+      $gte: req.query.startDate,
+      $lte: req.query.endDate
+    }
     delete filter.startDate
     delete filter.endDate
     // res.send(filter)
@@ -255,14 +305,18 @@ router.get('/all-buy/:id', (req, res) => {
 
       res.send(result)
 
-    }).sort({ created_date: -1 })
+    }).sort({
+      created_date: -1
+    })
   }
 
 
 })
 
 router.get('/get-buy/:id', (req, res) => {
-  Buyer.find({ _id: req.params.id }, (err, result) => {
+  Buyer.find({
+    _id: req.params.id
+  }, (err, result) => {
     if (err) {
       console.log(err)
     } else {
@@ -279,7 +333,10 @@ router.put('/update-buy/:id', (req, res) => {
   // var newInfo = req.body
   let newInfo = req.body
   console.log(newInfo)
-  Buyer.findByIdAndUpdate(req.params.id, newInfo, { upsert: true, new: true }, (err, result) => {
+  Buyer.findByIdAndUpdate(req.params.id, newInfo, {
+    upsert: true,
+    new: true
+  }, (err, result) => {
     if (err) {
       console.log(err)
     } else {

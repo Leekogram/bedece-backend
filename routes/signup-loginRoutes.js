@@ -21,7 +21,9 @@ var storage = multer.diskStorage({
   destination: 'uploads/'
 })
 
-var upload = multer({ storage: storage })
+var upload = multer({
+  storage: storage
+})
 
 const cloudinary = require('cloudinary');
 cloudinary.config({
@@ -51,7 +53,8 @@ router.post('/register', (req, res) => {
         message: errors,
       });
       console.log(errors)
-    } if (!req.body.email) {
+    }
+    if (!req.body.email) {
       errors.push("no email")
       res.status(404).json({
         status: 'error',
@@ -65,9 +68,12 @@ router.post('/register', (req, res) => {
       console.log(errors)
     } else {
       User.findOne({
-        $or: [
-          { email: req.body.email },
-          { phone: req.body.phone }
+        $or: [{
+            email: req.body.email
+          },
+          {
+            phone: req.body.phone
+          }
         ]
       }).then(user => {
         if (user) {
@@ -128,16 +134,7 @@ router.post('/register', (req, res) => {
                       to: req.body.email,
                       subject: 'Welcome to 313BDC',
                       html: tt.getMail()
-                      //  ` 
-                      // <h1>Welcome to BDC!</h1>
-                      // We're so excited you're here. We made this platform easy and accessible via mobile and web so our value d customers like you can carry our forex transaction without hassle physical movement.
 
-
-                      // ,<a href="https://bdc.smartapps.com.ng/login" >
-                      // GET STARTED </a> <br>
-                      // Thanks, <br>
-                      // The 313BDC team <br>
-                      // 08031230313, 08099936398, 07058890313 `
                     };
                     transporter.sendMail(mailOptions, function (error, info) {
                       if (error) {
@@ -176,11 +173,11 @@ router.post("/image/:id", multipartMiddleware, async (req, res) => {
   console.log(req.body, req.files, req.params.id)
   let x = await cloudinary.v2.uploader.upload(
     req.files.image.path, {
-    width: 700,
-    gravity: "south",
-    y: 80,
-    color: "white"
-  },
+      width: 700,
+      gravity: "south",
+      y: 80,
+      color: "white"
+    },
     function (error, result) {
       if (error) {
         console.log("error here")
@@ -193,7 +190,12 @@ router.post("/image/:id", multipartMiddleware, async (req, res) => {
       };
       console.log(imagePath.data, "is the image path");
 
-      User.findByIdAndUpdate(req.params.id, { image: imagePath.data }, { new: true, upsert: true }, (err, result) => {
+      User.findByIdAndUpdate(req.params.id, {
+        image: imagePath.data
+      }, {
+        new: true,
+        upsert: true
+      }, (err, result) => {
         if (err) {
           console.log(err)
         } else {
@@ -208,10 +210,29 @@ router.post("/image/:id", multipartMiddleware, async (req, res) => {
 })
 
 router.get('/users', (req, res) => {
-  User.find((err, result) => {
-    if (err) res.send(err)
-    res.send({ result: result })
-  })
+
+  if (!req.query.startDate || !req.query.endDate) {
+    res.send({
+      error: true,
+      message: "please enter date range for start and end"
+    })
+  } else {
+
+    filter = req.query
+    filter['created_date'] = {
+      $gte: req.query.startDate,
+      $lte: req.query.endDate
+    }
+    delete filter.startDate
+    delete filter.endDate
+    console.log(filter)
+    User.find(filter,(err, result) => {
+      if (err) res.send(err)
+      res.send({
+        result: result
+      })
+    })
+  }
 })
 
 
@@ -223,8 +244,11 @@ router.post('/addBank/:id', (req, res) => {
       bankName: req.body.bankName
     }]
   })
-  User.findByIdAndUpdate(req.params.id,
-    { $push: { bank: newdet.bank } },
+  User.findByIdAndUpdate(req.params.id, {
+      $push: {
+        bank: newdet.bank
+      }
+    },
     function (err, doc) {
       if (err) {
         console.log(err);
@@ -267,15 +291,20 @@ router.get("/user-banks/:id", (req, res) => {
 
 // delete a users bank
 router.get("/delUser-bank/:id/:bankId", (req, res) => {
-  User.update(
-    { _id: req.params.id },
-    { $pull: { bank: { _id: req.params.bankId } } },
+  User.update({
+      _id: req.params.id
+    }, {
+      $pull: {
+        bank: {
+          _id: req.params.bankId
+        }
+      }
+    },
     function (err) {
       if (err) {
         res.send("theres an error")
         console.log(err)
-      }
-      else {
+      } else {
         res.send("deleted")
         console.log("done")
       }
@@ -309,7 +338,11 @@ router.get("/delUser-bank/:id/:bankId", (req, res) => {
 router.get('/logout/:id', async (req, res) => {
 
 
-  let x = await User.findByIdAndUpdate(req.params.id, { logged_in: false }, { new: true }, (err, doc) => {
+  let x = await User.findByIdAndUpdate(req.params.id, {
+    logged_in: false
+  }, {
+    new: true
+  }, (err, doc) => {
     console.log(doc)
   })
   res.send({
@@ -326,11 +359,14 @@ router.post("/login", async (req, res, next) => {
   } else {
 
     await User.findOne({
-      $or: [
-        { email: req.body.emailOrPhone },
-        { phone: req.body.emailOrPhone }
-      ]
-    })
+        $or: [{
+            email: req.body.emailOrPhone
+          },
+          {
+            phone: req.body.emailOrPhone
+          }
+        ]
+      })
       .then(user => {
         console.log(req.body)
         if (user == null) {
@@ -346,8 +382,14 @@ router.post("/login", async (req, res, next) => {
           if (isMatch) {
             // res.status(200).send("ok");
             console.log(user)
-            const token = jwt.sign({ user }, "my_secret");
-            let x = await User.findByIdAndUpdate(user._id, { logged_in: true }, { new: true }, (err, doc) => {
+            const token = jwt.sign({
+              user
+            }, "my_secret");
+            let x = await User.findByIdAndUpdate(user._id, {
+              logged_in: true
+            }, {
+              new: true
+            }, (err, doc) => {
               console.log(doc)
             })
             res.send({
@@ -387,7 +429,9 @@ router.post('/fpass', async (req, res) => {
       message: "please enter email"
     })
   } else {
-    await User.findOne({ email: req.body.email }).then(user => {
+    await User.findOne({
+      email: req.body.email
+    }).then(user => {
       console.log(req.body)
       if (user == null) {
         res.json({
@@ -395,9 +439,11 @@ router.post('/fpass', async (req, res) => {
           devMessage: "no user has registered with the email"
         })
         console.log("not seen")
-      }
-      else {
-        const token = jwt.sign({ exp: Math.floor(Date.now() / 1000) + (60 * 60), user }, "my_secret");
+      } else {
+        const token = jwt.sign({
+          exp: Math.floor(Date.now() / 1000) + (60 * 60),
+          user
+        }, "my_secret");
 
         var transporter = nodemailer.createTransport({
           service: 'gmail',
@@ -444,7 +490,10 @@ router.put('/update-user/:id', (req, res) => {
   // var newInfo = req.body
   let newInfo = req.body
   console.log(newInfo)
-  User.findByIdAndUpdate(req.params.id, newInfo, { upsert: true, new: true }, (err, result) => {
+  User.findByIdAndUpdate(req.params.id, newInfo, {
+    upsert: true,
+    new: true
+  }, (err, result) => {
     if (err) {
       console.log(err)
     } else {
@@ -462,9 +511,16 @@ router.put('/update-user/:id', (req, res) => {
 // to update a user with its ID
 router.get('/search', (req, res) => {
   // var newInfo = req.body
-  User.find({ $text: { $search: req.query.search } })
+  User.find({
+      $text: {
+        $search: req.query.search
+      }
+    })
     .exec(function (err, docs) {
-      res.send({ doc: docs, err })
+      res.send({
+        doc: docs,
+        err
+      })
     })
 })
 
@@ -479,11 +535,14 @@ router.post("/changePass/:id", async (req, res, next) => {
   } else {
 
     await User.findOne({
-      $or: [
-        { email: req.body.emailOrPhone },
-        { phone: req.body.emailOrPhone }
-      ]
-    })
+        $or: [{
+            email: req.body.emailOrPhone
+          },
+          {
+            phone: req.body.emailOrPhone
+          }
+        ]
+      })
       .then(user => {
         console.log(req.body)
         if (user == null) {
@@ -507,7 +566,10 @@ router.post("/changePass/:id", async (req, res, next) => {
                     password: hash
                   };
 
-                  User.findByIdAndUpdate(req.params.id, newPass, { upsert: true, new: true }, (err, result) => {
+                  User.findByIdAndUpdate(req.params.id, newPass, {
+                    upsert: true,
+                    new: true
+                  }, (err, result) => {
                     if (err) {
                       console.log(err)
                     } else {
@@ -550,8 +612,7 @@ router.post("/reset-pass/:id/:token", (req, res) => {
       res.json({
         message: "sorry, this link has expired"
       })
-    }
-    else {
+    } else {
       let newInfo = req.body
       if (req.body.password == "") {
         res.json({
@@ -566,7 +627,10 @@ router.post("/reset-pass/:id/:token", (req, res) => {
             if (err) throw error;
             else {
               newInfo.password = hash;
-              User.findByIdAndUpdate(req.params.id, newInfo, { upsert: true, new: true }, (err, result) => {
+              User.findByIdAndUpdate(req.params.id, newInfo, {
+                upsert: true,
+                new: true
+              }, (err, result) => {
                 if (err) {
                   console.log(err)
                 } else {
@@ -602,8 +666,7 @@ function verifyToken(req, res, next) {
     req.token = bearerToken
     // call next middleware
     next();
-  }
-  else {
+  } else {
     res.send("invalid")
   }
 }
