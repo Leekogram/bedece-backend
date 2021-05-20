@@ -4,12 +4,16 @@ const logger = require('../../logConfig')
 const transLogs = require('../../models/purchase/transLogsModels')
 const User = require('../../models/regSchema')
 var nodemailer = require('nodemailer');
+var addDays = require("../utility")
+
 router.get('/t', (req, res) => {
     res.send('its now working')
 })
 router.post('/sell', async (req, res) => {
     let userDetails
-    await User.find({ _id: req.body.userId }, (err, result) => {
+    await User.find({
+        _id: req.body.userId
+    }, (err, result) => {
         userDetails = result;
 
     })
@@ -48,8 +52,7 @@ router.post('/sell', async (req, res) => {
         transactionId: req.body.transactionId,
         status: req.body.status,
         deliveryMethod: req.body.deliveryMethod,
-        deliveryAddress:
-            req.body.deliveryAddress,
+        deliveryAddress: req.body.deliveryAddress,
     })
 
     console.log(newSeller)
@@ -104,9 +107,12 @@ router.post('/sell', async (req, res) => {
                 })
 
             // this fetches the users details to get their mails
-            User.find({ _id: req.body.userId }, (err, result) => {
-                if (err) { res.send(err) }
-                else {
+            User.find({
+                _id: req.body.userId
+            }, (err, result) => {
+                if (err) {
+                    res.send(err)
+                } else {
                     // res.send(result) 
                     console.log(req.body.userId)
 
@@ -205,11 +211,14 @@ router.get('/all-sell', (req, res) => {
     } else {
 
         filter = req.query
-        filter['created_date'] = { $gte: req.query.startDate, $lte: req.query.endDate }
+        filter['created_date'] = {
+            $gte: req.query.startDate,
+            $lte: addDays(req.query.endDate, 1)
+        }
         delete filter.startDate
         delete filter.endDate
         console.log(filter)
-      
+
 
         Seller.find(filter, (err, result) => {
             if (err) res.send(err)
@@ -218,42 +227,44 @@ router.get('/all-sell', (req, res) => {
                 result: result
             })
 
-        }).sort({ created_date: -1 })
+        }).sort({
+            created_date: -1
+        })
     }
 })
 
 
 router.get('/all-sells-audit', (req, res) => {
     console.log(req.query)
-  
+
     Seller.aggregate(
-      [{
-          '$match': {
-            created_date: {
-              '$gte': new Date(req.query.startDate),
-              '$lt': new Date(req.query.endDate)
+        [{
+                '$match': {
+                    created_date: {
+                        '$gte': new Date(req.query.startDate),
+                        '$lt': new Date(addDays(req.query.endDate, 1))
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: "$recieve.recieveCurrency",
+                    "total": {
+                        $sum: "$recieve.recieveAmount"
+                    }
+                }
             }
-          }
-        },
-        {
-          $group: {
-            _id: "$recieve.recieveCurrency",
-            "total": {
-              $sum: "$recieve.recieveAmount"
+        ],
+        function (err, result) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.json(result);
             }
-          }
         }
-      ],
-      function (err, result) {
-        if (err) {
-          res.send(err);
-        } else {
-          res.json(result);
-        }
-      }
     );
-  
-  })
+
+})
 
 // get all the sells made by a single user
 router.get('/all-sell/:id', (req, res) => {
@@ -266,25 +277,33 @@ router.get('/all-sell/:id', (req, res) => {
     } else {
 
         filter = req.query
-        filter['created_date'] = { $gte: req.query.startDate, $lte: req.query.endDate }
+        filter['created_date'] = {
+            $gte: req.query.startDate,
+            $lte: req.query.endDate
+        }
         delete filter.startDate
         delete filter.endDate
         console.log(filter)
-    
-    filter = req.query
-    filter['userId'] = req.params.id
-    Seller.find(filter, (err, result) => {
-        if (err) res.send(err)
 
-        res.status(200).send({
-            result: result
+        filter = req.query
+        filter['userId'] = req.params.id
+        Seller.find(filter, (err, result) => {
+            if (err) res.send(err)
+
+            res.status(200).send({
+                result: result
+            })
+
+        }).sort({
+            created_date: -1
         })
-
-    }).sort({ created_date: -1 })}
+    }
 })
 // get a particular sell with its ID
 router.get('/get-sell/:id', (req, res) => {
-    Seller.find({ _id: req.params.id }, (err, result) => {
+    Seller.find({
+        _id: req.params.id
+    }, (err, result) => {
         if (err) {
             console.log(err)
         } else {
@@ -301,7 +320,9 @@ router.put('/update-sell/:id', (req, res) => {
     // var newInfo = req.body
     let newInfo = req.body
     console.log(req.body)
-    Seller.findByIdAndUpdate(req.params.id, newInfo, { new: true }, (err, result) => {
+    Seller.findByIdAndUpdate(req.params.id, newInfo, {
+        new: true
+    }, (err, result) => {
         if (err) {
             console.log(err)
         } else {

@@ -6,6 +6,7 @@ const logger = require('../../logConfig')
 const TransLog = require('../../TranslogerConfig')
 var MongoClient = require('mongodb').MongoClient;
 var nodemailer = require('nodemailer');
+var addDays = require ("../utility")
 
 router.get('/', (req, res) => {
   res.send('its now working')
@@ -223,6 +224,7 @@ router.post('/buy', async (req, res) => {
 
 // to get all the buys
 router.get('/all-buys', (req, res) => {
+ 
   if (!req.query.startDate || !req.query.endDate) {
     res.send({
       error: true,
@@ -233,7 +235,7 @@ router.get('/all-buys', (req, res) => {
     filter = req.query
     filter['created_date'] = {
       $gte: req.query.startDate,
-      $lte: req.query.endDate
+      $lte: addDays(req.query.endDate, 1)
     }
     delete filter.startDate
     delete filter.endDate
@@ -258,7 +260,7 @@ router.get('/all-buys-audit', (req, res) => {
         '$match': {
           created_date: {
             '$gte': new Date(req.query.startDate),
-            '$lt': new Date(req.query.endDate)
+            '$lt': new Date(addDays(req.query.endDate, 1))
           }
         }
       },
@@ -279,7 +281,6 @@ router.get('/all-buys-audit', (req, res) => {
       }
     }
   );
-
 })
 
 
@@ -302,15 +303,11 @@ router.get('/all-buy/:id', (req, res) => {
     // res.send(filter)
     Buyer.find(filter, (err, result) => {
       if (err) res.send(err)
-
       res.send(result)
-
     }).sort({
       created_date: -1
     })
   }
-
-
 })
 
 router.get('/get-buy/:id', (req, res) => {
