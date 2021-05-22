@@ -234,6 +234,20 @@ router.get('/all-sell', (req, res) => {
 })
 
 
+
+router.get("/search", async (req, res) => {
+    Seller.find({ $text: { $search: req.query.search } }).exec(function (
+      err,
+      docs
+    ) {
+      res.send({ doc: docs, err });
+    });
+  });
+  
+
+
+
+
 router.get('/all-sells-audit', (req, res) => {
     console.log(req.query)
 

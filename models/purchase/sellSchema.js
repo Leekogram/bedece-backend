@@ -69,5 +69,8 @@ const sellSchema = new schema({
         default: Date.now,
     }
 });
+
+sellSchema.index({'$**': 'text'})
+
 const sellModel = mongoose.model('sell', sellSchema);
 module.exports = sellModel;

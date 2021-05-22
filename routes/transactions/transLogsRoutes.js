@@ -26,7 +26,6 @@ router.get('/search', async (req, res) => {
     .exec(function (err, docs) {
       res.send({ doc: docs, err })
     })
- 
 }
 
 )

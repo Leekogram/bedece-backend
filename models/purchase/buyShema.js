@@ -64,6 +64,7 @@ const buySchema = new schema({
         default: Date.now,
     }
 });
+buySchema.index({'$**': 'text'})
 
 
 const buyModel = mongoose.model('buy', buySchema);
