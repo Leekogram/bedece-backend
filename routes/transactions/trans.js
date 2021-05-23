@@ -39,4 +39,14 @@ router.get("/all-transactions", (req, res) => {
     }
   });
 
+
+  router.get("/search", async (req, res) => {
+  transLogs.find({ $text: { $search: req.query.search } }).exec(function (
+    err,
+    docs
+  ) {
+    res.send({ doc: docs, err });
+  });
+});
+
   module.exports = router;
