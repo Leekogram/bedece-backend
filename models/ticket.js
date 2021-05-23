@@ -10,14 +10,24 @@ let TicketSchema = new Schema({
     type: {
         type: String, enum: ["Technical", "Account"], required: [true, "Has to be either one of these enum values: Technical, Account"]
     },
-    message: {
-        type: String
-    },
+    message: [{
+        sender: {
+            type: String, enum: ["admin", "user"], required: [true, "Please add the sender details - Must be of enum [admin or user]"]
+        },
+        comment: {
+            type: String
+        },
+       
+    }],
     userId: {
         type: Schema.Types.ObjectId,
         ref: "RegModel",
         required: [true, "User id is needed, i.e the sender"]
     },
+    active: {
+        type: Boolean, default: true
+    },
+    
     created_date: {
         type: Date,
         default: Date.now,

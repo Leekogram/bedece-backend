@@ -7,6 +7,11 @@ router.get('/', (req, res) => {
 
 router.post('/open-tickets', (req, res) => {
     let newTicket = new Tickets(req.body)
+   let message={
+      sender: req.body.sender,
+      comment: req.body.comment,
+    }
+    newTicket['message'][0] = message
     //  res.send(newTicket)
     newTicket.save()
     .then(rate => {
@@ -29,7 +34,7 @@ router.get("/all-tickets", (re, res) => {
 })
 
 
-//   get a particular Currency
+
   router.get('/ticket/:id', (req, res) => {
     Tickets.find({ _id: req.params.id }, (err, result) => {
       if (err) {
