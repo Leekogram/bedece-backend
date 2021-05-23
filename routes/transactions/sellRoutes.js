@@ -208,7 +208,7 @@ router.get("/all-sell", (req, res) => {
 router.get("/all-sells-audit", (req, res) => {
   console.log(req.query);
 
-  Seller.aggregate(
+  transLogs.aggregate(
     [
       {
         $match: {
@@ -216,6 +216,7 @@ router.get("/all-sells-audit", (req, res) => {
             $gte: new Date(req.query.startDate),
             $lt: new Date(addDays(req.query.endDate, 1)),
           },
+          Type:"SELL"
         },
       },
       {

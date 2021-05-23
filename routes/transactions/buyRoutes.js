@@ -257,7 +257,7 @@ router.get("/all-buys", (req, res) => {
 router.get("/all-buys-audit", (req, res) => {
   console.log(req.query);
 
-  Buyer.aggregate(
+  transLogs.aggregate(
     [
       {
         $match: {
@@ -265,6 +265,8 @@ router.get("/all-buys-audit", (req, res) => {
             $gte: new Date(req.query.startDate),
             $lt: new Date(addDays(req.query.endDate, 1)),
           },
+          Type:"BUY"
+
         },
       },
       {
