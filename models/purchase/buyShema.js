@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 let customId = mongoose.Types.ObjectId()
+// autoIncrement = require('mongoose-auto-increment');
+let gen = require ("../utility/referenceGenerator")
+// var connection = mongoose.createConnection("mongodb://localhost/test");
+// autoIncrement.initialize(connection);
+
+
 
 const buySchema = new schema({
     Type: {
@@ -25,7 +31,9 @@ const buySchema = new schema({
         },
         refference: {
             type:String,
-            default:`BDC/${new Date().toLocaleDateString()}/${customId}`,
+            // default:`${myTime}${day}${month}${year}313BDC${month}${customId}`,
+            default:gen,
+
             once:true
         }
     },

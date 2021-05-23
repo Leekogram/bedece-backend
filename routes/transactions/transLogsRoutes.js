@@ -21,6 +21,36 @@ router.get('/logs', (req, res) => {
   }).sort({ created_date: -1 })
 })
 
+router.get('/user-logs/:uid', (req, res) => {
+
+  Trans.find({ userId: req.params.uid }, (err, result) => {
+    if (err) res.send(err)
+    res.send(result)
+  }).sort({ created_date: -1 })
+})
+
+router.get('/user-logs-status/:uid', (req, res) => {
+
+  Trans.find({ userId: req.params.uid, status: req.query.status }, (err, result) => {
+    if (err) res.send(err)
+    res.send(result)
+  }).sort({ created_date: -1 })
+})
+
+router.get('/user-trans-logs', (req, res) => {
+  let status
+  if (!req.query.status) {
+    status = "pending"
+  } else {
+    status = req.query.status
+  }
+  console.log(status)
+  Trans.find({ userId: req.query.uid, status }, (err, result) => {
+    if (err) res.send(err)
+    res.send(result)
+  }).sort({ created_date: -1 })
+})
+
 router.get('/search', async (req, res) => {
   Trans.find({ $text: { $search: req.query.search } })
     .exec(function (err, docs) {
@@ -61,7 +91,6 @@ router.get('/excel', function (req, res) {
 
         ws.cell(1, 4)
           .string('User Email')
-
 
         ws.cell(1, 5)
           .string('Give amount')
@@ -106,7 +135,6 @@ router.get('/excel', function (req, res) {
           ws.cell(row, 6)
             .string(result[i].recieve.recieveAmount + " " + result[i].recieve.recieveCurrency)
 
-
           ws.cell(row, 7)
             .string(result[i].transDetails.creditAccount.bcdAccountName + " " + result[i].transDetails.creditAccount.bcdAccountNumber + " " + result[i].transDetails.creditAccount.bcdBankName)
 
@@ -114,6 +142,7 @@ router.get('/excel', function (req, res) {
             .string(result[i].transDetails.refference)
         }
 
+        
 
 
         resolve(wb)
@@ -124,7 +153,7 @@ router.get('/excel', function (req, res) {
     createSheet().then(file => {
       file.write('ExcelFile.xlsx', res);
     })
-  })
+  }).sort('-created_date')
 
   // var json = [{"Vehicle":"BMW","Date":"30, Jul 2013 09:24 AM","Location":"Hauz Khas, Enclave, New Delhi, Delhi, India","Speed":42},{"Vehicle":"Honda CBR","Date":"30, Jul 2013 12:00 AM","Location":"Military Road,  West Bengal 734013,  India","Speed":0},{"Vehicle":"Supra","Date":"30, Jul 2013 07:53 AM","Location":"Sec-45, St. Angel's School, Gurgaon, Haryana, India","Speed":58},{"Vehicle":"Land Cruiser","Date":"30, Jul 2013 09:35 AM","Location":"DLF Phase I, Marble Market, Gurgaon, Haryana, India","Speed":83},{"Vehicle":"Suzuki Swift","Date":"30, Jul 2013 12:02 AM","Location":"Behind Central Bank RO, Ram Krishna Rd by-lane, Siliguri, West Bengal, India","Speed":0},{"Vehicle":"Honda Civic","Date":"30, Jul 2013 12:00 AM","Location":"Behind Central Bank RO, Ram Krishna Rd by-lane, Siliguri, West Bengal, India","Speed":0},{"Vehicle":"Honda Accord","Date":"30, Jul 2013 11:05 AM","Location":"DLF Phase IV, Super Mart 1, Gurgaon, Haryana, India","Speed":71}]
 

@@ -178,7 +178,7 @@ router.post("/reset-pass/:id/:token", (req, res) => {
                     }
                 });
             });
-            console.log("success", newInfo)
+            console.log("suc@cess", newInfo)
         }
     })
 

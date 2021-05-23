@@ -158,7 +158,7 @@ router.post("/buy", async (req, res) => {
             <p>Dear ${result[0].fname},  </p> you made a transaction with the following details 
             <table style="width:100%">
             <caption>Transactions</caption> <br>
-           
+
             <tr>
               <td style="border: 1px solid black;
             border-collapse: collapse;">BDC ACCOUNT NUMBER</td>
@@ -237,17 +237,19 @@ router.get("/all-buys", (req, res) => {
       $gte: req.query.startDate,
       $lte: addDays(req.query.endDate, 1),
     };
-    filter["Type"] = "BUY"
+    filter["Type"] = "BUY";
     delete filter.startDate;
     delete filter.endDate;
     console.log(filter);
 
-    transLogs.find(filter, (err, result) => {
-      if (err) res.send(err);
-      res.send(result);
-    }).sort({
-      created_date: -1,
-    });
+    transLogs
+      .find(filter, (err, result) => {
+        if (err) res.send(err);
+        res.send(result);
+      })
+      .sort({
+        created_date: -1,
+      });
   }
 });
 
@@ -298,16 +300,18 @@ router.get("/all-buy/:id", (req, res) => {
       $gte: req.query.startDate,
       $lte: req.query.endDate,
     };
-    filter["Type"] = "SELL"
+    filter["Type"] = "SELL";
     delete filter.startDate;
     delete filter.endDate;
     // res.send(filter)
-    transLogs.find(filter, (err, result) => {
-      if (err) res.send(err);
-      res.send(result);
-    }).sort({
-      created_date: -1,
-    });
+    transLogs
+      .find(filter, (err, result) => {
+        if (err) res.send(err);
+        res.send(result);
+      })
+      .sort({
+        created_date: -1,
+      });
   }
 });
 

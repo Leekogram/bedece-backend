@@ -37,6 +37,9 @@ let RegSchema = new Schema({
         },
         bankName: {
             type: String
+        },
+        currencyType: {
+            type: String
         }
     }],
     Dob: {

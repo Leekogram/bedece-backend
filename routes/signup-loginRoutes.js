@@ -241,7 +241,8 @@ router.post('/addBank/:id', (req, res) => {
     bank: [{
       accountNumber: req.body.accountNumber,
       accountName: req.body.accountName,
-      bankName: req.body.bankName
+      bankName: req.body.bankName,
+      currencyType: req.body.currencyType
     }]
   })
   User.findByIdAndUpdate(req.params.id, {
@@ -252,6 +253,7 @@ router.post('/addBank/:id', (req, res) => {
     function (err, doc) {
       if (err) {
         console.log(err);
+        res.send("error occured")
       } else {
         console.log(newdet)
         res.status(200).send({
@@ -277,6 +279,7 @@ router.get("/user/:id", (req, res) => {
 
 // filter user to get banks
 router.get("/user-banks/:id", (req, res) => {
+  console.log(req.params.id)
   User.findById(req.params.id, (err, result) => {
     if (err) {
       res.send("An Error Occured!");
@@ -459,12 +462,12 @@ router.post('/fpass', async (req, res) => {
           html: ` 
           <h2>313BDC</h2>
           <div> 313BDC <br>
-          dear ${user.fname} ${user.fname}
+          Dear ${user.fname}, <br><br>
           </div>        
-          follow this  <a href="https://bdc-backend.herokuapp.com/reg/resetPass2/?e=${user._id}&q=${token}">link</a> to reset your password. <br> this link expires after an hour. if you did not make this request, kindly ignore the mail.
-          Thanks, <br>
-          The 313BDC team <br>
-          08031230313, 08099936398, 07058890313 `
+          Follow this  <a href="reset313.herokuapp.com/reg/resetPass2/?e=${user._id}&q=${token}">link</a> to reset your password,  this link expires after an hour. <br> if you did not make this request, or you believe that an unauthorised person has accessed your account, kindly log into your account without delay to review and update your security settings.<br><br>
+          Sincerely, <br><br>
+          313BDC Support <br><br>
+          08031230313, 08099936398, 07058890313`
         };
         transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
