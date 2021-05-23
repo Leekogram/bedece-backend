@@ -7,6 +7,8 @@ const TransLog = require("../../TranslogerConfig");
 var MongoClient = require("mongodb").MongoClient;
 var nodemailer = require("nodemailer");
 var addDays = require("../utility");
+var removeDays = require("../utility");
+
 
 router.get("/", (req, res) => {
   res.send("its now working");
@@ -24,8 +26,7 @@ router.post("/buy", async (req, res) => {
         });
       } else if (result.length > 0) {
         userDetails = result;
-    
-      } else if(result.length == 0) {
+      } else if (result.length == 0) {
         res.json({
           message: "Error: User, Unverified User",
         });
@@ -217,47 +218,54 @@ router.post("/buy", async (req, res) => {
 // to get all the buys
 router.get("/all-buys", (req, res) => {
   console.log(req.query);
+  let start = "";
+  let end = "";
   if (!req.query.startDate || !req.query.endDate) {
-    res.send({
-      error: true,
-      message: "please enter date range for start and end",
-    });
+    (start = removeDays(new Date(), 30)), (end = new Date());
   } else {
-    filter = req.query;
-    filter["created_date"] = {
-      $gte: req.query.startDate,
-      $lte: addDays(req.query.endDate, 1),
-    };
-    filter["Type"] = "BUY";
-    delete filter.startDate;
-    delete filter.endDate;
-    console.log(filter);
-
-    transLogs
-      .find(filter, (err, result) => {
-        if (err) res.send(err);
-        res.send(result);
-      })
-      .sort({
-        created_date: -1,
-      });
+    (start = req.query.startDate), (end = addDays(req.query.endDate, 1));
   }
+  filter = req.query;
+  filter["created_date"] = {
+    $gte: start,
+    $lte: end,
+  };
+  delete filter.startDate;
+  delete filter.endDate;
+  console.log(filter);
+
+
+  transLogs
+    .find(filter, (err, result) => {
+      if (err) res.send(err);
+      res.send(result);
+    })
+    .sort({
+      created_date: -1,
+    });
 });
 
 // to get all the buys
 router.get("/all-buys-audit", (req, res) => {
-  console.log(req.query);
+  let start = "";
+  let end = "";
+  if (!req.query.startDate || !req.query.endDate) {
+    start = removeDays(new Date(), 30), end = new Date();
+  } else {
+    start = new Date(req.query.startDate), end = new Date(addDays(req.query.endDate, 1));
+  }
+
+  console.log(start, end)
 
   transLogs.aggregate(
     [
       {
         $match: {
           created_date: {
-            $gte: new Date(req.query.startDate),
-            $lt: new Date(addDays(req.query.endDate, 1)),
+            $gte: start,
+            $lt: end,
           },
-          Type:"BUY"
-
+          Type: "BUY",
         },
       },
       {
@@ -281,31 +289,34 @@ router.get("/all-buys-audit", (req, res) => {
 
 // get all the buys made by a single user
 router.get("/all-buy/:id", (req, res) => {
+  console.log(req.query);
+  let start = "";
+  let end = "";
   if (!req.query.startDate || !req.query.endDate) {
-    res.send({
-      error: true,
-      message: "please enter date range for start and end",
-    });
+    (start = removeDays(new Date(), 30)), (end = new Date());
   } else {
-    filter = req.query;
-    filter["userId"] = req.params.id;
-    filter["created_date"] = {
-      $gte: req.query.startDate,
-      $lte: req.query.endDate,
-    };
-    filter["Type"] = "SELL";
-    delete filter.startDate;
-    delete filter.endDate;
-    // res.send(filter)
-    transLogs
-      .find(filter, (err, result) => {
-        if (err) res.send(err);
-        res.send(result);
-      })
-      .sort({
-        created_date: -1,
-      });
+    (start = req.query.startDate), (end = addDays(req.query.endDate, 1));
   }
+  filter = req.query;
+  filter["created_date"] = {
+    $gte: start,
+    $lte: end,
+  };
+  filter["Type"] = "BUY";
+  delete filter.startDate;
+  delete filter.endDate;
+  console.log(filter);
+
+  filter = req.query;
+  filter["userId"] = req.params.id;
+  transLogs
+    .find(filter, (err, result) => {
+      if (err) res.send(err);
+      res.send(result);
+    })
+    .sort({
+      created_date: -1,
+    });
 });
 
 // router.get("/search-buy", async (req, res) => {

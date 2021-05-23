@@ -5,6 +5,7 @@ const transLogs = require("../../models/purchase/transLogsModels");
 const User = require("../../models/regSchema");
 var nodemailer = require("nodemailer");
 var addDays = require("../utility");
+var removeDays = require("../utility");
 
 router.get("/t", (req, res) => {
   res.send("its now working");
@@ -22,8 +23,7 @@ router.post("/sell", async (req, res) => {
         });
       } else if (result.length > 0) {
         userDetails = result;
-      
-      } else if(result.length == 0) {
+      } else if (result.length == 0) {
         res.json({
           message: "Error: User, Unverified User",
         });
@@ -31,8 +31,7 @@ router.post("/sell", async (req, res) => {
     }
   );
   console.log(findUser);
-//   console.log(userDetails[0].fname, "out");
-
+  //   console.log(userDetails[0].fname, "out");
 
   let newTransLog = new transLogs({
     Type: "SELL",
@@ -69,9 +68,7 @@ router.post("/sell", async (req, res) => {
     deliveryMethod: req.body.deliveryMethod,
     deliveryAddress: req.body.deliveryAddress,
   });
-  
 
- 
   newTransLog
     .save()
     .then((seller) => {
@@ -85,9 +82,6 @@ router.post("/sell", async (req, res) => {
       console.log("success");
 
       // preparing to send data to all transaction logs
-     
-
-    
 
       // this fetches the users details to get their mails
       User.find(
@@ -189,46 +183,60 @@ router.post("/sell", async (req, res) => {
 });
 // to get all the sells
 router.get("/all-sell", (req, res) => {
+  console.log(req.query);
+  let start = "";
+  let end = "";
   if (!req.query.startDate || !req.query.endDate) {
-    res.send({
-      error: true,
-      message: "please enter date range for start and end",
-    });
+    (start = removeDays(new Date(), 30)), (end = new Date());
   } else {
-    filter = req.query;
-    filter["created_date"] = {
-      $gte: req.query.startDate,
-      $lte: addDays(req.query.endDate, 1),
-    };
-    filter["Type"] = "SELL"
-    delete filter.startDate;
-    delete filter.endDate;
-    console.log(filter);
+    (start = req.query.startDate), (end = addDays(req.query.endDate, 1));
+  }
+  filter = req.query;
+  filter["created_date"] = {
+    $gte: start,
+    $lte: end,
+  };
+  filter["Type"] = "SELL";
+  delete filter.startDate;
+  delete filter.endDate;
+  console.log(filter);
 
-    transLogs.find(filter, (err, result) => {
-      if (err) res.send(err);
+  transLogs
+    .find(filter, (err, result) => {
+      if (err) {
+        res.send(err);
+      }
 
       res.status(200).send({
         result: result,
       });
-    }).sort({
+    })
+    .sort({
       created_date: -1,
     });
-  }
 });
 
 router.get("/all-sells-audit", (req, res) => {
-  console.log(req.query);
+  let start = "";
+  let end = "";
+  if (!req.query.startDate || !req.query.endDate) {
+    (start = removeDays(new Date(), 30)), (end = new Date());
+  } else {
+    (start = new Date(req.query.startDate)),
+      (end = new Date(addDays(req.query.endDate, 1)));
+  }
+
+  console.log(start, end);
 
   transLogs.aggregate(
     [
       {
         $match: {
           created_date: {
-            $gte: new Date(req.query.startDate),
-            $lt: new Date(addDays(req.query.endDate, 1)),
+            $gte: start,
+            $lt: end,
           },
-          Type:"SELL"
+          Type: "SELL",
         },
       },
       {
@@ -252,34 +260,37 @@ router.get("/all-sells-audit", (req, res) => {
 
 // get all the sells made by a single user
 router.get("/all-sell/:id", (req, res) => {
+  console.log(req.query);
+  let start = "";
+  let end = "";
   if (!req.query.startDate || !req.query.endDate) {
-    res.send({
-      error: true,
-      message: "please enter date range for start and end",
-    });
+    (start = removeDays(new Date(), 30)), (end = new Date());
   } else {
-    filter = req.query;
-    filter["created_date"] = {
-      $gte: req.query.startDate,
-      $lte: req.query.endDate,
-    };
-    filter["Type"] = "SELL"
-    delete filter.startDate;
-    delete filter.endDate;
-    console.log(filter);
+    (start = req.query.startDate), (end = addDays(req.query.endDate, 1));
+  }
+  filter = req.query;
+  filter["created_date"] = {
+    $gte: start,
+    $lte: end,
+  };
+  filter["Type"] = "SELL";
+  delete filter.startDate;
+  delete filter.endDate;
+  console.log(filter);
 
-    filter = req.query;
-    filter["userId"] = req.params.id;
-    transLogs.find(filter, (err, result) => {
+  filter = req.query;
+  filter["userId"] = req.params.id;
+  transLogs
+    .find(filter, (err, result) => {
       if (err) res.send(err);
 
       res.status(200).send({
         result: result,
       });
-    }).sort({
+    })
+    .sort({
       created_date: -1,
     });
-  }
 });
 // get a particular sell with its ID
 router.get("/get-sell/:id", (req, res) => {
