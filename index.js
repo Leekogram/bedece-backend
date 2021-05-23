@@ -30,11 +30,11 @@ var session = require('express-session');
 require("firebase/auth");
 require("firebase/firestore");
 
-// mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true, useFindAndModify: false });
+mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true, useFindAndModify: false });
 
 // mongoose.connect('mongodb+srv://sayil:SEYILNEN2194@cluster0-0j8cs.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
 
-mongoose.connect('mongodb+srv://Jinn:jinnpassword@313bdccluster.x64qt.mongodb.net/313bdcCluster?retryWrites=true&w=majority', {useNewUrlParser: true})
+// mongoose.connect('mongodb+srv://Jinn:jinnpassword@313bdccluster.x64qt.mongodb.net/313bdcCluster?retryWrites=true&w=majority', {useNewUrlParser: true})
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -68,6 +68,8 @@ app.use('/fx', require('./routes/fxRoutes/fxroutes'))
 app.use('/logs', require('./routes/loggerRoutes'))
 app.use('/admin', require('./routes/admin/adminRoutes'))
 app.use('/tickets', require('./routes/tickets'))
+app.use('/transactions', require('./routes/transactions/trans'))
+
 
 
 app.listen(process.env.PORT || port, () => console.log(`Example app listening on port ${port}!`))

@@ -33,7 +33,36 @@ router.post("/buy", async (req, res) => {
   );
   console.log(findUser);
 
-  let newBuyer = new Buyer({
+  // let newTransLog = new Buyer({
+  //   Type: "BUY",
+  //   give: {
+  //     giveCurrency: req.body.giveCurrency,
+  //     giveAmount: req.body.giveAmount,
+  //   },
+  //   recieve: {
+  //     recieveCurrency: req.body.recieveCurrency,
+  //     recieveAmount: req.body.recieveAmount,
+  //   },
+  //   transDetails: {
+  //     creditAccount: {
+  //       bcdAccountName: req.body.bcdAccountName,
+  //       bcdAccountNumber: req.body.bcdAccountNumber,
+  //       bcdBankName: req.body.bcdBankName,
+  //     },
+  //   },
+  //   userId: req.body.userId,
+  //   user: {
+  //     fname: userDetails[0].fname,
+  //     lname: userDetails[0].lname,
+  //     email: userDetails[0].email,
+  //     phone: userDetails[0].phone,
+  //   },
+  //   // transactionId: req.body.transactionId,
+  //   // status: req.body.status,
+  //   deliveryMethod: req.body.deliveryMethod
+  // });
+
+  let newTransLog = new transLogs({
     Type: "BUY",
     give: {
       giveCurrency: req.body.giveCurrency,
@@ -62,12 +91,12 @@ router.post("/buy", async (req, res) => {
     deliveryMethod: req.body.deliveryMethod,
   });
 
-  newBuyer
+  newTransLog
     .save()
     .then((buyer) => {
       res.json({
         message: "saved successfully",
-        id: newBuyer._id,
+        id: newTransLog._id,
       });
       console.log("success");
       logger.info(
@@ -75,53 +104,25 @@ router.post("/buy", async (req, res) => {
       );
 
       TransLog.info({
-        firstname: newBuyer.user.fname,
-        lastname: newBuyer.user.lastname,
-        email: newBuyer.user.email,
-        refference: newBuyer.transDetails.refference,
+        firstname: newTransLog.user.fname,
+        lastname: newTransLog.user.lastname,
+        email: newTransLog.user.email,
+        refference: newTransLog.transDetails.refference,
         activity: "Buy Currency",
-        amount: newBuyer.give.giveAmount,
-        currency: newBuyer.give.giveCurrency,
-        status: newBuyer.status,
+        amount: newTransLog.give.giveAmount,
+        currency: newTransLog.give.giveCurrency,
+        status: newTransLog.status,
         date: Date.now,
       });
 
       // preparing to send data to all transaction logs
-      let newTransLog = new transLogs({
-        Type: "BUY",
-        give: {
-          giveCurrency: req.body.giveCurrency,
-          giveAmount: req.body.giveAmount,
-        },
-        recieve: {
-          recieveCurrency: req.body.recieveCurrency,
-          recieveAmount: req.body.recieveAmount,
-        },
-        transDetails: {
-          creditAccount: {
-            bcdAccountName: req.body.bcdAccountName,
-            bcdAccountNumber: req.body.bcdAccountNumber,
-            bcdBankName: req.body.bcdBankName,
-          },
-        },
-        userId: req.body.userId,
-        user: {
-          fname: userDetails[0].fname,
-          lname: userDetails[0].lname,
-          email: userDetails[0].email,
-          phone: userDetails[0].phone,
-        },
-        // transactionId: req.body.transactionId,
-        // status: req.body.status,
-        deliveryMethod: req.body.deliveryMethod,
-      });
 
-      newTransLog.save().then((trans) => {
-        res.json({
-          message: "saved successfully",
-          id: newBuyer._id,
-        });
-      });
+      // newTransLog.save().then((trans) => {
+      //   res.json({
+      //     message: "saved successfully",
+      //     id: newTransLog._id,
+      //   });
+      // });
 
       // this fetches the users details to get their mails
       User.find(
@@ -133,7 +134,7 @@ router.post("/buy", async (req, res) => {
             res.send(err);
           } else {
             console.log(result[0].email);
-            console.log(newBuyer, "are the current users details");
+            console.log(newTransLog, "are the current users details");
 
             var transporter = nodemailer.createTransport({
               service: "gmail",
@@ -162,37 +163,37 @@ router.post("/buy", async (req, res) => {
               <td style="border: 1px solid black;
             border-collapse: collapse;">BDC ACCOUNT NUMBER</td>
               <td style="border: 1px solid black;
-            border-collapse: collapse;">${newBuyer.transDetails.creditAccount.bcdAccountNumber}</td>
+            border-collapse: collapse;">${newTransLog.transDetails.creditAccount.bcdAccountNumber}</td>
             </tr>
             <tr>
               <td style="border: 1px solid black;
             border-collapse: collapse;">ACCOUNT HOLDER</td>
               <td style="border: 1px solid black;
-            border-collapse: collapse;">${newBuyer.transDetails.creditAccount.bcdAccountName}</td>
+            border-collapse: collapse;">${newTransLog.transDetails.creditAccount.bcdAccountName}</td>
             </tr>
             <tr>
               <td style="border: 1px solid black;
             border-collapse: collapse;">BANK NAME</td>
               <td style="border: 1px solid black;
-            border-collapse: collapse;">${newBuyer.transDetails.creditAccount.bcdBankName}</td>
+            border-collapse: collapse;">${newTransLog.transDetails.creditAccount.bcdBankName}</td>
             </tr>
             <tr>
               <td style="border: 1px solid black;
             border-collapse: collapse;">PAYMENT</td>
               <td style="border: 1px solid black;
-            border-collapse: collapse;">${newBuyer.give.giveAmount} ${newBuyer.give.giveCurrency}</td>
+            border-collapse: collapse;">${newTransLog.give.giveAmount} ${newTransLog.give.giveCurrency}</td>
             </tr>
             <tr>
             <td style="border: 1px solid black;
             border-collapse: collapse;">RECIEVED</td>
             <td style="border: 1px solid black;
-            border-collapse: collapse;">${newBuyer.recieve.recieveAmount} ${newBuyer.recieve.recieveCurrency}</td>
+            border-collapse: collapse;">${newTransLog.recieve.recieveAmount} ${newTransLog.recieve.recieveCurrency}</td>
             </tr>
             <tr>
             <td style="border: 1px solid black;
             border-collapse: collapse;">REFFERENCE</td>
             <td style="border: 1px solid black;
-            border-collapse: collapse;">${newBuyer.transDetails.refference}</td>
+            border-collapse: collapse;">${newTransLog.transDetails.refference}</td>
             </tr>
           </table> <br>
           Thanks, <br>
@@ -224,6 +225,7 @@ router.post("/buy", async (req, res) => {
 
 // to get all the buys
 router.get("/all-buys", (req, res) => {
+  console.log(req.query);
   if (!req.query.startDate || !req.query.endDate) {
     res.send({
       error: true,
@@ -235,11 +237,12 @@ router.get("/all-buys", (req, res) => {
       $gte: req.query.startDate,
       $lte: addDays(req.query.endDate, 1),
     };
+    filter["Type"] = "BUY"
     delete filter.startDate;
     delete filter.endDate;
     console.log(filter);
 
-    Buyer.find(filter, (err, result) => {
+    transLogs.find(filter, (err, result) => {
       if (err) res.send(err);
       res.send(result);
     }).sort({
@@ -295,10 +298,11 @@ router.get("/all-buy/:id", (req, res) => {
       $gte: req.query.startDate,
       $lte: req.query.endDate,
     };
+    filter["Type"] = "SELL"
     delete filter.startDate;
     delete filter.endDate;
     // res.send(filter)
-    Buyer.find(filter, (err, result) => {
+    transLogs.find(filter, (err, result) => {
       if (err) res.send(err);
       res.send(result);
     }).sort({
@@ -307,21 +311,17 @@ router.get("/all-buy/:id", (req, res) => {
   }
 });
 
-
-router.get("/search-buy", async (req, res) => {
-  Buyer.find({ $text: { $search: req.query.search } }).exec(function (
-    err,
-    docs
-  ) {
-    res.send({ doc: docs, err });
-  });
-});
-
-
-
+// router.get("/search-buy", async (req, res) => {
+//   Buyer.find({ $text: { $search: req.query.search } }).exec(function (
+//     err,
+//     docs
+//   ) {
+//     res.send({ doc: docs, err });
+//   });
+// });
 
 router.get("/get-buy/:id", (req, res) => {
-  Buyer.find(
+  transLogs.find(
     {
       _id: req.params.id,
     },
@@ -342,7 +342,7 @@ router.put("/update-buy/:id", (req, res) => {
   // var newInfo = req.body
   let newInfo = req.body;
   console.log(newInfo);
-  Buyer.findByIdAndUpdate(
+  transLogs.findByIdAndUpdate(
     req.params.id,
     newInfo,
     {

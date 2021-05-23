@@ -6,6 +6,10 @@ let TransSchema = new Schema({
         type: String,
         once: true
     },
+    pay: {
+        payCurrency: String,
+        payAmount : Number
+    },
     give: {
         giveCurrency: String,
         giveAmount: String
