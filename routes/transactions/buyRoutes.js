@@ -22,9 +22,10 @@ router.post("/buy", async (req, res) => {
         res.json({
           message: "Error: User, Unverified User",
         });
-      } else if (result) {
+      } else if (result.length > 0) {
         userDetails = result;
-      } else {
+    
+      } else if(result.length == 0) {
         res.json({
           message: "Error: User, Unverified User",
         });
@@ -115,16 +116,6 @@ router.post("/buy", async (req, res) => {
         date: Date.now,
       });
 
-      // preparing to send data to all transaction logs
-
-      // newTransLog.save().then((trans) => {
-      //   res.json({
-      //     message: "saved successfully",
-      //     id: newTransLog._id,
-      //   });
-      // });
-
-      // this fetches the users details to get their mails
       User.find(
         {
           _id: req.body.userId,

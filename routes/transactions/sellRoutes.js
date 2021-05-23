@@ -11,14 +11,26 @@ router.get("/t", (req, res) => {
 });
 router.post("/sell", async (req, res) => {
   let userDetails;
-  await User.find(
+  let findUser = await User.find(
     {
       _id: req.body.userId,
     },
     (err, result) => {
-      userDetails = result;
+      if (err) {
+        res.json({
+          message: "Error: User, Unverified User",
+        });
+      } else if (result.length > 0) {
+        userDetails = result;
+      
+      } else if(result.length == 0) {
+        res.json({
+          message: "Error: User, Unverified User",
+        });
+      }
     }
   );
+  console.log(findUser);
 //   console.log(userDetails[0].fname, "out");
 
 
