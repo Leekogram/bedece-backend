@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const transLogs = require("../../models/purchase/transLogsModels");
+const users = require("../../models/regSchema")
 const logger = require("../../logConfig");
 const TransLog = require("../../TranslogerConfig");
 var MongoClient = require("mongodb").MongoClient;
@@ -35,7 +36,6 @@ router.get("/all-transactions", (req, res) => {
   transLogs
     .find(filter, (err, result) => {
       if (err) res.send(err);
-
       res.status(200).send({
         result: result,
       });
@@ -51,6 +51,24 @@ router.get("/search", async (req, res) => {
     .exec(function (err, docs) {
       res.send({ doc: docs, err });
     });
+});
+
+router.get("/dashboard-summary", async (req, res) => {
+  let allData = await transLogs.find().count();
+  let allSell = await transLogs.find({ Type: "SELL" }).count();
+  let allBuy = await transLogs.find({ Type: "BUY" }).count();
+  let allusers = await users.find().count();
+
+
+  res.send({
+    message: "Successful",
+    data: {
+      allTransactions: allData,
+      allSell,
+      allBuy,
+      allusers
+    },
+  });
 });
 
 module.exports = router;
