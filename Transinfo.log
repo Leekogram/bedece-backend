@@ -48,3 +48,5 @@
 {"message":{"firstname":"Aliyu","email":"Leekogram@gmail.com","refference":"210118161851","activity":"Buy Currency","amount":"5000","currency":"dollars","status":"pending"},"level":"info","timestamp":"2021-01-18T15:18:51.443Z"}
 {"message":{"firstname":"Aliyu","email":"Leekogram@gmail.com","refference":"210118162051","activity":"Buy Currency","amount":"5000","currency":"dollars","status":"pending"},"level":"info","timestamp":"2021-01-18T15:20:52.013Z"}
 {"message":{"firstname":"sayiliyas","email":"sundaysayil4u@gmail.com","activity":"Buy Currency","amount":"250","currency":"naira","status":"pending"},"level":"info","timestamp":"2021-05-23T15:37:31.829Z"}
+{"message":{"firstname":"sayiliyas","email":"sundaysayil4u@gmail.com","activity":"Buy Currency","amount":"250","currency":"naira","status":"pending"},"level":"info","timestamp":"2021-05-25T05:55:00.802Z"}
+{"message":{"firstname":"sayiliyas","email":"sundaysayil4u@gmail.com","refference":"BCD/25/05/2021/60ac936974123f212550e18b","activity":"Buy Currency","amount":"250","currency":"naira","status":"pending"},"level":"info","timestamp":"2021-05-25T06:05:06.595Z"}

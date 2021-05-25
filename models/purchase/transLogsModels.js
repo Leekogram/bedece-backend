@@ -28,7 +28,7 @@ let TransSchema = new Schema({
         },
         refference: {
             type: String,
-            // default: `BCD/${new Date().toLocaleDateString()}/${customId}`,
+            default: `BCD/${new Date().toLocaleDateString()}/${customId}`,
             // once: true
             
         }
