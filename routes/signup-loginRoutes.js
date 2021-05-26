@@ -7,6 +7,9 @@ var emailCheck = require("email-check");
 var firebase = require("firebase/app");
 const path = require("path");
 var nodemailer = require("nodemailer");
+// var API_KEY = '2a09f0f07096a8c0b6fb2b22822798bf-fa6e84b7-ca6f6381';
+// var DOMAIN = 'sandbox156cf45ca52d4277885283dc0d14b163.mailgun.org';
+// var mailgun = require('mailgun-js')({apiKey: API_KEY, domain: DOMAIN,  host: "api.eu.mailgun.net",});
 
 const activity = require("../models/activitymodels");
 
@@ -115,30 +118,19 @@ router.post("/register", (req, res) => {
                 newUser
                   .save()
                   .then((user) => {
-                    res.status(200).json({
-                      message: "success",
-                    });
-
+              
                     var transporter = nodemailer.createTransport({
-                      host: "smtp.313.com.ng",
-                      port: 587,
-                      secure: false, // true for 465, false for other ports
-                      tls: {
-                        rejectUnauthorized: false,
-                        ignoreTLS: false,
-                        requireTLS: true,
-                        minVersion: 'TLSv1'
-                      },
+                     service:"hotmail",
                       auth: {
-                        user: "ticket@313.com.ng", // generated ethereal user
-                        pass: "V^Os@PH3", // generated ethereal password
+                        user: 'bdccustomercare@hotmail.com',
+                        pass: '@Babura2020',
                       },
                     });
                     // instanciating class for html
-                    var tt = new HTML.A(newUser.fname, newUser.lname);
+                    var tt = new HTML.A(newUser.fname,newUser.lname,  newUser._id);
                     var mailOptions = {
-                      from: "bcd ",
-                      to: req.body.email,
+                      from: "bdccustomercare@hotmail.com",
+                      to: "sundaysayil4u@gmail.com",
                       subject:
                         "Welcome to 313BDC, please follow the following link to activate",
                       html: tt.getMail(),
@@ -280,7 +272,7 @@ router.post("/addBank/:id", (req, res) => {
   );
 });
 
-router.post("/activate-account/:id", (req, res) => {
+router.get("/activate-account/:id", (req, res) => {
   User.findByIdAndUpdate(
     req.params.id,
     {
@@ -291,10 +283,7 @@ router.post("/activate-account/:id", (req, res) => {
         console.log(err);
         res.send("error occured");
       } else {
-        console.log(newdet);
-        res.status(200).send({
-          message: "account has been activated",
-        });
+        res.sendFile(path.join(__dirname + "/activatedAcount.html"))
       }
     }
   );
