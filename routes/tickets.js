@@ -35,6 +35,7 @@ router.get("/all-tickets", (re, res) => {
 });
 
 router.post("/add-comment/:id", (req, res) => {
+  console.log(req.body)
   let newTickets = new Tickets({
     message: [
       {

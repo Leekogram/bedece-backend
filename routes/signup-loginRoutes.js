@@ -132,7 +132,7 @@ router.post('/register', (req, res) => {
                     var mailOptions = {
                       from: 'bcd ',
                       to: req.body.email,
-                      subject: 'Welcome to 313BDC',
+                      subject: 'Welcome to 313BDC, please follow the following link to activate',
                       html: tt.getMail()
 
                     };
@@ -258,6 +258,25 @@ router.post('/addBank/:id', (req, res) => {
         console.log(newdet)
         res.status(200).send({
           message: "added successful"
+        })
+      }
+    }
+  );
+})
+
+
+router.post('/activate-account/:id', (req, res) => {
+  User.findByIdAndUpdate(req.params.id, {
+     active:true
+    },
+    function (err, doc) {
+      if (err) {
+        console.log(err);
+        res.send("error occured")
+      } else {
+        console.log(newdet)
+        res.status(200).send({
+          message: "account has been activated"
         })
       }
     }

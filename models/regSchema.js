@@ -4,6 +4,10 @@ let RegSchema = new Schema({
     fname: {
         type: String
     },
+    active:{
+        type:Boolean,
+        default: false
+    },
     lname: {
         type: String
     },
