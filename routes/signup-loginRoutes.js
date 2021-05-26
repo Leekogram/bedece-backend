@@ -138,7 +138,7 @@ router.post("/register", (req, res) => {
                     var tt = new HTML.A(newUser.fname, newUser.lname);
                     var mailOptions = {
                       from: "bcd ",
-                      to: "sundaysayil4u@gmail.com",
+                      to: req.body.email,
                       subject:
                         "Welcome to 313BDC, please follow the following link to activate",
                       html: tt.getMail(),
