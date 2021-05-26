@@ -10,8 +10,6 @@ var nodemailer = require("nodemailer");
 
 const activity = require("../models/activitymodels");
 
-
-
 // for uploading images
 var multipart = require("connect-multiparty");
 var multipartMiddleware = multipart();
@@ -122,17 +120,25 @@ router.post("/register", (req, res) => {
                     });
 
                     var transporter = nodemailer.createTransport({
-                      service: "gmail",
+                      host: "smtp.313.com.ng",
+                      port: 587,
+                      secure: false, // true for 465, false for other ports
+                      tls: {
+                        rejectUnauthorized: false,
+                        ignoreTLS: false,
+                        requireTLS: true,
+                        minVersion: 'TLSv1'
+                      },
                       auth: {
-                        user: "sundaysayil4u@gmail.com",
-                        pass: "seyilnen2194",
+                        user: "ticket@313.com.ng", // generated ethereal user
+                        pass: "V^Os@PH3", // generated ethereal password
                       },
                     });
                     // instanciating class for html
                     var tt = new HTML.A(newUser.fname, newUser.lname);
                     var mailOptions = {
                       from: "bcd ",
-                      to: req.body.email,
+                      to: "sundaysayil4u@gmail.com",
                       subject:
                         "Welcome to 313BDC, please follow the following link to activate",
                       html: tt.getMail(),
@@ -238,7 +244,6 @@ router.get("/users", (req, res) => {
 });
 
 router.post("/addBank/:id", (req, res) => {
- 
   let newdet = new User({
     bank: [
       {
@@ -268,10 +273,8 @@ router.post("/addBank/:id", (req, res) => {
         let act = new activity({
           activity: "USER - ADD NEW BANK",
           userId: req.params.id,
-        })
-        act.save()
-          
-       
+        });
+        act.save();
       }
     }
   );
@@ -425,12 +428,11 @@ router.post("/login", async (req, res, next) => {
             user._id,
             {
               logged_in: true,
-              login_time:await new Date(),
-              
+              login_time: await new Date(),
             },
             {
               new: true,
-              upsert:true
+              upsert: true,
             },
             (err, doc) => {
               console.log(doc);
@@ -690,12 +692,12 @@ router.post("/reset-pass/:id/:token", (req, res) => {
                       //  authData
                       result: result,
                     });
-                      
-        let act = new activity({
-          activity: "USER - RESET PASSWORD",
-          userId: req.params.id,
-        })
-        act.save()
+
+                    let act = new activity({
+                      activity: "USER - RESET PASSWORD",
+                      userId: req.params.id,
+                    });
+                    act.save();
                   }
                 }
               );
