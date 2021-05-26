@@ -1,13 +1,13 @@
 const router = require("express").Router();
 const transLogs = require("../../models/purchase/transLogsModels");
-const users = require("../../models/regSchema")
+const users = require("../../models/regSchema");
 const logger = require("../../logConfig");
 const TransLog = require("../../TranslogerConfig");
 var MongoClient = require("mongodb").MongoClient;
 var nodemailer = require("nodemailer");
+const activity = require("../../models/activitymodels");
 var addDays = require("../utility");
 var removeDays = require("../utility");
-
 
 router.get("/", (req, res) => {
   res.send("its now working");
@@ -53,12 +53,32 @@ router.get("/search", async (req, res) => {
     });
 });
 
+router.get("/user-activity/:id", async (req, res) => {
+  let user = await users.findOne({_id: req.params.id})
+  console.log(user)
+  let filter = {}
+  filter["created_date"] = {
+    $gte: user.login_time,
+    $lte: user.logout_time,
+  };
+  console.log(filter)
+  activity
+    .find(filter, (err, result) => {
+      if (err){res.send(err);} 
+      res.status(200).send({
+        result: result,
+      });
+    })
+    .sort({
+      created_date: -1,
+    });
+});
+
 router.get("/dashboard-summary", async (req, res) => {
   let allData = await transLogs.find().count();
   let allSell = await transLogs.find({ Type: "SELL" }).count();
   let allBuy = await transLogs.find({ Type: "BUY" }).count();
   let allusers = await users.find().count();
-
 
   res.send({
     message: "Successful",
@@ -66,7 +86,7 @@ router.get("/dashboard-summary", async (req, res) => {
       allTransactions: allData,
       allSell,
       allBuy,
-      allusers
+      allusers,
     },
   });
 });

@@ -6,6 +6,8 @@ const User = require("../../models/regSchema");
 var nodemailer = require("nodemailer");
 var addDays = require("../utility");
 var removeDays = require("../utility");
+const activity = require("../../models/activitymodels");
+
 
 router.get("/t", (req, res) => {
   res.send("its now working");
@@ -80,6 +82,11 @@ router.post("/sell", async (req, res) => {
         `status:SUCCESS, user:${req.body.userId}, type:sell, give:${req.body.giveCurrency}${req.body.giveAmount}, recieve:${req.body.recieveCurrency}${req.body.recieveAmount}, transactionID:${req.body.transactionId}`
       );
       console.log("success");
+      let act = new activity({
+        activity: "Transactions - SELL",
+        userId: req.body.userId,
+      })
+      act.save()
 
       // preparing to send data to all transaction logs
 
@@ -330,6 +337,12 @@ router.put("/update-sell/:id", (req, res) => {
           //  authData
           result,
         });
+        console.log("success");
+        let act = new activity({
+          activity: "Transactions - UPDATE SELL",
+          userId: req.body.userId,
+        })
+        act.save()
       }
     }
   );

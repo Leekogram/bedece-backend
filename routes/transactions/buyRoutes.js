@@ -2,6 +2,8 @@ const router = require("express").Router();
 const Buyer = require("../../models/purchase/buyShema");
 const User = require("../../models/regSchema");
 const transLogs = require("../../models/purchase/transLogsModels");
+const activity = require("../../models/activitymodels");
+
 const logger = require("../../logConfig");
 const TransLog = require("../../TranslogerConfig");
 var MongoClient = require("mongodb").MongoClient;
@@ -101,6 +103,14 @@ router.post("/buy", async (req, res) => {
         id: newTransLog._id,
       });
       console.log("success");
+
+      let act = new activity({
+        activity: "Transactions - BUY",
+        userId: req.body.userId,
+      })
+
+      act.save()
+     
       logger.info(
         `status:SUCCESS, user:${req.body.userId}, type:buy, give: ${req.body.giveCurrency} ${req.body.giveAmount}, recieve: ${req.body.recieveCurrency} ${req.body.recieveAmount}, transactionID:${req.body.transactionId}, referenceId:${req.body.refference}`
       );
@@ -366,6 +376,12 @@ router.put("/update-buy/:id", (req, res) => {
           //  authData
           result,
         });
+       
+        let act = new activity({
+          activity: "Transactions - UPDATE BUY",
+          userId: req.body.userId,
+        })
+        act.save()
       }
     }
   );

@@ -78,6 +78,12 @@ let RegSchema = new Schema({
     aboutMe: {
         type: String
     },
+    logout_time:{
+         type: Date
+    },
+    login_time:{
+        type: Date
+    },
 
     created_date: {
         type: Date,

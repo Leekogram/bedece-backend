@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const Tickets = require("./../models/ticket");
+const activity = require("../models/activitymodels");
+
 
 router.get("/", (req, res) => {
   res.send("i see you");
@@ -20,6 +22,11 @@ router.post("/open-tickets", (req, res) => {
         message: "saved successfully",
       });
       console.log("success");
+      let act = new activity({
+        activity: "USER - OPEN TICKETS",
+        userId: req.body.userId,
+      })
+      act.save()
     })
     .catch((err) => {
       console.log(err);

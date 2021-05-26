@@ -81,3 +81,10 @@
 {"message":"status:SUCCESS, user:609c51dba1a91329bef1d26b, type:sell, give:undefinedundefined, recieve:NAIRA12332434, transactionID:undefined","level":"info","timestamp":"2021-05-25T06:03:45.567Z"}
 {"message":"status:SUCCESS, user:609c51dba1a91329bef1d26b, type:sell, give:undefinedundefined, recieve:NAIRA12332434, transactionID:undefined","level":"info","timestamp":"2021-05-25T06:04:43.487Z"}
 {"message":"status:SUCCESS, user:609c51dba1a91329bef1d26b, type:buy, give: naira 250, recieve: dollars 2345, transactionID:undefined, referenceId:undefined","level":"info","timestamp":"2021-05-25T06:05:06.592Z"}
+{"message":"status:FAILURE, user:609c51dba1a91329bef1d26b, type:buy, give: naira 250, recieve: dollars 2345, transactionID:undefined","level":"info","timestamp":"2021-05-26T09:09:02.397Z"}
+{"message":"status:SUCCESS, user:609c51dba1a91329bef1d26b, type:buy, give: naira 250, recieve: dollars 2345, transactionID:undefined, referenceId:undefined","level":"info","timestamp":"2021-05-26T09:10:15.359Z"}
+{"message":"status:SUCCESS, user:609c51dba1a91329bef1d26b, type:sell, give:undefinedundefined, recieve:NAIRA12332434, transactionID:undefined","level":"info","timestamp":"2021-05-26T09:32:07.745Z"}
+{"message":"status:SUCCESS, user:60ae141de0d89247b292c1ba, type:buy, give: naira 250, recieve: dollars 2345, transactionID:undefined, referenceId:undefined","level":"info","timestamp":"2021-05-26T10:29:02.542Z"}
+{"message":"status:SUCCESS, user:60ae141de0d89247b292c1ba, type:sell, give:undefinedundefined, recieve:NAIRA12332434, transactionID:undefined","level":"info","timestamp":"2021-05-26T10:29:15.073Z"}
+{"message":"status:SUCCESS, user:60ae141de0d89247b292c1ba, type:buy, give: naira 250, recieve: dollars 2345, transactionID:undefined, referenceId:undefined","level":"info","timestamp":"2021-05-26T10:32:53.714Z"}
+{"message":"status:SUCCESS, user:60ae141de0d89247b292c1ba, type:sell, give:undefinedundefined, recieve:NAIRA12332434, transactionID:undefined","level":"info","timestamp":"2021-05-26T10:33:05.075Z"}
