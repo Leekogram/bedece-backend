@@ -7,7 +7,9 @@ var emailCheck = require("email-check");
 var firebase = require("firebase/app");
 const path = require("path");
 var nodemailer = require("nodemailer");
+
 const activity = require("../models/activitymodels");
+
 
 
 // for uploading images
@@ -122,8 +124,8 @@ router.post("/register", (req, res) => {
                     var transporter = nodemailer.createTransport({
                       service: "gmail",
                       auth: {
-                        user: "313bureau@gmail.com",
-                        pass: "08067713959bdc",
+                        user: "sundaysayil4u@gmail.com",
+                        pass: "seyilnen2194",
                       },
                     });
                     // instanciating class for html
