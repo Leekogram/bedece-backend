@@ -10,7 +10,8 @@ var nodemailer = require("nodemailer");
 // var API_KEY = '2a09f0f07096a8c0b6fb2b22822798bf-fa6e84b7-ca6f6381';
 // var DOMAIN = 'sandbox156cf45ca52d4277885283dc0d14b163.mailgun.org';
 // var mailgun = require('mailgun-js')({apiKey: API_KEY, domain: DOMAIN,  host: "api.eu.mailgun.net",});
-
+var addDays = require("../routes/utility");
+var removeDays = require("../routes/utility");
 const activity = require("../models/activitymodels");
 
 // for uploading images
@@ -101,13 +102,6 @@ router.post("/register", (req, res) => {
             busPhoneNum: req.body.busPhoneNumber,
             busEmail: req.body.busEmail,
             aboutMe: req.body.aboutMe,
-            // bank: [
-            //   {
-            //     accountNumber: req.body.accountNumber,
-            //     accountName: req.body.accountName,
-            //     bankName: req.body.bankName,
-            //   }
-            // ]
           });
 
           bcrypt.genSalt(10, (err, salt) => {
@@ -118,21 +112,24 @@ router.post("/register", (req, res) => {
                 newUser
                   .save()
                   .then((user) => {
-              
                     var transporter = nodemailer.createTransport({
-                     service:"hotmail",
+                      service: "hotmail",
                       auth: {
-                        user: 'bdccustomercare@hotmail.com',
-                        pass: '@Babura2020',
+                        user: "bdccustomercare@hotmail.com",
+                        pass: "@Babura2020",
                       },
                     });
+
                     // instanciating class for html
-                    var tt = new HTML.A(newUser.fname,newUser.lname,  newUser._id);
+                    var tt = new HTML.A(
+                      newUser.fname,
+                      newUser.lname,
+                      newUser._id
+                    );
                     var mailOptions = {
                       from: "bdccustomercare@hotmail.com",
-                      to: "sundaysayil4u@gmail.com",
-                      subject:
-                        "Welcome to 313BDC, please follow the following link to activate",
+                      to: user.email,
+                      subject: "Welcome to 313BDC, Activation of account",
                       html: tt.getMail(),
                     };
                     transporter.sendMail(mailOptions, function (error, info) {
@@ -212,27 +209,29 @@ router.post("/image/:id", multipartMiddleware, async (req, res) => {
 });
 
 router.get("/users", (req, res) => {
+  console.log(req.query);
+  let start = "";
+  let end = "";
   if (!req.query.startDate || !req.query.endDate) {
-    res.send({
-      error: true,
-      message: "please enter date range for start and end",
-    });
+    (start = removeDays(new Date(), 30)), (end = new Date());
   } else {
-    filter = req.query;
-    filter["created_date"] = {
-      $gte: req.query.startDate,
-      $lte: req.query.endDate,
-    };
-    delete filter.startDate;
-    delete filter.endDate;
-    console.log(filter);
-    User.find(filter, (err, result) => {
-      if (err) res.send(err);
-      res.send({
-        result: result,
-      });
-    });
+    (start = req.query.startDate), (end = addDays(req.query.endDate, 1));
   }
+  filter = req.query;
+  filter["created_date"] = {
+    $gte: start,
+    $lte: end,
+  };
+  delete filter.startDate;
+  delete filter.endDate;
+  console.log(filter);
+  console.log(filter);
+  User.find(filter, (err, result) => {
+    if (err) res.send(err);
+    res.send({
+      result: result,
+    });
+  });
 });
 
 router.post("/addBank/:id", (req, res) => {
@@ -278,12 +277,16 @@ router.get("/activate-account/:id", (req, res) => {
     {
       active: true,
     },
+    {
+      new: true,
+      upsert: true,
+    },
     function (err, doc) {
       if (err) {
         console.log(err);
         res.send("error occured");
       } else {
-        res.sendFile(path.join(__dirname + "/activatedAcount.html"))
+        res.sendFile(path.join(__dirname + "/activatedAcount.html"));
       }
     }
   );
@@ -368,6 +371,7 @@ router.get("/logout/:id", async (req, res) => {
     },
     {
       new: true,
+
     },
     (err, doc) => {
       console.log(doc);
@@ -391,12 +395,12 @@ router.post("/login", async (req, res, next) => {
         {
           phone: req.body.emailOrPhone,
         },
-      ],
+      ], active:true
     }).then((user) => {
       console.log(req.body);
       if (user == null) {
         res.status(400).json({
-          message: "wrong login details",
+          message: "wrong login details or account not yet activated",
           devMessage: "this user wasnt found",
         });
         console.log("not seen");
@@ -481,10 +485,10 @@ router.post("/fpass", async (req, res) => {
         );
 
         var transporter = nodemailer.createTransport({
-          service: "gmail",
+          service: "hotmail",
           auth: {
-            user: "313bureau@gmail.com",
-            pass: "08067713959bdc",
+            user: "bdccustomercare@hotmail.com",
+            pass: "@Babura2020",
           },
         });
         var mailOptions = {

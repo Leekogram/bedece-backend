@@ -103,10 +103,10 @@ router.post("/sell", async (req, res) => {
             console.log(req.body.userId);
 
             var transporter = nodemailer.createTransport({
-              service: "gmail",
+              service: "hotmail",
               auth: {
-                user: "313bureau@gmail.com",
-                pass: "08067713959",
+                user: "bdccustomercare@hotmail.com",
+                pass: "@Babura2020",
               },
             });
             var mailOptions = {
