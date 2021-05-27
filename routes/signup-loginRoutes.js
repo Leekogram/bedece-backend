@@ -79,7 +79,7 @@ router.post("/register", (req, res) => {
           },
         ],
       }).then((user) => {
-        console.log(user)
+        console.log(user);
         if (user) {
           errors.push(
             "either phone or email is already registered with another account"
@@ -88,7 +88,7 @@ router.post("/register", (req, res) => {
             devMessage: errors,
           });
           console.log("this account exists");
-        } else if(user == null) {
+        } else if (user == null) {
           const newUser = new User({
             fname: req.body.fname,
             lname: req.body.lname,
@@ -372,7 +372,6 @@ router.get("/logout/:id", async (req, res) => {
     },
     {
       new: true,
-
     },
     (err, doc) => {
       console.log(doc);
@@ -396,7 +395,8 @@ router.post("/login", async (req, res, next) => {
         {
           phone: req.body.emailOrPhone,
         },
-      ], active:true
+      ],
+      active: true,
     }).then((user) => {
       console.log(req.body);
       if (user == null) {
@@ -405,46 +405,50 @@ router.post("/login", async (req, res, next) => {
           devMessage: "this user wasnt found",
         });
         console.log("not seen");
-      }
-
-      bcrypt.compare(req.body.password, user.password, async (err, isMatch) => {
-        if (err) throw err;
-        if (isMatch) {
-          // res.status(200).send("ok");
-          console.log(user);
-          const token = jwt.sign(
-            {
-              user,
-            },
-            "my_secret"
-          );
-          let x = await User.findByIdAndUpdate(
-            user._id,
-            {
-              logged_in: true,
-              login_time: await new Date(),
-            },
-            {
-              new: true,
-              upsert: true,
-            },
-            (err, doc) => {
-              console.log(doc);
+      } else {
+        bcrypt.compare(
+          req.body.password,
+          user.password,
+          async (err, isMatch) => {
+            if (err) throw err;
+            if (isMatch) {
+              // res.status(200).send("ok");
+              console.log(user);
+              const token = jwt.sign(
+                {
+                  user,
+                },
+                "my_secret"
+              );
+              let x = await User.findByIdAndUpdate(
+                user._id,
+                {
+                  logged_in: true,
+                  login_time: await new Date(),
+                },
+                {
+                  new: true,
+                  upsert: true,
+                },
+                (err, doc) => {
+                  console.log(doc);
+                }
+              );
+              res.send({
+                token: token,
+                user: user,
+              });
+            } else {
+              res.status(400).json({
+                message: "wrong login details",
+                devMessage: "passwords didnt match",
+              });
+              console.log("failed password didnt match");
+              console.log(req.body);
             }
-          );
-          res.send({
-            token: token,
-            user: user,
-          });
-        } else {
-          res.status(400).json({
-            message: "wrong login details",
-            devMessage: "passwords didnt match",
-          });
-          console.log("failed password didnt match");
-          console.log(req.body);
-        }
-      });
+          }
+        );
+      }
 
       // console.log(req.body.password);
       // console.log(req.body.email);
