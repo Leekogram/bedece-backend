@@ -79,6 +79,7 @@ router.post("/register", (req, res) => {
           },
         ],
       }).then((user) => {
+        console.log(user)
         if (user) {
           errors.push(
             "either phone or email is already registered with another account"
@@ -87,7 +88,7 @@ router.post("/register", (req, res) => {
             devMessage: errors,
           });
           console.log("this account exists");
-        } else {
+        } else if(user == null) {
           const newUser = new User({
             fname: req.body.fname,
             lname: req.body.lname,
