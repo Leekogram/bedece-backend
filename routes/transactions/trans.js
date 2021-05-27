@@ -46,25 +46,33 @@ router.get("/all-transactions", (req, res) => {
 });
 
 router.get("/search", async (req, res) => {
-  transLogs
-    .find({ $text: { $search: req.query.search } })
-    .exec(function (err, docs) {
+  if (!req.query.search) {
+    transLogs.find({}).exec(function (err, docs) {
       res.send({ doc: docs, err });
     });
+  } else {
+    transLogs
+      .find({ $text: { $search: req.query.search } })
+      .exec(function (err, docs) {
+        res.send({ doc: docs, err });
+      });
+  }
 });
 
 router.get("/user-activity/:id", async (req, res) => {
-  let user = await users.findOne({_id: req.params.id})
-  console.log(user)
-  let filter = {}
+  let user = await users.findOne({ _id: req.params.id });
+  console.log(user);
+  let filter = {};
   filter["created_date"] = {
     $gte: user.login_time,
     $lte: user.logout_time,
   };
-  console.log(filter)
+  console.log(filter);
   activity
     .find(filter, (err, result) => {
-      if (err){res.send(err);} 
+      if (err) {
+        res.send(err);
+      }
       res.status(200).send({
         result: result,
       });
