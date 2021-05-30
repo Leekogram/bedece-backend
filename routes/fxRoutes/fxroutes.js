@@ -38,9 +38,6 @@ router.get("/all-currency", (re, res) => {
 // to update a currency's rates with its ID
 router.put('/update-currency/:id', (req, res) => {
     let newInfo = req.body
-    //  res.send(req.body)
-    // let newInfo = req.body
-    // console.log(newInfo)
     Rates.findByIdAndUpdate(req.params.id, newInfo, {upsert: true, new: true}, (err, result) => {
         if (err) {
             console.log(err)
@@ -52,6 +49,23 @@ router.put('/update-currency/:id', (req, res) => {
                 result
             })
             logger.info( `status:SUCCESS, user:Admin, type:Update Currency, currencyID:${req.params.id}`)
+        }
+    })
+  })
+
+  router.put('/delete-currency/:id', (req, res) => {
+    let newInfo = req.body
+    Rates.findByIdAndDelete(req.params.id, (err, result) => {
+        if (err) {
+            console.log(err)
+            logger.info( `status:FAILURE, user:Admin, type:delete Currency, currencyID:${req.params.id}`)
+        } else {
+            res.json({
+                message: "Successfully updated",
+                //  authData
+                result
+            })
+            logger.info( `status:SUCCESS, user:Admin, type:delete Currency, currencyID:${req.params.id}`)
         }
     })
   })

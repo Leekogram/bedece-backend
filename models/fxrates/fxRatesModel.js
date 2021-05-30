@@ -12,6 +12,10 @@ let RateSchema = new Schema({
         type: String,
         default: 1
     },
+    disabled:{
+        type:Boolean,
+        default: false
+    },
     created_date: {
         type: Date,
         default: Date.now,
@@ -23,5 +27,11 @@ let RateSchema = new Schema({
 
     }
 })
+
+
 const RateModel = mongoose.model('RateModel', RateSchema)
 module.exports = RateModel;
+
+
+
+
