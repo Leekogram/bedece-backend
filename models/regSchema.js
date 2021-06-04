@@ -6,7 +6,7 @@ let RegSchema = new Schema({
     },
     active:{
         type:Boolean,
-        default: false
+        default: true
     },
     lname: {
         type: String
