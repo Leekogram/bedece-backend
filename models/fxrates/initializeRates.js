@@ -9,6 +9,7 @@ const Rates = require('./fxRatesModel')
         {currency:"EUR"},
         {currency:"CHF"},
         {currency:"CAD"},
+        {currency:"NGN"},
         
     ]
     for (let index = 0; index < data.length; index++) {

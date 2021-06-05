@@ -313,6 +313,9 @@ router.get("/user-banks/:id", (req, res) => {
     if (err) {
       res.send("An Error Occured!");
       console.log("error:");
+    
+    } else if(!result){
+       res.send("No banks found for user!")
     } else {
       res.send(result.bank);
       console.log(req.params.id);
