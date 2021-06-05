@@ -17,9 +17,9 @@ router.post("/open-tickets", (req, res) => {
   //  res.send(newTicket)
   newTicket
     .save()
-    .then((rate) => {
+    .then((message) => {
       res.status(200).json({
-        message: "saved successfully",
+        message
       });
       console.log("success");
       let act = new activity({
@@ -57,7 +57,10 @@ router.post("/add-comment/:id", (req, res) => {
       $push: {
         message: newTickets.message,
       },
+     
+     
     },
+    {new: true},
     function (err, doc) {
       if (err) {
         console.log(err);
@@ -65,7 +68,7 @@ router.post("/add-comment/:id", (req, res) => {
       } else {
         // console.log(newdet);
         res.status(200).send({
-          message: "added successful",
+          message: doc,
         });
       }
     }
