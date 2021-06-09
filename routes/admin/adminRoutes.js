@@ -3,6 +3,7 @@ const AdminUser = require('../../models/admin/adminSchema')
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 var nodemailer = require('nodemailer');
+const activity = require("../../models/activitymodels");
 
 
 
@@ -39,18 +40,18 @@ router.post('/regAdmin', (req, res) => {
     res.send('you didnt send any data')
   } else {
     // console.log(req.body, 'is the body')
-    if (!req.body.password || req.body.password.length < 4) {
+    if (!req.body.password || req.body.password.length < 4 ) {
       errors.push("Pin must not be less than 4")
       res.status(404).json({
         status: 'error',
         message: errors,
       });
       console.log(errors)
-    } if (!req.body.email) {
-      errors.push("no email")
-      res.status(404).json({
-        status: 'error',
-        message: errors,
+    } if (!req.body.email || !req.body.rank) {
+      // errors.push("either emails, rank is missing in the body of request")
+      res.send({
+        error:true,
+        message: "either emails, rank is missing in the body of request",
       });
       console.log(errors)
     }
@@ -67,7 +68,7 @@ router.post('/regAdmin', (req, res) => {
       }).then(user => {
         if (user) {
           errors.push("either phone or email is already registered with another account")
-          res.status(404).json({
+          res.send({
             message: errors
           })
           console.log("this account exists")
@@ -75,6 +76,7 @@ router.post('/regAdmin', (req, res) => {
           const newAdmin = new AdminUser({
             email: req.body.email,
             password: req.body.password,
+            rank:req.body.rank
           });
           bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(newAdmin.password, salt, (err, hash) => {
@@ -84,8 +86,9 @@ router.post('/regAdmin', (req, res) => {
                 newAdmin
                   .save()
                   .then(user => {
-                    res.status(200).json({
-                      message: "success"
+                    res.send({
+                      message: "admin successfully created",
+                      error:false
                     });
                     console.log("success")
                   })
@@ -248,12 +251,125 @@ router.post("/reset-pass/:id/:token", (req, res) => {
 //     });
 // })
 
-router.get('/users', (req, res) => {
+router.get('/admins', (req, res) => {
   AdminUser.find((err, result) => {
     if (err) res.send(err)
     res.send({ result: result })
   })
 })
+
+router.get('/admin/:id', (req, res) => {
+  AdminUser.find({_id:req.params.id},(err, result) => {
+    if (err) res.send(err)
+    res.send({ result: result })
+  })
+})
+
+router.put("/update-admin/:id", (req, res) => {
+  // var newInfo = req.body
+  let newInfo = req.body;
+  console.log(newInfo);
+  AdminUser.findByIdAndUpdate(
+    req.params.id,
+    newInfo,
+    {
+      upsert: true,
+      new: true,
+    },
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.json({
+          message: "Successfully updated",
+          //  authData
+          result: result,
+        });
+      }
+    }
+  );
+});
+
+router.put("/changePass/:id", async (req, res, next) => {
+  if (Object.keys(req.body).length === 0) {
+    console.log("sorry u didnt send any data");
+    res.status(400).send("you didnt send any data");
+  } else {
+    await AdminUser.findOne({
+      $or: [
+        {
+          email: req.body.emailOrPhone,
+        },
+        {
+          phone: req.body.emailOrPhone,
+        },
+      ],
+    }).then((user) => {
+      console.log(req.body);
+      if (user == null) {
+        res.status(400).json({
+          message: "wrong login details",
+          devMessage: "this user wasnt found",
+        });
+        console.log("not seen");
+      }
+
+      bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
+        // if (err) throw err;
+        if (isMatch) {
+          // res.status(200).send("ok");
+
+          bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(req.body.newPassWord, salt, (err, hash) => {
+              if (err) throw error;
+              else {
+                let newPass = {
+                  password: hash,
+                };
+
+                AdminUser.findByIdAndUpdate(
+                  req.params.id,
+                  newPass,
+                  {
+                    upsert: true,
+                    new: true,
+                  },
+                  (err, result) => {
+                    if (err) {
+                      console.log(err);
+                    } else {
+                      res.json({
+                        message: "Successfully updated",
+                        //  authData
+                        result: result,
+                      });
+
+                      let act = new activity({
+                        activity: "ADMIN - UPDATE PASSWORD",
+                        userId: req.params.id,
+                      });
+                      act.save();
+                    }
+                  }
+                );
+              }
+            });
+          });
+        } else {
+          res.status(400).json({
+            message: "wrong login details",
+            devMessage: "passwords didnt match",
+          });
+          console.log("failed password didnt match");
+          console.log(req.body);
+        }
+      });
+
+      // console.log(req.body.password);
+      // console.log(req.body.email);
+    });
+  }
+});
 
 
 router.get('/logout', (req, res) => {

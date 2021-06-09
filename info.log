@@ -88,3 +88,5 @@
 {"message":"status:SUCCESS, user:60ae141de0d89247b292c1ba, type:sell, give:undefinedundefined, recieve:NAIRA12332434, transactionID:undefined","level":"info","timestamp":"2021-05-26T10:29:15.073Z"}
 {"message":"status:SUCCESS, user:60ae141de0d89247b292c1ba, type:buy, give: naira 250, recieve: dollars 2345, transactionID:undefined, referenceId:undefined","level":"info","timestamp":"2021-05-26T10:32:53.714Z"}
 {"message":"status:SUCCESS, user:60ae141de0d89247b292c1ba, type:sell, give:undefinedundefined, recieve:NAIRA12332434, transactionID:undefined","level":"info","timestamp":"2021-05-26T10:33:05.075Z"}
+{"message":"status:SUCCESS, user:Admin, type:Update Currency, currencyID:5e2059c81a8e1e001750e1c1","level":"info","timestamp":"2021-06-05T13:44:09.306Z"}
+{"message":"status:SUCCESS, user:Admin, type:Update Currency, currencyID:5e2059c81a8e1e001750e1c1","level":"info","timestamp":"2021-06-05T13:44:39.776Z"}

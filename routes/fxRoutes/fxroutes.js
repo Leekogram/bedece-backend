@@ -53,6 +53,8 @@ router.put('/update-currency/:id', (req, res) => {
     })
   })
 
+  
+
   router.put('/delete-currency/:id', (req, res) => {
     let newInfo = req.body
     Rates.findByIdAndDelete(req.params.id, (err, result) => {
