@@ -21,6 +21,8 @@ var storage = multer.diskStorage({
 });
 
 const fxrates = require("./models/fxrates/initializeRates");
+const checkAdmin = require("./models/admin/initializeAdmin");
+
 
 
 var upload = multer({ storage: storage });
