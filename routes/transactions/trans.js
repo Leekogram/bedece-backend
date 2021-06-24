@@ -10,7 +10,7 @@ var addDays = require("../utility");
 var removeDays = require("../utility");
 
 router.get("/", (req, res) => {
-  res.send("its now working");
+  res.send("its now working ");
 });
 
 // to get all the sells
